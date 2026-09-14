@@ -1,77 +1,3661 @@
 {
-  "acid-splash": { "name": "酸液飛濺", "nameEn": "Acid Splash", "level": 0, "school": "咒法", "classes": ["sorcerer", "wizard"], "text": "60 呎內一人或兩人（相距 5 呎內）敏捷豁免，失敗受 1d6 強酸。" },
-  "chill-touch": { "name": "冷凍之觸", "nameEn": "Chill Touch", "level": 0, "school": "死靈", "classes": ["sorcerer", "warlock", "wizard"], "text": "120 呎法術攻擊，1d8 死靈傷害，下回合前無法被治療。" },
-  "eldritch-blast": { "name": "魔能爆", "nameEn": "Eldritch Blast", "level": 0, "school": "塑能", "classes": ["warlock"], "text": "120 呎法術攻擊，1d10 力場。高等級會多射線。" },
-  "fire-bolt": { "name": "火焰箭", "nameEn": "Fire Bolt", "level": 0, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "120 呎法術攻擊，1d10 火焰。打中物件可點燃。" },
-  "guidance": { "name": "指引", "nameEn": "Guidance", "level": 0, "school": "預言", "classes": ["cleric", "druid"], "text": "觸摸一個生物，下次屬性檢定加 1d4。專注，最多 1 分鐘。" },
-  "light": { "name": "光亮術", "nameEn": "Light", "level": 0, "school": "塑能", "classes": ["bard", "cleric", "sorcerer", "wizard"], "text": "物件發出 20 呎亮光 + 20 呎微光，1 小時。" },
-  "mage-hand": { "name": "法師之手", "nameEn": "Mage Hand", "level": 0, "school": "咒法", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "30 呎內幽靈手，可拿 10 磅內東西。不能攻擊。" },
-  "minor-illusion": { "name": "次級幻象", "nameEn": "Minor Illusion", "level": 0, "school": "幻術", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "5 呎立方的聲音或影像，1 分鐘。調查可看穿。" },
-  "poison-spray": { "name": "毒性噴霧", "nameEn": "Poison Spray", "level": 0, "school": "咒法", "classes": ["druid", "sorcerer", "warlock", "wizard"], "text": "10 呎內體質豁免，失敗 1d12 毒素。" },
-  "prestidigitation": { "name": "魔法伎倆", "nameEn": "Prestidigitation", "level": 0, "school": "變化", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "小把戲：火花、乾淨、味道、小印記。非戰鬥。" },
-  "ray-of-frost": { "name": "寒冰射線", "nameEn": "Ray of Frost", "level": 0, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "60 呎法術攻擊，1d8 寒冷，速度 -10 呎到你下回合。" },
-  "sacred-flame": { "name": "聖火術", "nameEn": "Sacred Flame", "level": 0, "school": "塑能", "classes": ["cleric"], "text": "60 呎內敏捷豁免（無掩蔽），失敗 1d8 光耀。" },
-  "shocking-grasp": { "name": "電擊之掌", "nameEn": "Shocking Grasp", "level": 0, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "近戰法術攻擊（金屬甲有優勢），1d8 閃電，不能做反應直到下回合。" },
-  "thaumaturgy": { "name": "奇術", "nameEn": "Thaumaturgy", "level": 0, "school": "變化", "classes": ["cleric"], "text": "聲音變大、開門、震動、眼睛變色等小神蹟。" },
-  "vicious-mockery": { "name": "惡毒嘲諷", "nameEn": "Vicious Mockery", "level": 0, "school": "惑控", "classes": ["bard"], "text": "60 呎內聽得懂你的生物感知豁免，失敗 1d4 精神傷害，下次攻擊有劣勢。" },
-  "bless": { "name": "祝福術", "nameEn": "Bless", "level": 1, "school": "惑控", "classes": ["cleric", "paladin"], "text": "最多 3 個生物攻擊與豁免加 1d4。專注 1 分鐘。" },
-  "burning-hands": { "name": "燃燒之手", "nameEn": "Burning Hands", "level": 1, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "15 呎錐，敏捷豁免，3d6 火焰（半傷）。" },
-  "charm-person": { "name": "魅惑人類", "nameEn": "Charm Person", "level": 1, "school": "惑控", "classes": ["bard", "druid", "sorcerer", "warlock", "wizard"], "text": "30 呎內類人感知豁免，失敗被魅惑 1 小時。戰鬥中有優勢。" },
-  "cure-wounds": { "name": "療傷術", "nameEn": "Cure Wounds", "level": 1, "school": "塑能", "classes": ["bard", "cleric", "druid", "paladin", "ranger"], "text": "觸摸，回復 1d8＋施法屬性調整值 HP。" },
-  "detect-magic": { "name": "偵測魔法", "nameEn": "Detect Magic", "level": 1, "school": "預言", "classes": ["bard", "cleric", "druid", "paladin", "ranger", "sorcerer", "wizard"], "text": "感覺 30 呎內魔法。儀式。專注 10 分鐘。" },
-  "faerie-fire": { "name": "妖火", "nameEn": "Faerie Fire", "level": 1, "school": "塑能", "classes": ["bard", "druid"], "text": "20 呎立方，敏捷豁免失敗會發光，攻擊它有優勢。專注 1 分鐘。" },
-  "guiding-bolt": { "name": "導引箭", "nameEn": "Guiding Bolt", "level": 1, "school": "塑能", "classes": ["cleric"], "text": "120 呎法術攻擊，4d6 光耀。下一個打它的攻擊有優勢。" },
-  "healing-word": { "name": "治療真言", "nameEn": "Healing Word", "level": 1, "school": "塑能", "classes": ["bard", "cleric", "druid"], "text": "附贈動作，60 呎內回復 1d4＋施法屬性 HP。" },
-  "hex": { "name": "脆弱詛咒", "nameEn": "Hex", "level": 1, "school": "惑控", "classes": ["warlock"], "text": "指定目標，你打它額外 1d6 死靈，選一項屬性檢定有劣勢。專注。" },
-  "hunters-mark": { "name": "獵人印記", "nameEn": "Hunter's Mark", "level": 1, "school": "預言", "classes": ["ranger"], "text": "你打標記目標額外 1d6。感知（生存）追蹤它有優勢。專注。" },
-  "mage-armor": { "name": "法師護甲", "nameEn": "Mage Armor", "level": 1, "school": "防護", "classes": ["sorcerer", "wizard"], "text": "未著甲生物 AC 變成 13＋敏捷調整值，8 小時。" },
-  "magic-missile": { "name": "魔法飛彈", "nameEn": "Magic Missile", "level": 1, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "三發飛彈，各 1d4+1 力場，自動命中。可打同一人或分開。" },
-  "shield": { "name": "護盾術", "nameEn": "Shield", "level": 1, "school": "防護", "classes": ["sorcerer", "wizard"], "text": "反應。直到你下回合開始 AC +5，並擋掉魔法飛彈。" },
-  "shield-of-faith": { "name": "虔信護盾", "nameEn": "Shield of Faith", "level": 1, "school": "防護", "classes": ["cleric", "paladin"], "text": "60 呎內一個生物 AC +2。專注 10 分鐘。" },
-  "sleep": { "name": "睡眠術", "nameEn": "Sleep", "level": 1, "school": "惑控", "classes": ["bard", "sorcerer", "wizard"], "text": "20 呎內擲 5d8 HP，由當前 HP 最低者開始陷入昏迷。" },
-  "thunderwave": { "name": "雷鳴波", "nameEn": "Thunderwave", "level": 1, "school": "塑能", "classes": ["bard", "druid", "sorcerer", "wizard"], "text": "15 呎立方，體質豁免，2d8 雷鳴並推開 10 呎（半傷不推）。" },
-  "hold-person": { "name": "人類定身術", "nameEn": "Hold Person", "level": 2, "school": "惑控", "classes": ["bard", "cleric", "druid", "sorcerer", "warlock", "wizard"], "text": "60 呎內類人感知豁免，失敗麻痺。每回合結束再豁免。專注。" },
-  "invisibility": { "name": "隱形術", "nameEn": "Invisibility", "level": 2, "school": "幻術", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "觸摸一個生物隱形。攻擊或施法結束。專注 1 小時。" },
-  "misty-step": { "name": "迷霧步", "nameEn": "Misty Step", "level": 2, "school": "咒法", "classes": ["sorcerer", "warlock", "wizard"], "text": "附贈動作，傳送 30 呎內你看得到的未佔空間。" },
-  "scorching-ray": { "name": "灼熱射線", "nameEn": "Scorching Ray", "level": 2, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "三條射線，各做法術攻擊 2d6 火焰。可打同一人或分開。" },
-  "shatter": { "name": "粉碎音波", "nameEn": "Shatter", "level": 2, "school": "塑能", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "60 呎內 10 呎半徑，體質豁免 3d8 雷鳴（半傷）。構裝劣勢。" },
-  "spiritual-weapon": { "name": "靈體武器", "nameEn": "Spiritual Weapon", "level": 2, "school": "塑能", "classes": ["cleric"], "text": "附贈動作召喚武器，法術攻擊 1d8＋感知調整值力場。可持續 1 分鐘（不專注）。" },
-  "web": { "name": "蛛網術", "nameEn": "Web", "level": 2, "school": "咒法", "classes": ["sorcerer", "wizard"], "text": "20 呎立方難地形，敏捷豁免失敗被束縛。專注 1 小時。" },
-  "counterspell": { "name": "反制法術", "nameEn": "Counterspell", "level": 3, "school": "防護", "classes": ["sorcerer", "warlock", "wizard"], "text": "反應，60 呎。3 環或以下直接打斷；更高則做 DC 10+環數的檢定。" },
-  "fireball": { "name": "火球術", "nameEn": "Fireball", "level": 3, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "150 呎內 20 呎半徑，敏捷豁免 8d6 火焰（半傷）。" },
-  "fly": { "name": "飛行術", "nameEn": "Fly", "level": 3, "school": "變化", "classes": ["sorcerer", "warlock", "wizard"], "text": "觸摸一個生物獲得 60 呎飛行速度。專注 10 分鐘。" },
-  "haste": { "name": "加速術", "nameEn": "Haste", "level": 3, "school": "變化", "classes": ["sorcerer", "wizard"], "text": "速度加倍、AC +2、敏捷豁免有優勢、每回合多一個攻擊動作。專注。結束時遲緩一回合。" },
-  "lightning-bolt": { "name": "閃電束", "nameEn": "Lightning Bolt", "level": 3, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "100 呎長 5 呎寬直線，敏捷豁免 8d6 閃電（半傷）。" },
-  "revivify": { "name": "復生術", "nameEn": "Revivify", "level": 3, "school": "死靈", "classes": ["cleric", "paladin"], "text": "死不超過 1 分鐘的生物以 1 HP 復活。耗 300 gp 鑽石。" },
-  "spirit-guardians": { "name": "靈體守衛", "nameEn": "Spirit Guardians", "level": 3, "school": "咒法", "classes": ["cleric"], "text": "15 呎內敵人速度減半，進入或開始回合感知豁免 3d8 傷害（半傷）。專注。" },
-  "dimension-door": { "name": "任意門", "nameEn": "Dimension Door", "level": 4, "school": "咒法", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "傳送最多 500 呎。可帶一個自願生物。" },
-  "greater-invisibility": { "name": "高等隱形術", "nameEn": "Greater Invisibility", "level": 4, "school": "幻術", "classes": ["bard", "sorcerer", "wizard"], "text": "一個生物隱形，攻擊與施法也不結束。專注 1 分鐘。" },
-  "ice-storm": { "name": "冰風暴", "nameEn": "Ice Storm", "level": 4, "school": "塑能", "classes": ["druid", "sorcerer", "wizard"], "text": "20 呎半徑 40 呎高，敏捷豁免 2d8 鈍擊 + 4d6 寒冷（半傷）。難地形。" },
-  "stoneskin": { "name": "石膚術", "nameEn": "Stoneskin", "level": 4, "school": "防護", "classes": ["druid", "ranger", "sorcerer", "wizard"], "text": "非魔法鈍擊／穿刺／揮砍抗性。專注 1 小時。耗 100 gp 鑽石粉。" },
-  "cone-of-cold": { "name": "寒冰錐", "nameEn": "Cone of Cold", "level": 5, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "60 呎錐，體質豁免 8d8 寒冷（半傷）。" },
-  "hold-monster": { "name": "怪物定身術", "nameEn": "Hold Monster", "level": 5, "school": "惑控", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "同人類定身，但任何生物（非不死）。" },
-  "mass-cure-wounds": { "name": "群體療傷術", "nameEn": "Mass Cure Wounds", "level": 5, "school": "塑能", "classes": ["bard", "cleric", "druid"], "text": "30 呎內最多 6 個生物各回復 3d8＋施法屬性 HP。" },
-  "chain-lightning": { "name": "連鎖閃電", "nameEn": "Chain Lightning", "level": 6, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "一個目標 10d8 閃電（敏捷半傷），再跳到最多 3 個 30 呎內目標。" },
-  "disintegrate": { "name": "解離術", "nameEn": "Disintegrate", "level": 6, "school": "變化", "classes": ["sorcerer", "wizard"], "text": "敏捷豁免失敗受 10d6+40 力場；HP 歸 0 則化為灰。" },
-  "heal": { "name": "治療術", "nameEn": "Heal", "level": 6, "school": "塑能", "classes": ["cleric", "druid"], "text": "60 呎內一個生物回復 70 HP，並結束目盲、耳聾與疾病。" },
-  "sunbeam": { "name": "陽炎射線", "nameEn": "Sunbeam", "level": 6, "school": "塑能", "classes": ["druid", "sorcerer", "wizard"], "text": "60 呎線，體質豁免 6d8 光耀（半傷）並目盲。專注。" },
-  "flesh-to-stone": { "name": "石化術", "nameEn": "Flesh to Stone", "level": 6, "school": "變化", "classes": ["warlock", "wizard"], "text": "體質豁免失敗受束縛，連續失敗會變成石頭。專注。" },
-  "true-seeing": { "name": "真知術", "nameEn": "True Seeing", "level": 6, "school": "預言", "classes": ["bard", "cleric", "sorcerer", "warlock", "wizard"], "text": "1 小時內看穿隱形、幻術、以太與真實形態。" },
-  "delayed-blast-fireball": { "name": "延遲爆裂火球", "nameEn": "Delayed Blast Fireball", "level": 7, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "火球可延遲。立刻丟為 12d6，每回合多 1d6，最多專注 1 分鐘。" },
-  "finger-of-death": { "name": "死亡一指", "nameEn": "Finger of Death", "level": 7, "school": "死靈", "classes": ["sorcerer", "warlock", "wizard"], "text": "體質豁免 7d8+30 死靈（半傷）。因此死亡的類人會變成殭屍。" },
-  "fire-storm": { "name": "火焰風暴", "nameEn": "Fire Storm", "level": 7, "school": "塑能", "classes": ["cleric", "druid", "sorcerer"], "text": "十個 10 呎立方，敏捷豁免 7d10 火焰（半傷）。" },
-  "teleport": { "name": "傳送術", "nameEn": "Teleport", "level": 7, "school": "咒法", "classes": ["bard", "sorcerer", "wizard"], "text": "你與最多 8 個自願者傳送到同平面地點。熟悉度影響是否偏離。" },
-  "reverse-gravity": { "name": "反轉重力", "nameEn": "Reverse Gravity", "level": 7, "school": "變化", "classes": ["druid", "sorcerer", "wizard"], "text": "50 呎半徑 100 呎高重力反轉。專注 1 分鐘。" },
-  "regenerate": { "name": "再生術", "nameEn": "Regenerate", "level": 7, "school": "變化", "classes": ["bard", "cleric", "druid"], "text": "立刻回復 4d8+15，每回合再 +1 HP，可長回斷肢。" },
-  "resurrection": { "name": "復活術", "nameEn": "Resurrection", "level": 7, "school": "死靈", "classes": ["bard", "cleric"], "text": "死不超過一世紀、非老死的生物復活。耗鑽石。" },
-  "prismatic-spray": { "name": "虹光噴射", "nameEn": "Prismatic Spray", "level": 7, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "60 呎錐，每人擲 1d8 決定顏色效果（傷害或特殊）。" },
-  "earthquake": { "name": "地震術", "nameEn": "Earthquake", "level": 8, "school": "塑能", "classes": ["cleric", "druid", "sorcerer"], "text": "100 呎半徑地面震動，倒地、裂縫、建築受損。專注。" },
-  "dominate-monster": { "name": "支配怪物", "nameEn": "Dominate Monster", "level": 8, "school": "惑控", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "感知豁免失敗被你魅惑並聽從。專注。" },
-  "power-word-stun": { "name": "律令震懾", "nameEn": "Power Word Stun", "level": 8, "school": "惑控", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "150 HP 以下的目標直接昏迷，直到體質豁免成功。" },
-  "sunburst": { "name": "陽炎爆", "nameEn": "Sunburst", "level": 8, "school": "塑能", "classes": ["druid", "sorcerer", "wizard"], "text": "60 呎半徑，體質豁免 12d6 光耀（半傷）並目盲。" },
-  "meteor-swarm": { "name": "流星爆", "nameEn": "Meteor Swarm", "level": 9, "school": "塑能", "classes": ["sorcerer", "wizard"], "text": "四顆流星，各 40 呎半徑，敏捷豁免 20d6 火焰 + 20d6 鈍擊（半傷）。" },
-  "power-word-kill": { "name": "律令死亡", "nameEn": "Power Word Kill", "level": 9, "school": "惑控", "classes": ["bard", "sorcerer", "warlock", "wizard"], "text": "100 HP 以下的目標直接死亡。" },
-  "time-stop": { "name": "時間停止", "nameEn": "Time Stop", "level": 9, "school": "變化", "classes": ["sorcerer", "wizard"], "text": "你獨行動 1d4+1 回合。影響其他生物則提前結束。" },
-  "wish": { "name": "祈願術", "nameEn": "Wish", "level": 9, "school": "咒法", "classes": ["sorcerer", "wizard"], "text": "複製 8 環或以下法術，或提出更強願望（有風險）。" },
-  "true-resurrection": { "name": "完全復活術", "nameEn": "True Resurrection", "level": 9, "school": "死靈", "classes": ["cleric", "druid"], "text": "死不超過 200 年者復活，即使沒有遺體。耗昂貴鑽石。" }
+  "acid-arrow": {
+    "name": "酸液箭",
+    "nameEn": "Acid Arrow",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，90 呎，即時，4d4強酸。"
+  },
+  "acid-splash": {
+    "name": "酸液飛濺",
+    "nameEn": "Acid Splash",
+    "level": 0,
+    "school": "咒法",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "60 呎內一人或兩人（相距 5 呎內）敏捷豁免，失敗受 1d6 強酸。"
+  },
+  "aid": {
+    "name": "援助術",
+    "nameEn": "Aid",
+    "level": 2,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "text": "1 動作，30 呎，8 小時。"
+  },
+  "alarm": {
+    "name": "警報術",
+    "nameEn": "Alarm",
+    "level": 1,
+    "school": "防護",
+    "classes": [
+      "ranger",
+      "wizard"
+    ],
+    "text": "儀式，1 分鐘，30 呎，8 小時。"
+  },
+  "alter-self": {
+    "name": "變身術",
+    "nameEn": "Alter Self",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 小時。"
+  },
+  "animal-friendship": {
+    "name": "動物友善",
+    "nameEn": "Animal Friendship",
+    "level": 1,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "druid",
+      "ranger"
+    ],
+    "text": "1 動作，30 呎，24 小時，感知豁免。"
+  },
+  "animal-messenger": {
+    "name": "動物信使",
+    "nameEn": "Animal Messenger",
+    "level": 2,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "druid",
+      "ranger"
+    ],
+    "text": "儀式，1 動作，30 呎，24 小時。"
+  },
+  "animal-shapes": {
+    "name": "群體動物形態",
+    "nameEn": "Animal Shapes",
+    "level": 8,
+    "school": "變化",
+    "classes": [
+      "druid"
+    ],
+    "text": "專注，1 動作，30 呎，最長 24 小時。"
+  },
+  "animate-dead": {
+    "name": "活化死屍",
+    "nameEn": "Animate Dead",
+    "level": 3,
+    "school": "死靈",
+    "classes": [
+      "cleric",
+      "wizard"
+    ],
+    "text": "1 分鐘，10 呎，即時。"
+  },
+  "animate-objects": {
+    "name": "活化物件",
+    "nameEn": "Animate Objects",
+    "level": 5,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘。"
+  },
+  "antilife-shell": {
+    "name": "反生命護罩",
+    "nameEn": "Antilife Shell",
+    "level": 5,
+    "school": "防護",
+    "classes": [
+      "druid"
+    ],
+    "text": "專注，1 動作，自身，最長 1 小時。"
+  },
+  "antimagic-field": {
+    "name": "反魔法力場",
+    "nameEn": "Antimagic Field",
+    "level": 8,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 小時。"
+  },
+  "antipathy-sympathy": {
+    "name": "厭惡／同情術",
+    "nameEn": "Antipathy/Sympathy",
+    "level": 8,
+    "school": "惑控",
+    "classes": [
+      "druid",
+      "wizard"
+    ],
+    "text": "1 小時，60 呎，10 日。"
+  },
+  "arcane-eye": {
+    "name": "秘法眼",
+    "nameEn": "Arcane Eye",
+    "level": 4,
+    "school": "預言",
+    "classes": [
+      "cleric",
+      "wizard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 小時。"
+  },
+  "arcane-hand": {
+    "name": "秘法之手",
+    "nameEn": "Arcane Hand",
+    "level": 5,
+    "school": "塑能",
+    "classes": [
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘。"
+  },
+  "arcane-lock": {
+    "name": "秘法鎖",
+    "nameEn": "Arcane Lock",
+    "level": 2,
+    "school": "防護",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，直到被解除。"
+  },
+  "arcane-sword": {
+    "name": "秘法劍",
+    "nameEn": "Arcane Sword",
+    "level": 7,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 分鐘，3d10力場。"
+  },
+  "arcanists-magic-aura": {
+    "name": "魔法靈光",
+    "nameEn": "Arcanist's Magic Aura",
+    "level": 2,
+    "school": "幻術",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，24 小時。"
+  },
+  "astral-projection": {
+    "name": "星界投射",
+    "nameEn": "Astral Projection",
+    "level": 9,
+    "school": "死靈",
+    "classes": [
+      "cleric",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 小時，10 呎，特殊。"
+  },
+  "augury": {
+    "name": "占兆術",
+    "nameEn": "Augury",
+    "level": 2,
+    "school": "預言",
+    "classes": [
+      "cleric"
+    ],
+    "text": "儀式，1 分鐘，自身，即時。"
+  },
+  "awaken": {
+    "name": "啟智術",
+    "nameEn": "Awaken",
+    "level": 5,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "druid"
+    ],
+    "text": "8 小時，觸碰，即時。"
+  },
+  "bane": {
+    "name": "災禍術",
+    "nameEn": "Bane",
+    "level": 1,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "cleric"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 分鐘，魅力豁免。"
+  },
+  "banishment": {
+    "name": "放逐術",
+    "nameEn": "Banishment",
+    "level": 4,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "paladin",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 分鐘，魅力豁免。"
+  },
+  "barkskin": {
+    "name": "樹膚術",
+    "nameEn": "Barkskin",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "text": "專注，1 動作，觸碰，最長 1 小時。"
+  },
+  "beacon-of-hope": {
+    "name": "希望信標",
+    "nameEn": "Beacon of Hope",
+    "level": 3,
+    "school": "防護",
+    "classes": [
+      "cleric"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 分鐘。"
+  },
+  "bestow-curse": {
+    "name": "降咒",
+    "nameEn": "Bestow Curse",
+    "level": 3,
+    "school": "死靈",
+    "classes": [
+      "bard",
+      "cleric",
+      "wizard"
+    ],
+    "text": "專注，1 動作，觸碰，最長 1 分鐘，感知豁免。"
+  },
+  "black-tentacles": {
+    "name": "黑觸手",
+    "nameEn": "Black Tentacles",
+    "level": 4,
+    "school": "咒法",
+    "classes": [
+      "wizard"
+    ],
+    "text": "專注，1 動作，90 呎，最長 1 分鐘，3d6鈍擊，敏捷豁免。"
+  },
+  "blade-barrier": {
+    "name": "劍刃護壁",
+    "nameEn": "Blade Barrier",
+    "level": 6,
+    "school": "塑能",
+    "classes": [
+      "cleric"
+    ],
+    "text": "專注，1 動作，90 呎，最長 10 分鐘，6d10揮砍，敏捷豁免。"
+  },
+  "bless": {
+    "name": "祝福術",
+    "nameEn": "Bless",
+    "level": 1,
+    "school": "惑控",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "text": "最多 3 個生物攻擊與豁免加 1d4。專注 1 分鐘。"
+  },
+  "blight": {
+    "name": "凋死術",
+    "nameEn": "Blight",
+    "level": 4,
+    "school": "死靈",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，30 呎，即時，8d8死靈，體質豁免。"
+  },
+  "blindness-deafness": {
+    "name": "目盲／耳聾",
+    "nameEn": "Blindness/Deafness",
+    "level": 2,
+    "school": "死靈",
+    "classes": [
+      "bard",
+      "cleric",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，30 呎，1 分鐘，體質豁免。"
+  },
+  "blink": {
+    "name": "閃現術",
+    "nameEn": "Blink",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，自身，1 分鐘。"
+  },
+  "blur": {
+    "name": "朦朧術",
+    "nameEn": "Blur",
+    "level": 2,
+    "school": "幻術",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘。"
+  },
+  "branding-smite": {
+    "name": "烙印斬",
+    "nameEn": "Branding Smite",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "paladin"
+    ],
+    "text": "專注，附贈動作，自身，最長 1 分鐘，2d6光耀。"
+  },
+  "burning-hands": {
+    "name": "燃燒之手",
+    "nameEn": "Burning Hands",
+    "level": 1,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "15 呎錐，敏捷豁免，3d6 火焰（半傷）。"
+  },
+  "call-lightning": {
+    "name": "召雷術",
+    "nameEn": "Call Lightning",
+    "level": 3,
+    "school": "咒法",
+    "classes": [
+      "druid"
+    ],
+    "text": "專注，1 動作，120 呎，最長 10 分鐘，3d10閃電。"
+  },
+  "calm-emotions": {
+    "name": "安定心神",
+    "nameEn": "Calm Emotions",
+    "level": 2,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "cleric"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 分鐘，魅力豁免。"
+  },
+  "chain-lightning": {
+    "name": "連鎖閃電",
+    "nameEn": "Chain Lightning",
+    "level": 6,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "一個目標 10d8 閃電（敏捷半傷），再跳到最多 3 個 30 呎內目標。"
+  },
+  "charm-person": {
+    "name": "魅惑人類",
+    "nameEn": "Charm Person",
+    "level": 1,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "druid",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "30 呎內類人感知豁免，失敗被魅惑 1 小時。戰鬥中有優勢。"
+  },
+  "chill-touch": {
+    "name": "冷凍之觸",
+    "nameEn": "Chill Touch",
+    "level": 0,
+    "school": "死靈",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "120 呎法術攻擊，1d8 死靈傷害，下回合前無法被治療。"
+  },
+  "circle-of-death": {
+    "name": "死亡法陣",
+    "nameEn": "Circle of Death",
+    "level": 6,
+    "school": "死靈",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，150 呎，即時，8d6死靈，體質豁免。"
+  },
+  "clairvoyance": {
+    "name": "千里眼",
+    "nameEn": "Clairvoyance",
+    "level": 3,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "cleric",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，10 分鐘，1 哩，最長 10 分鐘。"
+  },
+  "clone": {
+    "name": "複製術",
+    "nameEn": "Clone",
+    "level": 8,
+    "school": "死靈",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 小時，觸碰，即時。"
+  },
+  "cloudkill": {
+    "name": "死雲術",
+    "nameEn": "Cloudkill",
+    "level": 5,
+    "school": "咒法",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 10 分鐘，5d8毒素，體質豁免。"
+  },
+  "color-spray": {
+    "name": "七彩噴射",
+    "nameEn": "Color Spray",
+    "level": 1,
+    "school": "幻術",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，自身，1 輪。"
+  },
+  "command": {
+    "name": "命令術",
+    "nameEn": "Command",
+    "level": 1,
+    "school": "惑控",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "text": "1 動作，60 呎，1 輪，感知豁免。"
+  },
+  "commune": {
+    "name": "通神術",
+    "nameEn": "Commune",
+    "level": 5,
+    "school": "預言",
+    "classes": [
+      "cleric"
+    ],
+    "text": "儀式，1 分鐘，自身，1 分鐘。"
+  },
+  "commune-with-nature": {
+    "name": "問道自然",
+    "nameEn": "Commune With Nature",
+    "level": 5,
+    "school": "預言",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "text": "儀式，1 分鐘，自身，即時。"
+  },
+  "comprehend-languages": {
+    "name": "通曉語言",
+    "nameEn": "Comprehend Languages",
+    "level": 1,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "儀式，1 動作，自身，1 小時。"
+  },
+  "compulsion": {
+    "name": "強制術",
+    "nameEn": "Compulsion",
+    "level": 4,
+    "school": "惑控",
+    "classes": [
+      "bard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 分鐘，感知豁免。"
+  },
+  "cone-of-cold": {
+    "name": "寒冰錐",
+    "nameEn": "Cone of Cold",
+    "level": 5,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "60 呎錐，體質豁免 8d8 寒冷（半傷）。"
+  },
+  "confusion": {
+    "name": "困惑術",
+    "nameEn": "Confusion",
+    "level": 4,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，90 呎，最長 1 分鐘，感知豁免。"
+  },
+  "conjure-animals": {
+    "name": "召喚動物",
+    "nameEn": "Conjure Animals",
+    "level": 3,
+    "school": "咒法",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 小時。"
+  },
+  "conjure-celestial": {
+    "name": "召喚天界生物",
+    "nameEn": "Conjure Celestial",
+    "level": 7,
+    "school": "咒法",
+    "classes": [
+      "cleric"
+    ],
+    "text": "專注，1 分鐘，90 呎，最長 1 小時。"
+  },
+  "conjure-elemental": {
+    "name": "召喚元素",
+    "nameEn": "Conjure Elemental",
+    "level": 5,
+    "school": "咒法",
+    "classes": [
+      "druid",
+      "wizard"
+    ],
+    "text": "專注，1 分鐘，90 呎，最長 1 小時。"
+  },
+  "conjure-fey": {
+    "name": "召喚妖精",
+    "nameEn": "Conjure Fey",
+    "level": 6,
+    "school": "咒法",
+    "classes": [
+      "druid",
+      "warlock"
+    ],
+    "text": "專注，1 分鐘，90 呎，最長 1 小時。"
+  },
+  "conjure-minor-elementals": {
+    "name": "召喚次級元素",
+    "nameEn": "Conjure Minor Elementals",
+    "level": 4,
+    "school": "咒法",
+    "classes": [
+      "druid",
+      "wizard"
+    ],
+    "text": "專注，1 分鐘，90 呎，最長 1 小時。"
+  },
+  "conjure-woodland-beings": {
+    "name": "召喚林木生物",
+    "nameEn": "Conjure Woodland Beings",
+    "level": 4,
+    "school": "咒法",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 小時。"
+  },
+  "contact-other-plane": {
+    "name": "異界通訊",
+    "nameEn": "Contact Other Plane",
+    "level": 5,
+    "school": "預言",
+    "classes": [
+      "warlock",
+      "wizard"
+    ],
+    "text": "儀式，1 分鐘，自身，1 分鐘，智力豁免。"
+  },
+  "contagion": {
+    "name": "傳染術",
+    "nameEn": "Contagion",
+    "level": 5,
+    "school": "死靈",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "text": "1 動作，觸碰，7 日，體質豁免。"
+  },
+  "contingency": {
+    "name": "觸發術",
+    "nameEn": "Contingency",
+    "level": 6,
+    "school": "塑能",
+    "classes": [
+      "wizard"
+    ],
+    "text": "10 分鐘，自身，10 日。"
+  },
+  "continual-flame": {
+    "name": "不滅明焰",
+    "nameEn": "Continual Flame",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "cleric",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，直到被解除。"
+  },
+  "control-water": {
+    "name": "操控水體",
+    "nameEn": "Control Water",
+    "level": 4,
+    "school": "變化",
+    "classes": [
+      "cleric",
+      "druid",
+      "wizard"
+    ],
+    "text": "專注，1 動作，300 呎，最長 10 分鐘，2d8鈍擊，力量豁免。"
+  },
+  "control-weather": {
+    "name": "操控天氣",
+    "nameEn": "Control Weather",
+    "level": 8,
+    "school": "變化",
+    "classes": [
+      "cleric",
+      "druid",
+      "wizard"
+    ],
+    "text": "專注，10 分鐘，自身，最長 8 小時。"
+  },
+  "counterspell": {
+    "name": "反制法術",
+    "nameEn": "Counterspell",
+    "level": 3,
+    "school": "防護",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "反應，60 呎。3 環或以下直接打斷；更高則做 DC 10+環數的檢定。"
+  },
+  "create-food-and-water": {
+    "name": "造糧術",
+    "nameEn": "Create Food and Water",
+    "level": 3,
+    "school": "咒法",
+    "classes": [
+      "cleric",
+      "druid",
+      "paladin"
+    ],
+    "text": "1 動作，30 呎，即時。"
+  },
+  "create-undead": {
+    "name": "創造不死",
+    "nameEn": "Create Undead",
+    "level": 6,
+    "school": "死靈",
+    "classes": [
+      "cleric",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 分鐘，10 呎，即時。"
+  },
+  "create-or-destroy-water": {
+    "name": "造水／毀水",
+    "nameEn": "Create or Destroy Water",
+    "level": 1,
+    "school": "變化",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "text": "1 動作，30 呎，即時。"
+  },
+  "creation": {
+    "name": "造物術",
+    "nameEn": "Creation",
+    "level": 5,
+    "school": "幻術",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 分鐘，30 呎，特殊。"
+  },
+  "cure-wounds": {
+    "name": "療傷術",
+    "nameEn": "Cure Wounds",
+    "level": 1,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger"
+    ],
+    "text": "觸摸，回復 1d8＋施法屬性調整值 HP。"
+  },
+  "dancing-lights": {
+    "name": "舞光術",
+    "nameEn": "Dancing Lights",
+    "level": 0,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘。"
+  },
+  "darkness": {
+    "name": "黑暗術",
+    "nameEn": "Darkness",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 10 分鐘。"
+  },
+  "darkvision": {
+    "name": "黑暗視覺",
+    "nameEn": "Darkvision",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "druid",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，8 小時。"
+  },
+  "daylight": {
+    "name": "日光術",
+    "nameEn": "Daylight",
+    "level": 3,
+    "school": "塑能",
+    "classes": [
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger",
+      "sorcerer"
+    ],
+    "text": "1 動作，60 呎，1 小時。"
+  },
+  "death-ward": {
+    "name": "死亡結界",
+    "nameEn": "Death Ward",
+    "level": 4,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "text": "1 動作，觸碰，8 小時。"
+  },
+  "delayed-blast-fireball": {
+    "name": "延遲爆裂火球",
+    "nameEn": "Delayed Blast Fireball",
+    "level": 7,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "火球可延遲。立刻丟為 12d6，每回合多 1d6，最多專注 1 分鐘。"
+  },
+  "demiplane": {
+    "name": "半位面",
+    "nameEn": "Demiplane",
+    "level": 8,
+    "school": "咒法",
+    "classes": [
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，60 呎，1 小時。"
+  },
+  "detect-evil-and-good": {
+    "name": "偵測善惡",
+    "nameEn": "Detect Evil and Good",
+    "level": 1,
+    "school": "預言",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "text": "專注，1 動作，自身，最長 10 分鐘。"
+  },
+  "detect-magic": {
+    "name": "偵測魔法",
+    "nameEn": "Detect Magic",
+    "level": 1,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "感覺 30 呎內魔法。儀式。專注 10 分鐘。"
+  },
+  "detect-poison-and-disease": {
+    "name": "偵測毒與疾病",
+    "nameEn": "Detect Poison and Disease",
+    "level": 1,
+    "school": "預言",
+    "classes": [
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger"
+    ],
+    "text": "儀式，專注，1 動作，自身，最長 10 分鐘。"
+  },
+  "detect-thoughts": {
+    "name": "偵測思想",
+    "nameEn": "Detect Thoughts",
+    "level": 2,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘。"
+  },
+  "dimension-door": {
+    "name": "任意門",
+    "nameEn": "Dimension Door",
+    "level": 4,
+    "school": "咒法",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "傳送最多 500 呎。可帶一個自願生物。"
+  },
+  "disguise-self": {
+    "name": "易容術",
+    "nameEn": "Disguise Self",
+    "level": 1,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，自身，1 小時。"
+  },
+  "disintegrate": {
+    "name": "解離術",
+    "nameEn": "Disintegrate",
+    "level": 6,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "敏捷豁免失敗受 10d6+40 力場；HP 歸 0 則化為灰。"
+  },
+  "dispel-evil-and-good": {
+    "name": "驅散善惡",
+    "nameEn": "Dispel Evil and Good",
+    "level": 5,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘，魅力豁免。"
+  },
+  "dispel-magic": {
+    "name": "解除魔法",
+    "nameEn": "Dispel Magic",
+    "level": 3,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，120 呎，即時。"
+  },
+  "divination": {
+    "name": "預言術",
+    "nameEn": "Divination",
+    "level": 4,
+    "school": "預言",
+    "classes": [
+      "druid"
+    ],
+    "text": "儀式，1 動作，自身，即時。"
+  },
+  "divine-favor": {
+    "name": "神恩",
+    "nameEn": "Divine Favor",
+    "level": 1,
+    "school": "塑能",
+    "classes": [
+      "paladin"
+    ],
+    "text": "專注，附贈動作，自身，最長 1 分鐘，1d4光耀。"
+  },
+  "divine-word": {
+    "name": "聖言術",
+    "nameEn": "Divine Word",
+    "level": 7,
+    "school": "塑能",
+    "classes": [
+      "cleric"
+    ],
+    "text": "附贈動作，30 呎，即時，魅力豁免。"
+  },
+  "dominate-beast": {
+    "name": "支配野獸",
+    "nameEn": "Dominate Beast",
+    "level": 4,
+    "school": "惑控",
+    "classes": [
+      "druid",
+      "sorcerer"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 分鐘，感知豁免。"
+  },
+  "dominate-monster": {
+    "name": "支配怪物",
+    "nameEn": "Dominate Monster",
+    "level": 8,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "感知豁免失敗被你魅惑並聽從。專注。"
+  },
+  "dominate-person": {
+    "name": "支配人類",
+    "nameEn": "Dominate Person",
+    "level": 5,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 分鐘，感知豁免。"
+  },
+  "dream": {
+    "name": "夢境",
+    "nameEn": "Dream",
+    "level": 5,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 分鐘，特殊，8 小時，3d6心靈，感知豁免。"
+  },
+  "druidcraft": {
+    "name": "德魯伊伎倆",
+    "nameEn": "Druidcraft",
+    "level": 0,
+    "school": "變化",
+    "classes": [
+      "druid"
+    ],
+    "text": "1 動作，30 呎，即時。"
+  },
+  "earthquake": {
+    "name": "地震術",
+    "nameEn": "Earthquake",
+    "level": 8,
+    "school": "塑能",
+    "classes": [
+      "cleric",
+      "druid",
+      "sorcerer"
+    ],
+    "text": "100 呎半徑地面震動，倒地、裂縫、建築受損。專注。"
+  },
+  "eldritch-blast": {
+    "name": "魔能爆",
+    "nameEn": "Eldritch Blast",
+    "level": 0,
+    "school": "塑能",
+    "classes": [
+      "warlock"
+    ],
+    "text": "120 呎法術攻擊，1d10 力場。高等級會多射線。"
+  },
+  "enhance-ability": {
+    "name": "強化能力",
+    "nameEn": "Enhance Ability",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "sorcerer"
+    ],
+    "text": "專注，1 動作，觸碰，最長 1 小時。"
+  },
+  "enlarge-reduce": {
+    "name": "放大／縮小",
+    "nameEn": "Enlarge/Reduce",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 分鐘，體質豁免。"
+  },
+  "entangle": {
+    "name": "糾纏術",
+    "nameEn": "Entangle",
+    "level": 1,
+    "school": "咒法",
+    "classes": [
+      "druid"
+    ],
+    "text": "專注，1 動作，90 呎，最長 1 分鐘，力量豁免。"
+  },
+  "enthrall": {
+    "name": "攝心術",
+    "nameEn": "Enthrall",
+    "level": 2,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "warlock"
+    ],
+    "text": "1 動作，60 呎，1 分鐘，感知豁免。"
+  },
+  "etherealness": {
+    "name": "以太化",
+    "nameEn": "Etherealness",
+    "level": 7,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "cleric",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，自身，8 小時。"
+  },
+  "expeditious-retreat": {
+    "name": "加速撤退",
+    "nameEn": "Expeditious Retreat",
+    "level": 1,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，附贈動作，自身，最長 10 分鐘。"
+  },
+  "eyebite": {
+    "name": "攝魂凝視",
+    "nameEn": "Eyebite",
+    "level": 6,
+    "school": "死靈",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘，感知豁免。"
+  },
+  "fabricate": {
+    "name": "製造術",
+    "nameEn": "Fabricate",
+    "level": 4,
+    "school": "變化",
+    "classes": [
+      "wizard"
+    ],
+    "text": "10 分鐘，120 呎，即時。"
+  },
+  "faerie-fire": {
+    "name": "妖火",
+    "nameEn": "Faerie Fire",
+    "level": 1,
+    "school": "塑能",
+    "classes": [
+      "druid"
+    ],
+    "text": "20 呎立方，敏捷豁免失敗會發光，攻擊它有優勢。專注 1 分鐘。"
+  },
+  "faithful-hound": {
+    "name": "忠犬",
+    "nameEn": "Faithful Hound",
+    "level": 4,
+    "school": "咒法",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，30 呎，8 小時，4d8穿刺。"
+  },
+  "false-life": {
+    "name": "虛假生命",
+    "nameEn": "False Life",
+    "level": 1,
+    "school": "死靈",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，自身，1 小時。"
+  },
+  "fear": {
+    "name": "恐懼術",
+    "nameEn": "Fear",
+    "level": 3,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘，感知豁免。"
+  },
+  "feather-fall": {
+    "name": "羽落術",
+    "nameEn": "Feather Fall",
+    "level": 1,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "反應，60 呎，1 分鐘。"
+  },
+  "feeblemind": {
+    "name": "弱智術",
+    "nameEn": "Feeblemind",
+    "level": 8,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "druid",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，150 呎，即時，4d6心靈，智力豁免。"
+  },
+  "find-familiar": {
+    "name": "尋獲魔寵",
+    "nameEn": "Find Familiar",
+    "level": 1,
+    "school": "咒法",
+    "classes": [
+      "wizard"
+    ],
+    "text": "儀式，1 小時，10 呎，即時。"
+  },
+  "find-steed": {
+    "name": "尋獲坐騎",
+    "nameEn": "Find Steed",
+    "level": 2,
+    "school": "咒法",
+    "classes": [
+      "paladin"
+    ],
+    "text": "10 分鐘，30 呎，即時。"
+  },
+  "find-traps": {
+    "name": "尋找陷阱",
+    "nameEn": "Find Traps",
+    "level": 2,
+    "school": "預言",
+    "classes": [
+      "cleric",
+      "druid",
+      "ranger"
+    ],
+    "text": "1 動作，120 呎，即時。"
+  },
+  "find-the-path": {
+    "name": "尋路術",
+    "nameEn": "Find the Path",
+    "level": 6,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid"
+    ],
+    "text": "專注，1 分鐘，自身，最長 24 小時。"
+  },
+  "finger-of-death": {
+    "name": "死亡一指",
+    "nameEn": "Finger of Death",
+    "level": 7,
+    "school": "死靈",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "體質豁免 7d8+30 死靈（半傷）。因此死亡的類人會變成殭屍。"
+  },
+  "fire-bolt": {
+    "name": "火焰箭",
+    "nameEn": "Fire Bolt",
+    "level": 0,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "120 呎法術攻擊，1d10 火焰。打中物件可點燃。"
+  },
+  "fire-shield": {
+    "name": "火焰護盾",
+    "nameEn": "Fire Shield",
+    "level": 4,
+    "school": "塑能",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，自身，10 分鐘，2d8火焰。"
+  },
+  "fire-storm": {
+    "name": "火焰風暴",
+    "nameEn": "Fire Storm",
+    "level": 7,
+    "school": "塑能",
+    "classes": [
+      "cleric",
+      "druid",
+      "sorcerer"
+    ],
+    "text": "十個 10 呎立方，敏捷豁免 7d10 火焰（半傷）。"
+  },
+  "fireball": {
+    "name": "火球術",
+    "nameEn": "Fireball",
+    "level": 3,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "150 呎內 20 呎半徑，敏捷豁免 8d6 火焰（半傷）。"
+  },
+  "flame-blade": {
+    "name": "火焰刀",
+    "nameEn": "Flame Blade",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "druid"
+    ],
+    "text": "專注，附贈動作，自身，最長 10 分鐘，3d6火焰。"
+  },
+  "flame-strike": {
+    "name": "焰擊術",
+    "nameEn": "Flame Strike",
+    "level": 5,
+    "school": "塑能",
+    "classes": [
+      "cleric"
+    ],
+    "text": "1 動作，60 呎，即時，4d6火焰，敏捷豁免。"
+  },
+  "flaming-sphere": {
+    "name": "熾焰法球",
+    "nameEn": "Flaming Sphere",
+    "level": 2,
+    "school": "咒法",
+    "classes": [
+      "druid",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 分鐘，2d6火焰。"
+  },
+  "flesh-to-stone": {
+    "name": "石化術",
+    "nameEn": "Flesh to Stone",
+    "level": 6,
+    "school": "變化",
+    "classes": [
+      "warlock",
+      "wizard"
+    ],
+    "text": "體質豁免失敗受束縛，連續失敗會變成石頭。專注。"
+  },
+  "floating-disk": {
+    "name": "浮空碟",
+    "nameEn": "Floating Disk",
+    "level": 1,
+    "school": "咒法",
+    "classes": [
+      "wizard"
+    ],
+    "text": "儀式，1 動作，30 呎，1 小時。"
+  },
+  "fly": {
+    "name": "飛行術",
+    "nameEn": "Fly",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "觸摸一個生物獲得 60 呎飛行速度。專注 10 分鐘。"
+  },
+  "fog-cloud": {
+    "name": "霧雲術",
+    "nameEn": "Fog Cloud",
+    "level": 1,
+    "school": "咒法",
+    "classes": [
+      "druid",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 小時。"
+  },
+  "forbiddance": {
+    "name": "禁制術",
+    "nameEn": "Forbiddance",
+    "level": 6,
+    "school": "防護",
+    "classes": [
+      "cleric"
+    ],
+    "text": "儀式，10 分鐘，觸碰，24 小時。"
+  },
+  "forcecage": {
+    "name": "力場監牢",
+    "nameEn": "Forcecage",
+    "level": 7,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，100 呎，1 小時。"
+  },
+  "foresight": {
+    "name": "預視術",
+    "nameEn": "Foresight",
+    "level": 9,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "druid",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 分鐘，觸碰，8 小時。"
+  },
+  "freedom-of-movement": {
+    "name": "自由行動",
+    "nameEn": "Freedom of Movement",
+    "level": 4,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "ranger"
+    ],
+    "text": "1 動作，觸碰，1 小時。"
+  },
+  "freezing-sphere": {
+    "name": "冰封法球",
+    "nameEn": "Freezing Sphere",
+    "level": 6,
+    "school": "塑能",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，300 呎，即時，10d6寒冷，體質豁免。"
+  },
+  "gaseous-form": {
+    "name": "氣化形態",
+    "nameEn": "Gaseous Form",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，觸碰，最長 1 小時。"
+  },
+  "gate": {
+    "name": "異界之門",
+    "nameEn": "Gate",
+    "level": 9,
+    "school": "咒法",
+    "classes": [
+      "cleric",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 分鐘。"
+  },
+  "geas": {
+    "name": "指使術",
+    "nameEn": "Geas",
+    "level": 5,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "wizard"
+    ],
+    "text": "1 分鐘，60 呎，30 日，感知豁免。"
+  },
+  "gentle-repose": {
+    "name": "安息術",
+    "nameEn": "Gentle Repose",
+    "level": 2,
+    "school": "死靈",
+    "classes": [
+      "cleric",
+      "wizard"
+    ],
+    "text": "儀式，1 動作，觸碰，10 日。"
+  },
+  "giant-insect": {
+    "name": "巨蟲術",
+    "nameEn": "Giant Insect",
+    "level": 4,
+    "school": "變化",
+    "classes": [
+      "druid"
+    ],
+    "text": "專注，1 動作，30 呎，最長 10 分鐘。"
+  },
+  "glibness": {
+    "name": "花言巧語",
+    "nameEn": "Glibness",
+    "level": 8,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "warlock"
+    ],
+    "text": "1 動作，自身，1 小時。"
+  },
+  "globe-of-invulnerability": {
+    "name": "法術無效結界",
+    "nameEn": "Globe of Invulnerability",
+    "level": 6,
+    "school": "防護",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘。"
+  },
+  "glyph-of-warding": {
+    "name": "守衛雕文",
+    "nameEn": "Glyph of Warding",
+    "level": 3,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "cleric",
+      "wizard"
+    ],
+    "text": "1 小時，觸碰，直到被解除。"
+  },
+  "goodberry": {
+    "name": "神莓術",
+    "nameEn": "Goodberry",
+    "level": 1,
+    "school": "變化",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "text": "1 動作，觸碰，即時。"
+  },
+  "grease": {
+    "name": "油膩術",
+    "nameEn": "Grease",
+    "level": 1,
+    "school": "咒法",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，60 呎，1 分鐘，敏捷豁免。"
+  },
+  "greater-invisibility": {
+    "name": "高等隱形術",
+    "nameEn": "Greater Invisibility",
+    "level": 4,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "一個生物隱形，攻擊與施法也不結束。專注 1 分鐘。"
+  },
+  "greater-restoration": {
+    "name": "高等復原術",
+    "nameEn": "Greater Restoration",
+    "level": 5,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid"
+    ],
+    "text": "1 動作，觸碰，即時。"
+  },
+  "guardian-of-faith": {
+    "name": "信仰守衛",
+    "nameEn": "Guardian of Faith",
+    "level": 4,
+    "school": "咒法",
+    "classes": [
+      "cleric"
+    ],
+    "text": "1 動作，30 呎，8 小時，20光耀，敏捷豁免。"
+  },
+  "guards-and-wards": {
+    "name": "守衛與結界",
+    "nameEn": "Guards and Wards",
+    "level": 6,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "10 分鐘，觸碰，24 小時。"
+  },
+  "guidance": {
+    "name": "指引",
+    "nameEn": "Guidance",
+    "level": 0,
+    "school": "預言",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "text": "觸摸一個生物，下次屬性檢定加 1d4。專注，最多 1 分鐘。"
+  },
+  "guiding-bolt": {
+    "name": "導引箭",
+    "nameEn": "Guiding Bolt",
+    "level": 1,
+    "school": "塑能",
+    "classes": [
+      "cleric"
+    ],
+    "text": "120 呎法術攻擊，4d6 光耀。下一個打它的攻擊有優勢。"
+  },
+  "gust-of-wind": {
+    "name": "造風術",
+    "nameEn": "Gust of Wind",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘，力量豁免。"
+  },
+  "hallow": {
+    "name": "聖居術",
+    "nameEn": "Hallow",
+    "level": 5,
+    "school": "塑能",
+    "classes": [
+      "cleric"
+    ],
+    "text": "24 小時，觸碰，直到被解除，魅力豁免。"
+  },
+  "hallucinatory-terrain": {
+    "name": "幻景",
+    "nameEn": "Hallucinatory Terrain",
+    "level": 4,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "druid",
+      "warlock",
+      "wizard"
+    ],
+    "text": "10 分鐘，300 呎，24 小時。"
+  },
+  "harm": {
+    "name": "傷害術",
+    "nameEn": "Harm",
+    "level": 6,
+    "school": "死靈",
+    "classes": [
+      "cleric"
+    ],
+    "text": "1 動作，60 呎，即時，14d6死靈，體質豁免。"
+  },
+  "haste": {
+    "name": "加速術",
+    "nameEn": "Haste",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "速度加倍、AC +2、敏捷豁免有優勢、每回合多一個攻擊動作。專注。結束時遲緩一回合。"
+  },
+  "heal": {
+    "name": "治療術",
+    "nameEn": "Heal",
+    "level": 6,
+    "school": "塑能",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "text": "60 呎內一個生物回復 70 HP，並結束目盲、耳聾與疾病。"
+  },
+  "healing-word": {
+    "name": "治療真言",
+    "nameEn": "Healing Word",
+    "level": 1,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid"
+    ],
+    "text": "附贈動作，60 呎內回復 1d4＋施法屬性 HP。"
+  },
+  "heat-metal": {
+    "name": "灼熱金屬",
+    "nameEn": "Heat Metal",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "druid"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 分鐘，2d8火焰，體質豁免。"
+  },
+  "hellish-rebuke": {
+    "name": "煉獄叱喝",
+    "nameEn": "Hellish Rebuke",
+    "level": 1,
+    "school": "塑能",
+    "classes": [
+      "warlock"
+    ],
+    "text": "反應，60 呎，即時，2d10火焰，敏捷豁免。"
+  },
+  "heroes-feast": {
+    "name": "英雄宴",
+    "nameEn": "Heroes' Feast",
+    "level": 6,
+    "school": "咒法",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "text": "10 分鐘，30 呎，即時。"
+  },
+  "heroism": {
+    "name": "英雄氣概",
+    "nameEn": "Heroism",
+    "level": 1,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "paladin"
+    ],
+    "text": "專注，1 動作，觸碰，最長 1 分鐘。"
+  },
+  "hideous-laughter": {
+    "name": "狂笑術",
+    "nameEn": "Hideous Laughter",
+    "level": 1,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 分鐘，感知豁免。"
+  },
+  "hold-monster": {
+    "name": "怪物定身術",
+    "nameEn": "Hold Monster",
+    "level": 5,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "同人類定身，但任何生物（非不死）。"
+  },
+  "hold-person": {
+    "name": "人類定身術",
+    "nameEn": "Hold Person",
+    "level": 2,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "60 呎內類人感知豁免，失敗麻痺。每回合結束再豁免。專注。"
+  },
+  "holy-aura": {
+    "name": "神聖靈光",
+    "nameEn": "Holy Aura",
+    "level": 8,
+    "school": "防護",
+    "classes": [
+      "cleric"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘。"
+  },
+  "hunters-mark": {
+    "name": "獵人印記",
+    "nameEn": "Hunter's Mark",
+    "level": 1,
+    "school": "預言",
+    "classes": [
+      "ranger"
+    ],
+    "text": "你打標記目標額外 1d6。感知（生存）追蹤它有優勢。專注。"
+  },
+  "hypnotic-pattern": {
+    "name": "催眠圖紋",
+    "nameEn": "Hypnotic Pattern",
+    "level": 3,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘，感知豁免。"
+  },
+  "ice-storm": {
+    "name": "冰風暴",
+    "nameEn": "Ice Storm",
+    "level": 4,
+    "school": "塑能",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "20 呎半徑 40 呎高，敏捷豁免 2d8 鈍擊 + 4d6 寒冷（半傷）。難地形。"
+  },
+  "identify": {
+    "name": "鑑定術",
+    "nameEn": "Identify",
+    "level": 1,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "儀式，1 分鐘，觸碰，即時。"
+  },
+  "illusory-script": {
+    "name": "幻影手稿",
+    "nameEn": "Illusory Script",
+    "level": 1,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "warlock",
+      "wizard"
+    ],
+    "text": "儀式，1 分鐘，觸碰，10 日。"
+  },
+  "imprisonment": {
+    "name": "禁錮術",
+    "nameEn": "Imprisonment",
+    "level": 9,
+    "school": "防護",
+    "classes": [
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 分鐘，30 呎，直到被解除，感知豁免。"
+  },
+  "incendiary-cloud": {
+    "name": "焚雲術",
+    "nameEn": "Incendiary Cloud",
+    "level": 8,
+    "school": "咒法",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，150 呎，最長 1 分鐘，10d8火焰，敏捷豁免。"
+  },
+  "inflict-wounds": {
+    "name": "造成傷害",
+    "nameEn": "Inflict Wounds",
+    "level": 1,
+    "school": "死靈",
+    "classes": [
+      "cleric"
+    ],
+    "text": "1 動作，觸碰，即時，3d10死靈。"
+  },
+  "insect-plague": {
+    "name": "蟲群災禍",
+    "nameEn": "Insect Plague",
+    "level": 5,
+    "school": "咒法",
+    "classes": [
+      "cleric",
+      "druid",
+      "sorcerer"
+    ],
+    "text": "專注，1 動作，300 呎，最長 10 分鐘，4d10穿刺，體質豁免。"
+  },
+  "instant-summons": {
+    "name": "即時召喚",
+    "nameEn": "Instant Summons",
+    "level": 6,
+    "school": "咒法",
+    "classes": [
+      "wizard"
+    ],
+    "text": "儀式，1 分鐘，觸碰，直到被解除。"
+  },
+  "invisibility": {
+    "name": "隱形術",
+    "nameEn": "Invisibility",
+    "level": 2,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "觸摸一個生物隱形。攻擊或施法結束。專注 1 小時。"
+  },
+  "irresistible-dance": {
+    "name": "強制舞步",
+    "nameEn": "Irresistible Dance",
+    "level": 6,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 分鐘。"
+  },
+  "jump": {
+    "name": "跳躍術",
+    "nameEn": "Jump",
+    "level": 1,
+    "school": "變化",
+    "classes": [
+      "druid",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，1 分鐘。"
+  },
+  "knock": {
+    "name": "敲擊術",
+    "nameEn": "Knock",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，60 呎，即時。"
+  },
+  "legend-lore": {
+    "name": "通曉傳奇",
+    "nameEn": "Legend Lore",
+    "level": 5,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "cleric",
+      "wizard"
+    ],
+    "text": "10 分鐘，自身，即時。"
+  },
+  "lesser-restoration": {
+    "name": "次等復原術",
+    "nameEn": "Lesser Restoration",
+    "level": 2,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger"
+    ],
+    "text": "1 動作，觸碰，即時。"
+  },
+  "levitate": {
+    "name": "漂浮術",
+    "nameEn": "Levitate",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 10 分鐘。"
+  },
+  "light": {
+    "name": "光亮術",
+    "nameEn": "Light",
+    "level": 0,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "cleric",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "物件發出 20 呎亮光 + 20 呎微光，1 小時。"
+  },
+  "lightning-bolt": {
+    "name": "閃電束",
+    "nameEn": "Lightning Bolt",
+    "level": 3,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "100 呎長 5 呎寬直線，敏捷豁免 8d6 閃電（半傷）。"
+  },
+  "locate-animals-or-plants": {
+    "name": "定位動植物",
+    "nameEn": "Locate Animals or Plants",
+    "level": 2,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "druid",
+      "ranger"
+    ],
+    "text": "儀式，1 動作，自身，即時。"
+  },
+  "locate-creature": {
+    "name": "定位生物",
+    "nameEn": "Locate Creature",
+    "level": 4,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 小時。"
+  },
+  "locate-object": {
+    "name": "定位物件",
+    "nameEn": "Locate Object",
+    "level": 2,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 10 分鐘。"
+  },
+  "longstrider": {
+    "name": "大步奔行",
+    "nameEn": "Longstrider",
+    "level": 1,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "druid",
+      "ranger",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，1 小時。"
+  },
+  "mage-armor": {
+    "name": "法師護甲",
+    "nameEn": "Mage Armor",
+    "level": 1,
+    "school": "防護",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "未著甲生物 AC 變成 13＋敏捷調整值，8 小時。"
+  },
+  "mage-hand": {
+    "name": "法師之手",
+    "nameEn": "Mage Hand",
+    "level": 0,
+    "school": "咒法",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "30 呎內幽靈手，可拿 10 磅內東西。不能攻擊。"
+  },
+  "magic-circle": {
+    "name": "魔法法陣",
+    "nameEn": "Magic Circle",
+    "level": 3,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "paladin",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 分鐘，10 呎，1 小時，魅力豁免。"
+  },
+  "magic-jar": {
+    "name": "魔魂壺",
+    "nameEn": "Magic Jar",
+    "level": 6,
+    "school": "死靈",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 分鐘，自身，直到被解除，魅力豁免。"
+  },
+  "magic-missile": {
+    "name": "魔法飛彈",
+    "nameEn": "Magic Missile",
+    "level": 1,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "三發飛彈，各 1d4+1 力場，自動命中。可打同一人或分開。"
+  },
+  "magic-mouth": {
+    "name": "魔嘴術",
+    "nameEn": "Magic Mouth",
+    "level": 2,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "儀式，1 分鐘，30 呎，直到被解除。"
+  },
+  "magic-weapon": {
+    "name": "魔法武器",
+    "nameEn": "Magic Weapon",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "paladin",
+      "wizard"
+    ],
+    "text": "專注，附贈動作，觸碰，最長 1 小時。"
+  },
+  "magnificent-mansion": {
+    "name": "豪宅術",
+    "nameEn": "Magnificent Mansion",
+    "level": 7,
+    "school": "咒法",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "1 分鐘，300 呎，24 小時。"
+  },
+  "major-image": {
+    "name": "高等幻影",
+    "nameEn": "Major Image",
+    "level": 3,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 10 分鐘。"
+  },
+  "mass-cure-wounds": {
+    "name": "群體療傷術",
+    "nameEn": "Mass Cure Wounds",
+    "level": 5,
+    "school": "咒法",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid"
+    ],
+    "text": "30 呎內最多 6 個生物各回復 3d8＋施法屬性 HP。"
+  },
+  "mass-heal": {
+    "name": "群體醫療",
+    "nameEn": "Mass Heal",
+    "level": 9,
+    "school": "咒法",
+    "classes": [
+      "cleric"
+    ],
+    "text": "1 動作，60 呎，即時。"
+  },
+  "mass-healing-word": {
+    "name": "群體治療真言",
+    "nameEn": "Mass Healing Word",
+    "level": 3,
+    "school": "塑能",
+    "classes": [
+      "cleric"
+    ],
+    "text": "附贈動作，60 呎，即時。"
+  },
+  "mass-suggestion": {
+    "name": "群體暗示",
+    "nameEn": "Mass Suggestion",
+    "level": 6,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，60 呎，24 小時，感知豁免。"
+  },
+  "maze": {
+    "name": "迷宮術",
+    "nameEn": "Maze",
+    "level": 8,
+    "school": "咒法",
+    "classes": [
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 10 分鐘。"
+  },
+  "meld-into-stone": {
+    "name": "融身入石",
+    "nameEn": "Meld Into Stone",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "cleric"
+    ],
+    "text": "儀式，1 動作，觸碰，8 小時。"
+  },
+  "mending": {
+    "name": "修復術",
+    "nameEn": "Mending",
+    "level": 0,
+    "school": "變化",
+    "classes": [
+      "cleric",
+      "bard",
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 分鐘，觸碰，即時。"
+  },
+  "message": {
+    "name": "傳訊術",
+    "nameEn": "Message",
+    "level": 0,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，120 呎，1 輪。"
+  },
+  "meteor-swarm": {
+    "name": "流星爆",
+    "nameEn": "Meteor Swarm",
+    "level": 9,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "四顆流星，各 40 呎半徑，敏捷豁免 20d6 火焰 + 20d6 鈍擊（半傷）。"
+  },
+  "mind-blank": {
+    "name": "心靈屏障",
+    "nameEn": "Mind Blank",
+    "level": 8,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，24 小時。"
+  },
+  "minor-illusion": {
+    "name": "次級幻象",
+    "nameEn": "Minor Illusion",
+    "level": 0,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "5 呎立方的聲音或影像，1 分鐘。調查可看穿。"
+  },
+  "mirage-arcane": {
+    "name": "秘法蜃景",
+    "nameEn": "Mirage Arcane",
+    "level": 7,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "druid",
+      "wizard"
+    ],
+    "text": "10 分鐘，視線，10 日。"
+  },
+  "mirror-image": {
+    "name": "鏡影術",
+    "nameEn": "Mirror Image",
+    "level": 2,
+    "school": "幻術",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，自身，1 分鐘。"
+  },
+  "mislead": {
+    "name": "誤導術",
+    "nameEn": "Mislead",
+    "level": 5,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 小時。"
+  },
+  "misty-step": {
+    "name": "迷霧步",
+    "nameEn": "Misty Step",
+    "level": 2,
+    "school": "咒法",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "附贈動作，傳送 30 呎內你看得到的未佔空間。"
+  },
+  "modify-memory": {
+    "name": "修改記憶",
+    "nameEn": "Modify Memory",
+    "level": 5,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 分鐘，感知豁免。"
+  },
+  "moonbeam": {
+    "name": "月光束",
+    "nameEn": "Moonbeam",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "druid"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘，2d10光耀，體質豁免。"
+  },
+  "move-earth": {
+    "name": "移土術",
+    "nameEn": "Move Earth",
+    "level": 6,
+    "school": "變化",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 2 hours。"
+  },
+  "nondetection": {
+    "name": "回避偵測",
+    "nameEn": "Nondetection",
+    "level": 3,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "ranger",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，8 小時。"
+  },
+  "pass-without-trace": {
+    "name": "無蹤步",
+    "nameEn": "Pass Without Trace",
+    "level": 2,
+    "school": "防護",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "text": "專注，1 動作，自身，最長 1 小時。"
+  },
+  "passwall": {
+    "name": "穿牆術",
+    "nameEn": "Passwall",
+    "level": 5,
+    "school": "變化",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，30 呎，1 小時。"
+  },
+  "phantasmal-killer": {
+    "name": "幻影殺手",
+    "nameEn": "Phantasmal Killer",
+    "level": 4,
+    "school": "幻術",
+    "classes": [
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘，4d10心靈，感知豁免。"
+  },
+  "phantom-steed": {
+    "name": "魅影駒",
+    "nameEn": "Phantom Steed",
+    "level": 3,
+    "school": "幻術",
+    "classes": [
+      "wizard"
+    ],
+    "text": "儀式，1 分鐘，30 呎，1 小時。"
+  },
+  "planar-ally": {
+    "name": "異界盟友",
+    "nameEn": "Planar Ally",
+    "level": 6,
+    "school": "咒法",
+    "classes": [
+      "cleric"
+    ],
+    "text": "10 分鐘，60 呎，即時。"
+  },
+  "planar-binding": {
+    "name": "異界誓縛",
+    "nameEn": "Planar Binding",
+    "level": 5,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "wizard"
+    ],
+    "text": "1 小時，60 呎，24 小時，魅力豁免。"
+  },
+  "plane-shift": {
+    "name": "異界傳送",
+    "nameEn": "Plane Shift",
+    "level": 7,
+    "school": "咒法",
+    "classes": [
+      "cleric",
+      "druid",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，即時，魅力豁免。"
+  },
+  "plant-growth": {
+    "name": "植物滋長",
+    "nameEn": "Plant Growth",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "druid",
+      "ranger"
+    ],
+    "text": "1 動作，150 呎，即時。"
+  },
+  "poison-spray": {
+    "name": "毒性噴霧",
+    "nameEn": "Poison Spray",
+    "level": 0,
+    "school": "咒法",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard",
+      "druid"
+    ],
+    "text": "10 呎內體質豁免，失敗 1d12 毒素。"
+  },
+  "polymorph": {
+    "name": "變形術",
+    "nameEn": "Polymorph",
+    "level": 4,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 小時，感知豁免。"
+  },
+  "power-word-kill": {
+    "name": "律令死亡",
+    "nameEn": "Power Word Kill",
+    "level": 9,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "100 HP 以下的目標直接死亡。"
+  },
+  "power-word-stun": {
+    "name": "律令震懾",
+    "nameEn": "Power Word Stun",
+    "level": 8,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "150 HP 以下的目標直接昏迷，直到體質豁免成功。"
+  },
+  "prayer-of-healing": {
+    "name": "治療禱言",
+    "nameEn": "Prayer of Healing",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "cleric"
+    ],
+    "text": "10 分鐘，30 呎，即時。"
+  },
+  "prestidigitation": {
+    "name": "魔法伎倆",
+    "nameEn": "Prestidigitation",
+    "level": 0,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "小把戲：火花、乾淨、味道、小印記。非戰鬥。"
+  },
+  "prismatic-spray": {
+    "name": "虹光噴射",
+    "nameEn": "Prismatic Spray",
+    "level": 7,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "60 呎錐，每人擲 1d8 決定顏色效果（傷害或特殊）。"
+  },
+  "prismatic-wall": {
+    "name": "虹光法牆",
+    "nameEn": "Prismatic Wall",
+    "level": 9,
+    "school": "防護",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，60 呎，10 分鐘。"
+  },
+  "private-sanctum": {
+    "name": "私密聖所",
+    "nameEn": "Private Sanctum",
+    "level": 4,
+    "school": "防護",
+    "classes": [
+      "wizard"
+    ],
+    "text": "10 分鐘，120 呎，24 小時。"
+  },
+  "produce-flame": {
+    "name": "燃火術",
+    "nameEn": "Produce Flame",
+    "level": 0,
+    "school": "咒法",
+    "classes": [
+      "druid"
+    ],
+    "text": "1 動作，自身，10 分鐘，1d8火焰。"
+  },
+  "programmed-illusion": {
+    "name": "預設幻象",
+    "nameEn": "Programmed Illusion",
+    "level": 6,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "1 動作，120 呎，直到被解除。"
+  },
+  "project-image": {
+    "name": "投影術",
+    "nameEn": "Project Image",
+    "level": 7,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "專注，1 動作，500 哩s，最長 24 小時。"
+  },
+  "protection-from-energy": {
+    "name": "防護能量",
+    "nameEn": "Protection From Energy",
+    "level": 3,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "druid",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，觸碰，最長 1 小時。"
+  },
+  "protection-from-evil-and-good": {
+    "name": "防護善惡",
+    "nameEn": "Protection from Evil and Good",
+    "level": 1,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "paladin",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，觸碰，最長 10 分鐘。"
+  },
+  "protection-from-poison": {
+    "name": "防護毒素",
+    "nameEn": "Protection from Poison",
+    "level": 2,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "druid",
+      "paladin",
+      "ranger"
+    ],
+    "text": "1 動作，觸碰，1 小時。"
+  },
+  "purify-food-and-drink": {
+    "name": "淨化飲食",
+    "nameEn": "Purify Food and Drink",
+    "level": 1,
+    "school": "變化",
+    "classes": [
+      "cleric",
+      "druid",
+      "paladin"
+    ],
+    "text": "儀式，1 動作，10 呎，即時。"
+  },
+  "raise-dead": {
+    "name": "死者復活",
+    "nameEn": "Raise Dead",
+    "level": 5,
+    "school": "死靈",
+    "classes": [
+      "bard",
+      "cleric",
+      "paladin"
+    ],
+    "text": "1 小時，觸碰，即時。"
+  },
+  "ray-of-enfeeblement": {
+    "name": "衰弱射線",
+    "nameEn": "Ray of Enfeeblement",
+    "level": 2,
+    "school": "死靈",
+    "classes": [
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 1 分鐘，體質豁免。"
+  },
+  "ray-of-frost": {
+    "name": "寒冰射線",
+    "nameEn": "Ray of Frost",
+    "level": 0,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "60 呎法術攻擊，1d8 寒冷，速度 -10 呎到你下回合。"
+  },
+  "regenerate": {
+    "name": "再生術",
+    "nameEn": "Regenerate",
+    "level": 7,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid"
+    ],
+    "text": "立刻回復 4d8+15，每回合再 +1 HP，可長回斷肢。"
+  },
+  "reincarnate": {
+    "name": "轉生術",
+    "nameEn": "Reincarnate",
+    "level": 5,
+    "school": "變化",
+    "classes": [
+      "druid"
+    ],
+    "text": "1 小時，觸碰，即時。"
+  },
+  "remove-curse": {
+    "name": "移除詛咒",
+    "nameEn": "Remove Curse",
+    "level": 3,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "paladin",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，即時。"
+  },
+  "resilient-sphere": {
+    "name": "彈力法球",
+    "nameEn": "Resilient Sphere",
+    "level": 4,
+    "school": "塑能",
+    "classes": [
+      "wizard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 分鐘，敏捷豁免。"
+  },
+  "resistance": {
+    "name": "抵抗術",
+    "nameEn": "Resistance",
+    "level": 0,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "text": "專注，1 動作，觸碰，最長 1 分鐘。"
+  },
+  "resurrection": {
+    "name": "復活術",
+    "nameEn": "Resurrection",
+    "level": 7,
+    "school": "死靈",
+    "classes": [
+      "bard",
+      "cleric"
+    ],
+    "text": "死不超過一世紀、非老死的生物復活。耗鑽石。"
+  },
+  "reverse-gravity": {
+    "name": "反轉重力",
+    "nameEn": "Reverse Gravity",
+    "level": 7,
+    "school": "變化",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "50 呎半徑 100 呎高重力反轉。專注 1 分鐘。"
+  },
+  "revivify": {
+    "name": "復生術",
+    "nameEn": "Revivify",
+    "level": 3,
+    "school": "咒法",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "text": "死不超過 1 分鐘的生物以 1 HP 復活。耗 300 gp 鑽石。"
+  },
+  "rope-trick": {
+    "name": "繩術",
+    "nameEn": "Rope Trick",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，1 小時。"
+  },
+  "sacred-flame": {
+    "name": "聖火術",
+    "nameEn": "Sacred Flame",
+    "level": 0,
+    "school": "塑能",
+    "classes": [
+      "cleric"
+    ],
+    "text": "60 呎內敏捷豁免（無掩蔽），失敗 1d8 光耀。"
+  },
+  "sanctuary": {
+    "name": "聖域術",
+    "nameEn": "Sanctuary",
+    "level": 1,
+    "school": "防護",
+    "classes": [
+      "cleric"
+    ],
+    "text": "附贈動作，30 呎，1 分鐘。"
+  },
+  "scorching-ray": {
+    "name": "灼熱射線",
+    "nameEn": "Scorching Ray",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "三條射線，各做法術攻擊 2d6 火焰。可打同一人或分開。"
+  },
+  "scrying": {
+    "name": "探知術",
+    "nameEn": "Scrying",
+    "level": 5,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "cleric",
+      "druid",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，10 分鐘，自身，最長 10 分鐘，感知豁免。"
+  },
+  "secret-chest": {
+    "name": "秘藏箱",
+    "nameEn": "Secret Chest",
+    "level": 4,
+    "school": "咒法",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，即時。"
+  },
+  "see-invisibility": {
+    "name": "識破隱形",
+    "nameEn": "See Invisibility",
+    "level": 2,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，自身，1 小時。"
+  },
+  "seeming": {
+    "name": "偽裝術",
+    "nameEn": "Seeming",
+    "level": 5,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 動作，30 呎，8 小時。"
+  },
+  "sending": {
+    "name": "短訊術",
+    "nameEn": "Sending",
+    "level": 3,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "cleric",
+      "wizard"
+    ],
+    "text": "1 動作，無限，1 輪。"
+  },
+  "sequester": {
+    "name": "隔離術",
+    "nameEn": "Sequester",
+    "level": 7,
+    "school": "變化",
+    "classes": [
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，直到被解除。"
+  },
+  "shapechange": {
+    "name": "形體變化",
+    "nameEn": "Shapechange",
+    "level": 9,
+    "school": "變化",
+    "classes": [
+      "druid",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 小時。"
+  },
+  "shatter": {
+    "name": "粉碎音波",
+    "nameEn": "Shatter",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "60 呎內 10 呎半徑，體質豁免 3d8 雷鳴（半傷）。構裝劣勢。"
+  },
+  "shield": {
+    "name": "護盾術",
+    "nameEn": "Shield",
+    "level": 1,
+    "school": "防護",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "反應。直到你下回合開始 AC +5，並擋掉魔法飛彈。"
+  },
+  "shield-of-faith": {
+    "name": "虔信護盾",
+    "nameEn": "Shield of Faith",
+    "level": 1,
+    "school": "防護",
+    "classes": [
+      "cleric",
+      "paladin"
+    ],
+    "text": "60 呎內一個生物 AC +2。專注 10 分鐘。"
+  },
+  "shillelagh": {
+    "name": "橡棍術",
+    "nameEn": "Shillelagh",
+    "level": 0,
+    "school": "變化",
+    "classes": [
+      "druid"
+    ],
+    "text": "附贈動作，觸碰，1 分鐘。"
+  },
+  "shocking-grasp": {
+    "name": "電擊之掌",
+    "nameEn": "Shocking Grasp",
+    "level": 0,
+    "school": "塑能",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "近戰法術攻擊（金屬甲有優勢），1d8 閃電，不能做反應直到下回合。"
+  },
+  "silence": {
+    "name": "沉默術",
+    "nameEn": "Silence",
+    "level": 2,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "cleric",
+      "ranger"
+    ],
+    "text": "儀式，專注，1 動作，120 呎，最長 10 分鐘。"
+  },
+  "silent-image": {
+    "name": "無聲幻影",
+    "nameEn": "Silent Image",
+    "level": 1,
+    "school": "幻術",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 10 分鐘。"
+  },
+  "simulacrum": {
+    "name": "擬像術",
+    "nameEn": "Simulacrum",
+    "level": 7,
+    "school": "幻術",
+    "classes": [
+      "wizard"
+    ],
+    "text": "12 hours，觸碰，直到被解除。"
+  },
+  "sleep": {
+    "name": "睡眠術",
+    "nameEn": "Sleep",
+    "level": 1,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "20 呎內擲 5d8 HP，由當前 HP 最低者開始陷入昏迷。"
+  },
+  "sleet-storm": {
+    "name": "雨雪風暴",
+    "nameEn": "Sleet Storm",
+    "level": 3,
+    "school": "咒法",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，150 呎，最長 1 分鐘。"
+  },
+  "slow": {
+    "name": "緩慢術",
+    "nameEn": "Slow",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘，感知豁免。"
+  },
+  "spare-the-dying": {
+    "name": "穩定傷勢",
+    "nameEn": "Spare the Dying",
+    "level": 0,
+    "school": "死靈",
+    "classes": [
+      "cleric"
+    ],
+    "text": "1 動作，觸碰，即時。"
+  },
+  "speak-with-animals": {
+    "name": "動物交談",
+    "nameEn": "Speak with Animals",
+    "level": 1,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "druid",
+      "ranger"
+    ],
+    "text": "儀式，1 動作，自身，10 分鐘。"
+  },
+  "speak-with-dead": {
+    "name": "死者交談",
+    "nameEn": "Speak with Dead",
+    "level": 3,
+    "school": "死靈",
+    "classes": [
+      "bard",
+      "cleric"
+    ],
+    "text": "1 動作，10 呎，10 分鐘。"
+  },
+  "speak-with-plants": {
+    "name": "植物交談",
+    "nameEn": "Speak with Plants",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "druid",
+      "ranger"
+    ],
+    "text": "1 動作，自身，10 分鐘。"
+  },
+  "spider-climb": {
+    "name": "蛛行術",
+    "nameEn": "Spider Climb",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，觸碰，最長 1 小時。"
+  },
+  "spike-growth": {
+    "name": "荊棘叢生",
+    "nameEn": "Spike Growth",
+    "level": 2,
+    "school": "變化",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "text": "專注，1 動作，150 呎，最長 10 分鐘。"
+  },
+  "spirit-guardians": {
+    "name": "靈體守衛",
+    "nameEn": "Spirit Guardians",
+    "level": 3,
+    "school": "咒法",
+    "classes": [
+      "cleric"
+    ],
+    "text": "15 呎內敵人速度減半，進入或開始回合感知豁免 3d8 傷害（半傷）。專注。"
+  },
+  "spiritual-weapon": {
+    "name": "靈體武器",
+    "nameEn": "Spiritual Weapon",
+    "level": 2,
+    "school": "塑能",
+    "classes": [
+      "cleric"
+    ],
+    "text": "附贈動作召喚武器，法術攻擊 1d8＋感知調整值力場。可持續 1 分鐘（不專注）。"
+  },
+  "stinking-cloud": {
+    "name": "臭雲術",
+    "nameEn": "Stinking Cloud",
+    "level": 3,
+    "school": "咒法",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，90 呎，最長 1 分鐘，體質豁免。"
+  },
+  "stone-shape": {
+    "name": "塑石術",
+    "nameEn": "Stone Shape",
+    "level": 4,
+    "school": "變化",
+    "classes": [
+      "cleric",
+      "druid",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，即時。"
+  },
+  "stoneskin": {
+    "name": "石膚術",
+    "nameEn": "Stoneskin",
+    "level": 4,
+    "school": "防護",
+    "classes": [
+      "druid",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "非魔法鈍擊／穿刺／揮砍抗性。專注 1 小時。耗 100 gp 鑽石粉。"
+  },
+  "storm-of-vengeance": {
+    "name": "復仇風暴",
+    "nameEn": "Storm of Vengeance",
+    "level": 9,
+    "school": "咒法",
+    "classes": [
+      "druid"
+    ],
+    "text": "專注，1 動作，視線，最長 1 分鐘，2d6雷鳴，體質豁免。"
+  },
+  "suggestion": {
+    "name": "暗示術",
+    "nameEn": "Suggestion",
+    "level": 2,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 8 小時，感知豁免。"
+  },
+  "sunbeam": {
+    "name": "陽炎射線",
+    "nameEn": "Sunbeam",
+    "level": 6,
+    "school": "塑能",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "60 呎線，體質豁免 6d8 光耀（半傷）並目盲。專注。"
+  },
+  "sunburst": {
+    "name": "陽炎爆",
+    "nameEn": "Sunburst",
+    "level": 8,
+    "school": "塑能",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "60 呎半徑，體質豁免 12d6 光耀（半傷）並目盲。"
+  },
+  "symbol": {
+    "name": "徽記術",
+    "nameEn": "Symbol",
+    "level": 7,
+    "school": "防護",
+    "classes": [
+      "bard",
+      "cleric",
+      "wizard"
+    ],
+    "text": "1 分鐘，觸碰，直到被解除。"
+  },
+  "telekinesis": {
+    "name": "心靈遙控",
+    "nameEn": "Telekinesis",
+    "level": 5,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，60 呎，最長 10 分鐘。"
+  },
+  "telepathic-bond": {
+    "name": "心靈感應",
+    "nameEn": "Telepathic Bond",
+    "level": 5,
+    "school": "預言",
+    "classes": [
+      "wizard"
+    ],
+    "text": "儀式，1 動作，30 呎，1 小時。"
+  },
+  "teleport": {
+    "name": "傳送術",
+    "nameEn": "Teleport",
+    "level": 7,
+    "school": "咒法",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "你與最多 8 個自願者傳送到同平面地點。熟悉度影響是否偏離。"
+  },
+  "teleportation-circle": {
+    "name": "傳送法陣",
+    "nameEn": "Teleportation Circle",
+    "level": 5,
+    "school": "咒法",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "1 分鐘，10 呎，1 輪。"
+  },
+  "thaumaturgy": {
+    "name": "奇術",
+    "nameEn": "Thaumaturgy",
+    "level": 0,
+    "school": "變化",
+    "classes": [
+      "cleric"
+    ],
+    "text": "聲音變大、開門、震動、眼睛變色等小神蹟。"
+  },
+  "thunderwave": {
+    "name": "雷鳴波",
+    "nameEn": "Thunderwave",
+    "level": 1,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "15 呎立方，體質豁免，2d8 雷鳴並推開 10 呎（半傷不推）。"
+  },
+  "time-stop": {
+    "name": "時間停止",
+    "nameEn": "Time Stop",
+    "level": 9,
+    "school": "變化",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "你獨行動 1d4+1 回合。影響其他生物則提前結束。"
+  },
+  "tiny-hut": {
+    "name": "小屋術",
+    "nameEn": "Tiny Hut",
+    "level": 3,
+    "school": "塑能",
+    "classes": [
+      "bard",
+      "wizard"
+    ],
+    "text": "儀式，1 分鐘，自身，8 小時。"
+  },
+  "tongues": {
+    "name": "巧言術",
+    "nameEn": "Tongues",
+    "level": 3,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "cleric",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 動作，觸碰，1 小時。"
+  },
+  "transport-via-plants": {
+    "name": "植物傳送",
+    "nameEn": "Transport via Plants",
+    "level": 6,
+    "school": "咒法",
+    "classes": [
+      "druid"
+    ],
+    "text": "1 動作，10 呎，1 輪。"
+  },
+  "tree-stride": {
+    "name": "樹躍術",
+    "nameEn": "Tree Stride",
+    "level": 5,
+    "school": "咒法",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘。"
+  },
+  "true-polymorph": {
+    "name": "完全變形",
+    "nameEn": "True Polymorph",
+    "level": 9,
+    "school": "變化",
+    "classes": [
+      "bard",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 小時。"
+  },
+  "true-resurrection": {
+    "name": "完全復活術",
+    "nameEn": "True Resurrection",
+    "level": 9,
+    "school": "死靈",
+    "classes": [
+      "cleric",
+      "druid"
+    ],
+    "text": "死不超過 200 年者復活，即使沒有遺體。耗昂貴鑽石。"
+  },
+  "true-seeing": {
+    "name": "真知術",
+    "nameEn": "True Seeing",
+    "level": 6,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "cleric",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "1 小時內看穿隱形、幻術、以太與真實形態。"
+  },
+  "true-strike": {
+    "name": "克敵機先",
+    "nameEn": "True Strike",
+    "level": 0,
+    "school": "預言",
+    "classes": [
+      "bard",
+      "sorcerer",
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，30 呎，最長 1 輪。"
+  },
+  "unseen-servant": {
+    "name": "隱形僕役",
+    "nameEn": "Unseen Servant",
+    "level": 1,
+    "school": "咒法",
+    "classes": [
+      "bard",
+      "warlock",
+      "wizard"
+    ],
+    "text": "儀式，1 動作，60 呎，1 小時。"
+  },
+  "vampiric-touch": {
+    "name": "吸血鬼之觸",
+    "nameEn": "Vampiric Touch",
+    "level": 3,
+    "school": "死靈",
+    "classes": [
+      "warlock",
+      "wizard"
+    ],
+    "text": "專注，1 動作，自身，最長 1 分鐘，3d6死靈。"
+  },
+  "vicious-mockery": {
+    "name": "惡毒嘲諷",
+    "nameEn": "Vicious Mockery",
+    "level": 0,
+    "school": "惑控",
+    "classes": [
+      "bard"
+    ],
+    "text": "60 呎內聽得懂你的生物感知豁免，失敗 1d4 精神傷害，下次攻擊有劣勢。"
+  },
+  "wall-of-fire": {
+    "name": "火牆術",
+    "nameEn": "Wall of Fire",
+    "level": 4,
+    "school": "塑能",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘，5d8火焰，敏捷豁免。"
+  },
+  "wall-of-force": {
+    "name": "力場牆",
+    "nameEn": "Wall of Force",
+    "level": 5,
+    "school": "塑能",
+    "classes": [
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 10 分鐘。"
+  },
+  "wall-of-ice": {
+    "name": "冰牆術",
+    "nameEn": "Wall of Ice",
+    "level": 6,
+    "school": "塑能",
+    "classes": [
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 10 分鐘，10d6寒冷，敏捷豁免。"
+  },
+  "wall-of-stone": {
+    "name": "石牆術",
+    "nameEn": "Wall of Stone",
+    "level": 5,
+    "school": "塑能",
+    "classes": [
+      "druid",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 10 分鐘。"
+  },
+  "wall-of-thorns": {
+    "name": "棘牆術",
+    "nameEn": "Wall of Thorns",
+    "level": 6,
+    "school": "咒法",
+    "classes": [
+      "druid"
+    ],
+    "text": "專注，1 動作，120 呎，最長 10 分鐘，7d8穿刺，敏捷豁免。"
+  },
+  "warding-bond": {
+    "name": "守護之絆",
+    "nameEn": "Warding Bond",
+    "level": 2,
+    "school": "防護",
+    "classes": [
+      "cleric"
+    ],
+    "text": "1 動作，觸碰，1 小時。"
+  },
+  "water-breathing": {
+    "name": "水下呼吸",
+    "nameEn": "Water Breathing",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "druid",
+      "ranger",
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "儀式，1 動作，30 呎，24 小時。"
+  },
+  "water-walk": {
+    "name": "水上行走",
+    "nameEn": "Water Walk",
+    "level": 3,
+    "school": "變化",
+    "classes": [
+      "cleric",
+      "druid",
+      "ranger",
+      "sorcerer"
+    ],
+    "text": "儀式，1 動作，30 呎，1 小時。"
+  },
+  "web": {
+    "name": "蛛網術",
+    "nameEn": "Web",
+    "level": 2,
+    "school": "咒法",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "20 呎立方難地形，敏捷豁免失敗被束縛。專注 1 小時。"
+  },
+  "weird": {
+    "name": "怪影殺手",
+    "nameEn": "Weird",
+    "level": 9,
+    "school": "幻術",
+    "classes": [
+      "wizard"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘，感知豁免。"
+  },
+  "wind-walk": {
+    "name": "風行術",
+    "nameEn": "Wind Walk",
+    "level": 6,
+    "school": "變化",
+    "classes": [
+      "druid"
+    ],
+    "text": "1 分鐘，30 呎，8 小時。"
+  },
+  "wind-wall": {
+    "name": "風牆術",
+    "nameEn": "Wind Wall",
+    "level": 3,
+    "school": "塑能",
+    "classes": [
+      "druid",
+      "ranger"
+    ],
+    "text": "專注，1 動作，120 呎，最長 1 分鐘，3d8鈍擊，力量豁免。"
+  },
+  "wish": {
+    "name": "祈願術",
+    "nameEn": "Wish",
+    "level": 9,
+    "school": "咒法",
+    "classes": [
+      "sorcerer",
+      "wizard"
+    ],
+    "text": "複製 8 環或以下法術，或提出更強願望（有風險）。"
+  },
+  "word-of-recall": {
+    "name": "回語術",
+    "nameEn": "Word of Recall",
+    "level": 6,
+    "school": "咒法",
+    "classes": [
+      "cleric"
+    ],
+    "text": "1 動作，5 呎，即時。"
+  },
+  "zone-of-truth": {
+    "name": "誠實之域",
+    "nameEn": "Zone of Truth",
+    "level": 2,
+    "school": "惑控",
+    "classes": [
+      "bard",
+      "cleric",
+      "paladin"
+    ],
+    "text": "1 動作，60 呎，10 分鐘。"
+  },
+  "hex": {
+    "name": "脆弱詛咒",
+    "nameEn": "Hex",
+    "level": 1,
+    "school": "惑控",
+    "classes": [
+      "warlock"
+    ],
+    "text": "指定目標，你打它額外 1d6 死靈，選一項屬性檢定有劣勢。專注。"
+  }
 }

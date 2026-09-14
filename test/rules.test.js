@@ -272,4 +272,22 @@ const wk = R.createCharacter({
 assert.ok(wk.pendingChoices.some(x => x.catalog === 'invocation' && x.pick === 2))
 const inv = R.setChoices(wk, 'invocation', ['agonizing-blast', 'repelling-blast'], real)
 assert.equal(inv.ok, true)
+const tot = R.setSubclass(R.createCharacter({
+  name: '圖',
+  race: 'human',
+  class: 'barbarian',
+  level: 3,
+  abilities: { str: 16, dex: 14, con: 15, int: 8, wis: 10, cha: 8 },
+  hpMax: 32
+}, real), 'totem', real)
+assert.ok(tot.pendingChoices.some(x => x.catalog === 'totem' && x.pick === 1))
+const fe = R.setSubclass(R.createCharacter({
+  name: '四',
+  race: 'human',
+  class: 'monk',
+  level: 3,
+  abilities: { str: 10, dex: 16, con: 14, int: 8, wis: 15, cha: 8 },
+  hpMax: 24
+}, real), 'four-elements', real)
+assert.ok(fe.pendingChoices.some(x => x.catalog === 'four-elements' && x.pick === 2))
 console.log('choices ok')

@@ -73,6 +73,42 @@
           "fighter",
           "ranger"
         ]
+      },
+      {
+        "id": "blind-fighting",
+        "name": "盲戰",
+        "text": "10 呎盲視。",
+        "classes": [
+          "fighter",
+          "ranger",
+          "paladin"
+        ]
+      },
+      {
+        "id": "interception",
+        "name": "攔截",
+        "text": "5 呎內友方被打中時，反應減傷害＝1d10＋熟練。",
+        "classes": [
+          "fighter",
+          "paladin"
+        ]
+      },
+      {
+        "id": "thrown-weapon",
+        "name": "投擲武器",
+        "text": "抽武器並投擲可作為攻擊的一部分。投擲傷害 +2。",
+        "classes": [
+          "fighter",
+          "ranger"
+        ]
+      },
+      {
+        "id": "unarmed-fighting",
+        "name": "徒手戰鬥",
+        "text": "徒手 1d6（空手時 1d8）。擒抱時每回合 1d4 鈍擊。",
+        "classes": [
+          "fighter"
+        ]
       }
     ]
   },
@@ -108,7 +144,6 @@
   "arcane-shot": {
     "id": "arcane-shot",
     "name": "奧術射擊",
-    "pick": 2,
     "when": [
       {
         "class": "fighter",
@@ -156,6 +191,28 @@
         "id": "shadow",
         "name": "暗影箭",
         "text": "命中額外心靈傷害。目標感知豁免失敗則無法看見 5 呎外。"
+      }
+    ],
+    "pickAt": [
+      {
+        "level": 3,
+        "pick": 2
+      },
+      {
+        "level": 7,
+        "pick": 3
+      },
+      {
+        "level": 10,
+        "pick": 4
+      },
+      {
+        "level": 15,
+        "pick": 5
+      },
+      {
+        "level": 18,
+        "pick": 6
       }
     ]
   },
@@ -498,6 +555,11 @@
         "text": "魔能爆命中可把目標推 10 呎。"
       },
       {
+        "id": "eldritch-spear",
+        "name": "魔能長槍",
+        "text": "魔能爆射程 300 呎。"
+      },
+      {
         "id": "armor-of-shadows",
         "name": "暗影護甲",
         "text": "隨意施法師護甲（自己）。"
@@ -514,8 +576,8 @@
       },
       {
         "id": "mask-of-many-faces",
-        "text": "隨意施易容術。",
-        "name": "千面之罩"
+        "name": "千面之罩",
+        "text": "隨意施易容術。"
       },
       {
         "id": "misty-visions",
@@ -533,22 +595,361 @@
         "text": "能讀懂所有文字。"
       },
       {
+        "id": "beast-speech",
+        "name": "野獸之語",
+        "text": "隨意施動物交談。"
+      },
+      {
+        "id": "eldritch-sight",
+        "name": "魔能視覺",
+        "text": "隨意施偵測魔法。"
+      },
+      {
+        "id": "gaze-of-two-minds",
+        "name": "雙心凝視",
+        "text": "接觸一個同意的類人，分享其感官。"
+      },
+      {
+        "id": "voice-of-the-chain-master",
+        "name": "鎖鏈宗主之聲",
+        "text": "透過魔寵感知、說話。需鎖鏈契約。"
+      },
+      {
+        "id": "book-of-ancient-secrets",
+        "name": "遠古秘典",
+        "text": "秘法書可抄儀式法術。需書冊契約。"
+      },
+      {
         "id": "thief-of-five-fates",
         "name": "五劫盜賊",
         "text": "每日一次施災禍術。",
         "minLevel": 5
       },
       {
-        "id": "misfortune",
-        "name": "厄運視線",
-        "text": "對一個生物的攻擊有優勢一次。",
+        "id": "one-with-shadows",
+        "name": "暗影合一",
+        "text": "黑暗或微光中可隱形直到移動。",
         "minLevel": 5
+      },
+      {
+        "id": "mire-the-mind",
+        "name": "泥沼心智",
+        "text": "每日一次施緩慢術。",
+        "minLevel": 5
+      },
+      {
+        "id": "sign-of-ill-omen",
+        "name": "凶兆印記",
+        "text": "每日一次施降咒。",
+        "minLevel": 5
+      },
+      {
+        "id": "thirsting-blade",
+        "name": "渴血之刃",
+        "text": "契約武器攻擊兩下。需利刃契約。",
+        "minLevel": 5
+      },
+      {
+        "id": "sculptor-of-flesh",
+        "name": "血肉塑造者",
+        "text": "每日一次施變形術。",
+        "minLevel": 7
+      },
+      {
+        "id": "dreadful-word",
+        "name": "可怖真言",
+        "text": "每日一次施困惑術。",
+        "minLevel": 7
+      },
+      {
+        "id": "bewitching-whispers",
+        "name": "蠱惑低語",
+        "text": "每日一次施強制術。",
+        "minLevel": 7
       },
       {
         "id": "ascendant-step",
         "name": "升騰步伐",
         "text": "隨意施漂浮術（自己）。",
         "minLevel": 9
+      },
+      {
+        "id": "otherworldly-leap",
+        "name": "異界躍進",
+        "text": "隨意施跳躍術。",
+        "minLevel": 9
+      },
+      {
+        "id": "whispers-of-the-grave",
+        "name": "墳墓低語",
+        "text": "隨意施死者交談。",
+        "minLevel": 9
+      },
+      {
+        "id": "minions-of-chaos",
+        "name": "混沌爪牙",
+        "text": "每日一次施召喚元素。",
+        "minLevel": 9
+      },
+      {
+        "id": "lifedrinker",
+        "name": "飲命者",
+        "text": "契約武器額外死靈傷害＝魅力調整值。需利刃。",
+        "minLevel": 12
+      },
+      {
+        "id": "witch-sight",
+        "name": "巫視",
+        "text": "30 呎內看破變形與隱形。",
+        "minLevel": 15
+      },
+      {
+        "id": "visions-of-distant-realms",
+        "name": "遙域異象",
+        "text": "隨意施秘法眼。",
+        "minLevel": 15
+      },
+      {
+        "id": "master-of-myriad-forms",
+        "name": "萬形主宰",
+        "text": "隨意施變身術。",
+        "minLevel": 15
+      },
+      {
+        "id": "chains-of-carceri",
+        "name": "卡瑟瑞鎖鏈",
+        "text": "隨意對天界／邪魔／元素施人類定身。",
+        "minLevel": 15
+      }
+    ]
+  },
+  "totem-aspect": {
+    "id": "totem-aspect",
+    "name": "圖騰靈性",
+    "pick": 1,
+    "when": [
+      {
+        "class": "barbarian",
+        "subclass": "totem",
+        "level": 6
+      }
+    ],
+    "options": [
+      {
+        "id": "bear",
+        "name": "熊",
+        "text": "負重加倍。可推、拖、抬巨大重量。"
+      },
+      {
+        "id": "eagle",
+        "name": "鷹",
+        "text": "睜眼時看得見的東西，黑暗中視同微光。"
+      },
+      {
+        "id": "wolf",
+        "name": "狼",
+        "text": "追蹤時感知優勢。與他人同行時隱匿優勢。"
+      }
+    ]
+  },
+  "totem-attune": {
+    "id": "totem-attune",
+    "name": "圖騰共鳴",
+    "pick": 1,
+    "when": [
+      {
+        "class": "barbarian",
+        "subclass": "totem",
+        "level": 14
+      }
+    ],
+    "options": [
+      {
+        "id": "bear",
+        "name": "熊",
+        "text": "狂暴時，5 呎內敵對你的攻擊有劣勢（你以外）。"
+      },
+      {
+        "id": "eagle",
+        "name": "鷹",
+        "text": "狂暴時飛一段等於你速度的距離。"
+      },
+      {
+        "id": "wolf",
+        "name": "狼",
+        "text": "狂暴時，命中後附贈動作可把大型或更小目標擊倒。"
+      }
+    ]
+  },
+  "hunter-defense": {
+    "id": "hunter-defense",
+    "name": "防禦戰術",
+    "pick": 1,
+    "when": [
+      {
+        "class": "ranger",
+        "subclass": "hunter",
+        "level": 7
+      }
+    ],
+    "options": [
+      {
+        "id": "escape-horde",
+        "name": "脫離敵群",
+        "text": "機會攻擊對你有劣勢。"
+      },
+      {
+        "id": "multiattack-defense",
+        "name": "多重防禦",
+        "text": "同一生物本回合第二次起打你，AC +4。"
+      },
+      {
+        "id": "steel-will",
+        "name": "鋼鐵意志",
+        "text": "對抗恐懼有優勢。"
+      }
+    ]
+  },
+  "hunter-multi": {
+    "id": "hunter-multi",
+    "name": "多重攻擊",
+    "pick": 1,
+    "when": [
+      {
+        "class": "ranger",
+        "subclass": "hunter",
+        "level": 11
+      }
+    ],
+    "options": [
+      {
+        "id": "volley",
+        "name": "齊射",
+        "text": "動作對 10 呎半徑內你看得見的生物各射一箭。"
+      },
+      {
+        "id": "whirlwind",
+        "name": "旋風",
+        "text": "動作對 5 呎內每個生物做一次近戰攻擊。"
+      }
+    ]
+  },
+  "four-elements": {
+    "id": "four-elements",
+    "name": "四象法門",
+    "pickAt": [
+      {
+        "level": 3,
+        "pick": 2
+      },
+      {
+        "level": 6,
+        "pick": 3
+      },
+      {
+        "level": 11,
+        "pick": 4
+      },
+      {
+        "level": 17,
+        "pick": 5
+      }
+    ],
+    "when": [
+      {
+        "class": "monk",
+        "subclass": "four-elements",
+        "level": 3
+      }
+    ],
+    "options": [
+      {
+        "id": "elemental-attunement",
+        "name": "元素調和",
+        "text": "小把戲：移土、點火、熄火、水形。"
+      },
+      {
+        "id": "fangs-of-the-fire-snake",
+        "name": "火蛇之牙",
+        "text": "花氣讓徒手攻擊達 10 呎並加火焰傷害。"
+      },
+      {
+        "id": "fist-of-four-thunders",
+        "name": "四雷拳",
+        "text": "花氣施雷鳴波。"
+      },
+      {
+        "id": "fist-of-unbroken-air",
+        "name": "不破氣拳",
+        "text": "花氣遠程氣擊，傷害並可推開。"
+      },
+      {
+        "id": "rush-of-the-gale-spirits",
+        "name": "狂風之靈",
+        "text": "花氣施造風術。"
+      },
+      {
+        "id": "shape-the-flowing-river",
+        "name": "塑流河",
+        "text": "花氣結冰或融冰、改變水面。"
+      },
+      {
+        "id": "sweeping-cinder-strike",
+        "name": "掃燼擊",
+        "text": "花氣施燃燒之手。"
+      },
+      {
+        "id": "water-whip",
+        "name": "水鞭",
+        "text": "花氣水鞭攻擊，可拉近或擊倒。"
+      },
+      {
+        "id": "clench-of-the-north-wind",
+        "name": "北風之握",
+        "text": "花氣施人類定身。",
+        "minLevel": 6
+      },
+      {
+        "id": "gong-of-the-summit",
+        "name": "山巔鑼",
+        "text": "花氣施粉碎音波。",
+        "minLevel": 6
+      },
+      {
+        "id": "flames-of-the-phoenix",
+        "name": "鳳凰焰",
+        "text": "花氣施火球術。",
+        "minLevel": 11
+      },
+      {
+        "id": "mist-stance",
+        "name": "霧隱勢",
+        "text": "花氣施氣化形態。",
+        "minLevel": 11
+      },
+      {
+        "id": "ride-the-wind",
+        "name": "乘風",
+        "text": "花氣施飛行術。",
+        "minLevel": 11
+      },
+      {
+        "id": "breath-of-winter",
+        "name": "冬之息",
+        "text": "花氣施寒冰錐。",
+        "minLevel": 17
+      },
+      {
+        "id": "eternal-mountain-defense",
+        "name": "不朽山防",
+        "text": "花氣施石膚術（自己）。",
+        "minLevel": 17
+      },
+      {
+        "id": "river-of-hungry-flame",
+        "name": "噬焰之河",
+        "text": "花氣施火牆術。",
+        "minLevel": 17
       }
     ]
   }
