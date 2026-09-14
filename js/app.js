@@ -361,7 +361,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v39</p>
+    <p class="mast">冒險者紀錄 · v40</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -660,6 +660,14 @@ function comboItemsFor(key) {
   return []
 }
 
+function spellPickNeed(c) {
+  if (!c) return 0
+  const pack = packFor(c.ruleset || '2014')
+  const items = view === 'pending' ? (c.pendingChoices || []) : Rules.checklistFor(c, pack)
+  const it = items.filter(x => x.type === 'spells')[0]
+  return it ? it.count : 0
+}
+
 function comboExclude(key) {
   const c = current()
   if (key === 'spell') return (c && c.spells) || []
@@ -892,7 +900,11 @@ el.addEventListener('click', e => {
       if (key === 'subclass') { pickSubclass = id; comboOpen = ''; render(); return }
       if (key === 'pickfeat') { pickFeat = id; comboOpen = ''; render(); return }
       if (key === 'pickspell') {
-        if (pickSpells.indexOf(id) < 0) pickSpells.push(id)
+        const need = spellPickNeed(c)
+        let arr = pickSpells.slice()
+        if (arr.indexOf(id) < 0) arr.push(id)
+        if (need && arr.length > need) arr = arr.slice(arr.length - need)
+        pickSpells = arr
         comboOpen = key
         render()
         return
@@ -1015,13 +1027,24 @@ el.addEventListener('click', e => {
     return
   }
   if (act === 'apply') {
-    const next = JSON.parse(JSON.stringify(c))
+    let next = JSON.parse(JSON.stringify(c))
     const pack = packFor(c.ruleset || '2014')
     const items = view === 'pending' ? (next.pendingChoices || []) : Rules.checklistFor(c, pack)
     const on = id => checkedIds.indexOf(id) >= 0
     if (items.some(it => it.type === 'subclass' && on(it.id)) && pickSubclass) next.subclass = pickSubclass
-    if (items.some(it => it.type === 'spells' && on(it.id)) && pickSpells.length) {
-      next.spells = (next.spells || []).concat(pickSpells)
+    const spellItem = items.filter(it => it.type === 'spells')[0]
+    if (spellItem && on(spellItem.id)) {
+      const have = next.spells || []
+      const fresh = []
+      for (const id of pickSpells) {
+        if (have.indexOf(id) < 0 && fresh.indexOf(id) < 0) fresh.push(id)
+      }
+      if (fresh.length !== spellItem.count) {
+        banner = '請選滿 ' + spellItem.count + ' 個法術'
+        render()
+        return
+      }
+      next.spells = have.concat(fresh)
     }
     if (items.some(it => it.type === 'asi' && on(it.id))) {
       if (pickFeat) next.feats = (next.feats || []).concat([pickFeat])
@@ -1046,6 +1069,7 @@ el.addEventListener('click', e => {
     if (view === 'pending') {
       next.pendingChoices = Rules.pendingFor(next, cls, pack.choices)
       pickChoice = {}
+      pickSpells = []
       if (next.pendingChoices.length) {
         banner = '還有沒選完的項目'
         view = 'pending'
@@ -1061,6 +1085,7 @@ el.addEventListener('click', e => {
       if (r.ok) ch = r.character
     }
     pickChoice = {}
+    pickSpells = []
     view = (ch.pendingChoices || []).length ? 'pending' : 'combat'
     replace(ch)
     return

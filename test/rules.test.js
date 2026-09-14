@@ -290,4 +290,7 @@ const fe = R.setSubclass(R.createCharacter({
   hpMax: 24
 }, real), 'four-elements', real)
 assert.ok(fe.pendingChoices.some(x => x.catalog === 'four-elements' && x.pick === 2))
+const once = R.addSpell(f1, 'fireball', real)
+const twice = R.addSpell(once, 'fireball', real)
+assert.equal(twice.spells.filter(x => x === 'fireball').length, 1)
 console.log('choices ok')
