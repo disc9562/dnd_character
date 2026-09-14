@@ -585,10 +585,15 @@ function scriptHtml() {
   `
 }
 
-function choicePickerHtml(cat, classId, pick) {
+function choicePickerHtml(cat, classId, pick, level) {
   if (!cat) return ''
   const selected = pickChoice[cat.id] || []
-  const opts = (cat.options || []).filter(o => !o.classes || o.classes.indexOf(classId) >= 0)
+  const lv = level || 1
+  const opts = (cat.options || []).filter(o => {
+    if (o.classes && o.classes.indexOf(classId) < 0) return false
+    if (o.minLevel && lv < o.minLevel) return false
+    return true
+  })
   return `<p class="muted">選 ${pick} 項</p>` + opts.map(o => {
     const on = selected.indexOf(o.id) >= 0
     return `<label class="chk"><input type="checkbox" data-act="pickch" data-cat="${esc(cat.id)}" data-id="${esc(o.id)}" ${on ? 'checked' : ''}><span><strong>${esc(o.name)}</strong><span class="spell-text">${esc(o.text)}</span></span></label>`
@@ -632,7 +637,7 @@ function levelHtml(c) {
     }
     if (it.type === 'choice') {
       const cat = (pack.choices || {})[it.catalog]
-      extra = choicePickerHtml(cat, c.class, it.pick)
+      extra = choicePickerHtml(cat, c.class, it.pick, view === 'levelup' ? c.level + 1 : c.level)
     }
     if (it.type === 'missing') extra = `<p>${esc(it.label)}</p>`
     const label = it.label || ({ hp: '生命值', subclass: '子職', asi: '能力值／專長', spells: '法術 ×' + (it.count || '') }[it.type] || it.type)
@@ -645,7 +650,7 @@ function levelHtml(c) {
   const extraChoices = Rules.pendingFor(probe, cls, pack.choices).filter(x => x.type === 'choice' && items.every(it => it.catalog !== x.catalog))
   const extraHtml = extraChoices.map(it => {
     const cat = (pack.choices || {})[it.catalog]
-    return `<div class="choice-block"><p><strong>${esc(it.label)}</strong></p>${choicePickerHtml(cat, c.class, it.pick)}</div>`
+    return `<div class="choice-block"><p><strong>${esc(it.label)}</strong></p>${choicePickerHtml(cat, c.class, it.pick, probe.level)}</div>`
   }).join('')
   return `
     <p class="mast">冒險者紀錄</p>
@@ -751,8 +756,20 @@ el.addEventListener('click', e => {
     replace(next)
     return
   }
-  if (act === 'levelup') { view = 'levelup'; checkedIds = []; pickSpells = []; pickChoice = {}; hpRoll = ''; pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''; menuOpen = false; render(); return }
-  if (act === 'pending') { view = 'pending'; checkedIds = (c.pendingChoices || []).map(x => x.id); pickSpells = []; pickChoice = {}; pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''; render(); return }
+  if (act === 'levelup') {
+    view = 'levelup'; checkedIds = []; pickSpells = []; hpRoll = ''
+    pickChoice = {}
+    for (const [k, v] of Object.entries(c.choices || {})) pickChoice[k] = v.slice()
+    pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''
+    menuOpen = false; render(); return
+  }
+  if (act === 'pending') {
+    view = 'pending'; checkedIds = (c.pendingChoices || []).map(x => x.id); pickSpells = []
+    pickChoice = {}
+    for (const [k, v] of Object.entries(c.choices || {})) pickChoice[k] = v.slice()
+    pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''
+    render(); return
+  }
   if (act === 'check') {
     const id = btn.dataset.id
     const i = checkedIds.indexOf(id)

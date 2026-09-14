@@ -250,4 +250,26 @@ assert.equal(shots.character.choices['arcane-shot'].length, 2)
 assert.ok(!shots.character.pendingChoices.some(x => x.catalog === 'arcane-shot'))
 const tooFew = R.setChoices(aa, 'arcane-shot', ['banishing'], real)
 assert.equal(tooFew.ok, false)
+const bm = R.setSubclass(R.createCharacter({
+  name: '師',
+  race: 'human',
+  class: 'fighter',
+  level: 3,
+  abilities: { str: 16, dex: 12, con: 14, int: 10, wis: 10, cha: 8 },
+  hpMax: 28
+}, real), 'battlemaster', real)
+assert.ok(bm.pendingChoices.some(x => x.catalog === 'maneuver' && x.pick === 3))
+const man = R.setChoices(bm, 'maneuver', ['riposte', 'precision', 'trip'], real)
+assert.equal(man.ok, true)
+const wk = R.createCharacter({
+  name: '契',
+  race: 'human',
+  class: 'warlock',
+  level: 2,
+  abilities: { str: 8, dex: 14, con: 13, int: 10, wis: 12, cha: 15 },
+  hpMax: 15
+}, real)
+assert.ok(wk.pendingChoices.some(x => x.catalog === 'invocation' && x.pick === 2))
+const inv = R.setChoices(wk, 'invocation', ['agonizing-blast', 'repelling-blast'], real)
+assert.equal(inv.ok, true)
 console.log('choices ok')

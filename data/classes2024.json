@@ -25,6 +25,18 @@
       {
         "id": "totem",
         "name": "圖騰戰士"
+      },
+      {
+        "id": "ancestral",
+        "name": "先祖守護者"
+      },
+      {
+        "id": "zealot",
+        "name": "狂熱者"
+      },
+      {
+        "id": "storm-herald",
+        "name": "風暴先驅"
       }
     ],
     "defaultAttack": {
@@ -66,6 +78,22 @@
       {
         "id": "valor",
         "name": "勇氣學院"
+      },
+      {
+        "id": "glamour",
+        "name": "魅力學院"
+      },
+      {
+        "id": "swords",
+        "name": "劍舞學院"
+      },
+      {
+        "id": "whispers",
+        "name": "低語學院"
+      },
+      {
+        "id": "eloquence",
+        "name": "辯才學院"
       }
     ],
     "spellPicks": {
@@ -111,6 +139,38 @@
       {
         "id": "war",
         "name": "戰爭領域"
+      },
+      {
+        "id": "knowledge",
+        "name": "知識領域"
+      },
+      {
+        "id": "light",
+        "name": "光明領域"
+      },
+      {
+        "id": "nature",
+        "name": "自然領域"
+      },
+      {
+        "id": "tempest",
+        "name": "風暴領域"
+      },
+      {
+        "id": "trickery",
+        "name": "詭術領域"
+      },
+      {
+        "id": "forge",
+        "name": "鍛造領域"
+      },
+      {
+        "id": "grave",
+        "name": "墳墓領域"
+      },
+      {
+        "id": "twilight",
+        "name": "暮光領域"
       }
     ],
     "spellPicks": {
@@ -149,6 +209,22 @@
       {
         "id": "moon",
         "name": "月亮結社"
+      },
+      {
+        "id": "shepherd",
+        "name": "牧者結社"
+      },
+      {
+        "id": "spores",
+        "name": "孢子結社"
+      },
+      {
+        "id": "stars",
+        "name": "星辰結社"
+      },
+      {
+        "id": "wildfire",
+        "name": "野火結社"
       }
     ],
     "spellPicks": {
@@ -197,6 +273,22 @@
       {
         "id": "arcane-archer",
         "name": "魔射手"
+      },
+      {
+        "id": "cavalier",
+        "name": "騎兵"
+      },
+      {
+        "id": "samurai",
+        "name": "武士"
+      },
+      {
+        "id": "psi-warrior",
+        "name": "靈能戰士"
+      },
+      {
+        "id": "rune-knight",
+        "name": "符文騎士"
       }
     ],
     "defaultAttack": {
@@ -244,6 +336,22 @@
       {
         "id": "shadow",
         "name": "暗影宗"
+      },
+      {
+        "id": "four-elements",
+        "name": "四象宗"
+      },
+      {
+        "id": "drunken",
+        "name": "醉拳宗"
+      },
+      {
+        "id": "kensei",
+        "name": "劍聖宗"
+      },
+      {
+        "id": "mercy",
+        "name": "慈悲宗"
       }
     ],
     "defaultAttack": {
@@ -285,6 +393,22 @@
       {
         "id": "vengeance",
         "name": "復仇之誓"
+      },
+      {
+        "id": "ancients",
+        "name": "遠古之誓"
+      },
+      {
+        "id": "conquest",
+        "name": "征服之誓"
+      },
+      {
+        "id": "redemption",
+        "name": "救贖之誓"
+      },
+      {
+        "id": "glory",
+        "name": "榮耀之誓"
       }
     ],
     "spellPicks": {
@@ -330,6 +454,26 @@
       {
         "id": "beast",
         "name": "獸王"
+      },
+      {
+        "id": "gloom-stalker",
+        "name": "幽暗追蹤者"
+      },
+      {
+        "id": "horizon-walker",
+        "name": "地平線行者"
+      },
+      {
+        "id": "monster-slayer",
+        "name": "怪物殺手"
+      },
+      {
+        "id": "fey-wanderer",
+        "name": "妖精漫遊者"
+      },
+      {
+        "id": "swarmkeeper",
+        "name": "蟲群守護者"
       }
     ],
     "spellPicks": {
@@ -373,6 +517,26 @@
       {
         "id": "arcane-trickster",
         "name": "奧法詐術師"
+      },
+      {
+        "id": "swashbuckler",
+        "name": "劍客"
+      },
+      {
+        "id": "inquisitive",
+        "name": "審問者"
+      },
+      {
+        "id": "mastermind",
+        "name": "策士"
+      },
+      {
+        "id": "scout",
+        "name": "斥候"
+      },
+      {
+        "id": "phantom",
+        "name": "幽魂"
       }
     ],
     "defaultAttack": {
@@ -407,6 +571,26 @@
       {
         "id": "wild",
         "name": "野性魔法"
+      },
+      {
+        "id": "divine-soul",
+        "name": "神聖魂魄"
+      },
+      {
+        "id": "shadow",
+        "name": "暗影魔法"
+      },
+      {
+        "id": "storm",
+        "name": "風暴術法"
+      },
+      {
+        "id": "aberrant",
+        "name": "異怪心智"
+      },
+      {
+        "id": "clockwork",
+        "name": "發條靈魂"
       }
     ],
     "spellPicks": {
@@ -452,6 +636,26 @@
       {
         "id": "archfey",
         "name": "至高妖精"
+      },
+      {
+        "id": "great-old-one",
+        "name": "舊日支配者"
+      },
+      {
+        "id": "hexblade",
+        "name": "咒刃"
+      },
+      {
+        "id": "celestial",
+        "name": "天界"
+      },
+      {
+        "id": "fathomless",
+        "name": "深海"
+      },
+      {
+        "id": "genie",
+        "name": "巨靈"
       }
     ],
     "spellPicks": {
@@ -490,6 +694,42 @@
       {
         "id": "abjuration",
         "name": "防護學派"
+      },
+      {
+        "id": "conjuration",
+        "name": "咒法學派"
+      },
+      {
+        "id": "divination",
+        "name": "預言學派"
+      },
+      {
+        "id": "enchantment",
+        "name": "惑控學派"
+      },
+      {
+        "id": "illusion",
+        "name": "幻術學派"
+      },
+      {
+        "id": "necromancy",
+        "name": "死靈學派"
+      },
+      {
+        "id": "transmutation",
+        "name": "變化學派"
+      },
+      {
+        "id": "war-magic",
+        "name": "戰爭魔法"
+      },
+      {
+        "id": "bladesinging",
+        "name": "刃歌"
+      },
+      {
+        "id": "scribes",
+        "name": "書記秩序"
       }
     ],
     "spellPicks": {

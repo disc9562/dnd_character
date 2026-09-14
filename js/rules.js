@@ -122,9 +122,22 @@ function casterOf(classDef, subclass) {
   return classDef.caster
 }
 
+function catalogPick(catalog, level) {
+  if (catalog.pickAt) {
+    let p = 0
+    for (const row of catalog.pickAt) {
+      if (level >= row.level) p = row.pick
+    }
+    return p
+  }
+  return catalog.pick || 1
+}
+
 function choiceDue(catalog, character) {
+  const need = catalogPick(catalog, character.level)
+  if (!need) return false
   const have = (character.choices && character.choices[catalog.id]) || []
-  if (have.length >= (catalog.pick || 1)) return false
+  if (have.length >= need) return false
   return (catalog.when || []).some(w => {
     if (w.class && w.class !== character.class) return false
     if (w.subclass && w.subclass !== character.subclass) return false
@@ -162,14 +175,15 @@ function pendingFor(character, classDef, catalogs) {
     for (const cat of Object.values(catalogs)) {
       if (!choiceDue(cat, character)) continue
       const have = (character.choices && character.choices[cat.id]) || []
+      const need = catalogPick(cat, character.level)
       pending.push({
         id: 'choice-' + cat.id,
         type: 'choice',
         catalog: cat.id,
-        pick: cat.pick || 1,
+        pick: need,
         have: have.length,
         name: cat.name,
-        label: cat.name + '（選 ' + (cat.pick || 1) + '）'
+        label: cat.name + '（選 ' + need + '）'
       })
     }
   }
@@ -262,13 +276,14 @@ function setChoices(character, catalogId, optionIds, data) {
   const allowed = {}
   for (const o of cat.options || []) {
     if (o.classes && o.classes.indexOf(character.class) < 0) continue
+    if (o.minLevel && character.level < o.minLevel) continue
     allowed[o.id] = true
   }
   const ids = []
   for (const id of optionIds || []) {
     if (allowed[id] && ids.indexOf(id) < 0) ids.push(id)
   }
-  if (ids.length !== (cat.pick || 1)) return { ok: false }
+  if (ids.length !== catalogPick(cat, character.level)) return { ok: false }
   const next = clone(character)
   next.choices = Object.assign({}, next.choices || {})
   next.choices[catalogId] = ids
@@ -351,9 +366,9 @@ function checklistFor(character, data) {
         id: 'choice-' + cat.id,
         type: 'choice',
         catalog: cat.id,
-        pick: cat.pick || 1,
+        pick: catalogPick(cat, next),
         name: cat.name,
-        label: cat.name + '（選 ' + (cat.pick || 1) + '）'
+        label: cat.name + '（選 ' + catalogPick(cat, next) + '）'
       })
     }
   }
@@ -507,6 +522,7 @@ const Rules = {
   clearChoices,
   selectedPowers,
   choiceDue,
+  catalogPick,
   addSpell,
   removeSpell
 }

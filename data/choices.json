@@ -4,28 +4,105 @@
     "name": "戰鬥風格",
     "pick": 1,
     "when": [
-      { "class": "fighter", "level": 1 },
-      { "class": "ranger", "level": 2 },
-      { "class": "paladin", "level": 2 }
+      {
+        "class": "fighter",
+        "level": 1
+      },
+      {
+        "class": "ranger",
+        "level": 2
+      },
+      {
+        "class": "paladin",
+        "level": 2
+      }
     ],
     "options": [
-      { "id": "archery", "name": "射擊", "text": "使用遠程武器攻擊時命中 +2。", "classes": ["fighter", "ranger"] },
-      { "id": "defense", "name": "防禦", "text": "著甲時 AC +1。", "classes": ["fighter", "ranger", "paladin"] },
-      { "id": "dueling", "name": "決鬥", "text": "單手持一把近戰武器、另一手沒拿武器時，傷害 +2。", "classes": ["fighter", "ranger", "paladin"] },
-      { "id": "great-weapon", "name": "巨武器戰鬥", "text": "雙手近戰武器傷害骰出 1 或 2 可重骰。", "classes": ["fighter", "paladin"] },
-      { "id": "protection", "name": "防護", "text": "持盾時，鄰格友方被打可反應讓該攻擊有劣勢。", "classes": ["fighter", "paladin"] },
-      { "id": "two-weapon", "name": "雙武器戰鬥", "text": "雙持時，副手攻擊也能加上能力調整值。", "classes": ["fighter", "ranger"] }
+      {
+        "id": "archery",
+        "name": "射擊",
+        "text": "使用遠程武器攻擊時命中 +2。",
+        "classes": [
+          "fighter",
+          "ranger"
+        ]
+      },
+      {
+        "id": "defense",
+        "name": "防禦",
+        "text": "著甲時 AC +1。",
+        "classes": [
+          "fighter",
+          "ranger",
+          "paladin"
+        ]
+      },
+      {
+        "id": "dueling",
+        "name": "決鬥",
+        "text": "單手持一把近戰武器、另一手沒拿武器時，傷害 +2。",
+        "classes": [
+          "fighter",
+          "ranger",
+          "paladin"
+        ]
+      },
+      {
+        "id": "great-weapon",
+        "name": "巨武器戰鬥",
+        "text": "雙手近戰武器傷害骰出 1 或 2 可重骰。",
+        "classes": [
+          "fighter",
+          "paladin"
+        ]
+      },
+      {
+        "id": "protection",
+        "name": "防護",
+        "text": "持盾時，鄰格友方被打可反應讓該攻擊有劣勢。",
+        "classes": [
+          "fighter",
+          "paladin"
+        ]
+      },
+      {
+        "id": "two-weapon",
+        "name": "雙武器戰鬥",
+        "text": "雙持時，副手攻擊也能加上能力調整值。",
+        "classes": [
+          "fighter",
+          "ranger"
+        ]
+      }
     ]
   },
   "hunter-prey": {
     "id": "hunter-prey",
     "name": "獵食",
     "pick": 1,
-    "when": [{ "class": "ranger", "subclass": "hunter", "level": 3 }],
+    "when": [
+      {
+        "class": "ranger",
+        "subclass": "hunter",
+        "level": 3
+      }
+    ],
     "options": [
-      { "id": "colossus-slayer", "name": "巨像殺手", "text": "每回合一次，你打中的生物若未滿 HP，額外 1d8 傷害。" },
-      { "id": "giant-killer", "name": "巨人殺手", "text": "大型或更大的生物在 5 呎內攻擊你後，你可用反應攻擊它。" },
-      { "id": "horde-breaker", "name": "群體破壞者", "text": "攻擊動作打中後，可再打一次 5 呎內另一個不同生物。" }
+      {
+        "id": "colossus-slayer",
+        "name": "巨像殺手",
+        "text": "每回合一次，你打中的生物若未滿 HP，額外 1d8 傷害。"
+      },
+      {
+        "id": "giant-killer",
+        "name": "巨人殺手",
+        "text": "大型或更大的生物在 5 呎內攻擊你後，你可用反應攻擊它。"
+      },
+      {
+        "id": "horde-breaker",
+        "name": "群體破壞者",
+        "text": "攻擊動作打中後，可再打一次 5 呎內另一個不同生物。"
+      }
     ]
   },
   "arcane-shot": {
@@ -33,17 +110,446 @@
     "name": "奧術射擊",
     "pick": 2,
     "when": [
-      { "class": "fighter", "subclass": "arcane-archer", "level": 3 }
+      {
+        "class": "fighter",
+        "subclass": "arcane-archer",
+        "level": 3
+      }
     ],
     "options": [
-      { "id": "banishing", "name": "放逐箭", "text": "命中後目標魅力豁免，失敗則被短暫放逐（失能），你的下回合結束回來。" },
-      { "id": "beguiling", "name": "誘人箭", "text": "命中額外心靈傷害。目標感知豁免失敗則被你指定的生物魅惑。" },
-      { "id": "bursting", "name": "爆裂箭", "text": "命中後在該處爆開，10 呎內其他生物受力場傷害。" },
-      { "id": "enfeebling", "name": "衰弱箭", "text": "命中額外死靈傷害。目標力量豁免失敗則武器傷害減半，直到你下回合。" },
-      { "id": "grasping", "name": "攫抓箭", "text": "命中後荊棘纏住：速度 -10、移動會受傷，可掙脫。" },
-      { "id": "piercing", "name": "貫穿箭", "text": "箭化為線，沿直線上的生物各做豁免，失敗受傷。" },
-      { "id": "seeking", "name": "追尋箭", "text": "自動尋敵，可打你看不見但知道位置的目標；命中額外力場傷害。" },
-      { "id": "shadow", "name": "暗影箭", "text": "命中額外心靈傷害。目標感知豁免失敗則無法看見 5 呎外。" }
+      {
+        "id": "banishing",
+        "name": "放逐箭",
+        "text": "命中後目標魅力豁免，失敗則被短暫放逐（失能），你的下回合結束回來。"
+      },
+      {
+        "id": "beguiling",
+        "name": "誘人箭",
+        "text": "命中額外心靈傷害。目標感知豁免失敗則被你指定的生物魅惑。"
+      },
+      {
+        "id": "bursting",
+        "name": "爆裂箭",
+        "text": "命中後在該處爆開，10 呎內其他生物受力場傷害。"
+      },
+      {
+        "id": "enfeebling",
+        "name": "衰弱箭",
+        "text": "命中額外死靈傷害。目標力量豁免失敗則武器傷害減半，直到你下回合。"
+      },
+      {
+        "id": "grasping",
+        "name": "攫抓箭",
+        "text": "命中後荊棘纏住：速度 -10、移動會受傷，可掙脫。"
+      },
+      {
+        "id": "piercing",
+        "name": "貫穿箭",
+        "text": "箭化為線，沿直線上的生物各做豁免，失敗受傷。"
+      },
+      {
+        "id": "seeking",
+        "name": "追尋箭",
+        "text": "自動尋敵，可打你看不見但知道位置的目標；命中額外力場傷害。"
+      },
+      {
+        "id": "shadow",
+        "name": "暗影箭",
+        "text": "命中額外心靈傷害。目標感知豁免失敗則無法看見 5 呎外。"
+      }
+    ]
+  },
+  "totem": {
+    "id": "totem",
+    "name": "圖騰靈獸",
+    "pick": 1,
+    "when": [
+      {
+        "class": "barbarian",
+        "subclass": "totem",
+        "level": 3
+      }
+    ],
+    "options": [
+      {
+        "id": "bear",
+        "name": "熊",
+        "text": "狂暴時，除心靈外所有傷害抗性。"
+      },
+      {
+        "id": "eagle",
+        "name": "鷹",
+        "text": "狂暴時機會攻擊對你有劣勢；可用附贈動作疾走。"
+      },
+      {
+        "id": "wolf",
+        "name": "狼",
+        "text": "狂暴時，友方攻擊你 5 呎內敵人有優勢。"
+      }
+    ]
+  },
+  "maneuver": {
+    "id": "maneuver",
+    "name": "戰技",
+    "pickAt": [
+      {
+        "level": 3,
+        "pick": 3
+      },
+      {
+        "level": 7,
+        "pick": 4
+      },
+      {
+        "level": 10,
+        "pick": 5
+      },
+      {
+        "level": 15,
+        "pick": 6
+      }
+    ],
+    "when": [
+      {
+        "class": "fighter",
+        "subclass": "battlemaster",
+        "level": 3
+      }
+    ],
+    "options": [
+      {
+        "id": "commanders-strike",
+        "name": "指揮官打擊",
+        "text": "放棄一次攻擊，讓友方用反應攻擊並加優越骰。"
+      },
+      {
+        "id": "disarming",
+        "name": "繳械攻擊",
+        "text": "命中加優越骰傷害，力量豁免失敗則掉落物品。"
+      },
+      {
+        "id": "distracting",
+        "name": "擾亂攻擊",
+        "text": "命中加優越骰。下一個打它的友方攻擊有優勢。"
+      },
+      {
+        "id": "evasive",
+        "name": "迴避步法",
+        "text": "移動時把優越骰加到 AC，直到停下。"
+      },
+      {
+        "id": "feinting",
+        "name": "佯攻",
+        "text": "附贈動作，對一個生物的下一次攻擊有優勢並加優越骰傷害。"
+      },
+      {
+        "id": "goading",
+        "name": "激將攻擊",
+        "text": "命中加優越骰。感知豁免失敗則攻擊別人有劣勢。"
+      },
+      {
+        "id": "lunging",
+        "name": "突進攻擊",
+        "text": "這次近戰攻擊射程 +5 呎，命中加優越骰傷害。"
+      },
+      {
+        "id": "maneuvering",
+        "name": "機動攻擊",
+        "text": "命中加優越骰。一個友方可移動半速且不引發你目標的藉機。"
+      },
+      {
+        "id": "menacing",
+        "name": "威嚇攻擊",
+        "text": "命中加優越骰。感知豁免失敗則恐懼到你下回合。"
+      },
+      {
+        "id": "parry",
+        "name": "招架",
+        "text": "被近戰打中時，反應減傷害＝優越骰＋DEX。"
+      },
+      {
+        "id": "precision",
+        "name": "精準攻擊",
+        "text": "攻擊檢定可加上優越骰。"
+      },
+      {
+        "id": "pushing",
+        "name": "推撞攻擊",
+        "text": "命中加優越骰。力量豁免失敗被推最多 15 呎。"
+      },
+      {
+        "id": "rally",
+        "name": "重整",
+        "text": "附贈動作給友方暫時 HP＝優越骰＋CHA。"
+      },
+      {
+        "id": "riposte",
+        "name": "反擊",
+        "text": "近戰未命中你時，反應攻擊並加優越骰傷害。"
+      },
+      {
+        "id": "sweeping",
+        "name": "橫掃攻擊",
+        "text": "命中後，5 呎內另一個生物也受到優越骰傷害。"
+      },
+      {
+        "id": "trip",
+        "name": "絆摔攻擊",
+        "text": "命中加優越骰。力量豁免失敗則倒地。"
+      }
+    ]
+  },
+  "metamagic": {
+    "id": "metamagic",
+    "name": "超魔法",
+    "pickAt": [
+      {
+        "level": 3,
+        "pick": 2
+      },
+      {
+        "level": 10,
+        "pick": 3
+      },
+      {
+        "level": 17,
+        "pick": 4
+      }
+    ],
+    "when": [
+      {
+        "class": "sorcerer",
+        "level": 3
+      }
+    ],
+    "options": [
+      {
+        "id": "careful",
+        "name": "謹慎法術",
+        "text": "保護一些生物，讓他們自動通過你法術的豁免。"
+      },
+      {
+        "id": "distant",
+        "name": "遠隔法術",
+        "text": "射程加倍；觸摸改 30 呎。"
+      },
+      {
+        "id": "empowered",
+        "name": "強化法術",
+        "text": "重骰部分傷害骰（數量＝CHA 調整值）。"
+      },
+      {
+        "id": "extended",
+        "name": "延時法術",
+        "text": "持續時間加倍，最多 24 小時。"
+      },
+      {
+        "id": "heightened",
+        "name": "升階法術",
+        "text": "一個目標對此法術豁免有劣勢。"
+      },
+      {
+        "id": "quickened",
+        "name": "加速法術",
+        "text": "1 動作法術改為附贈動作。"
+      },
+      {
+        "id": "subtle",
+        "name": "隱密法術",
+        "text": "不需要姿勢與言語成分。"
+      },
+      {
+        "id": "twinned",
+        "name": "雙生法術",
+        "text": "只影響一個生物的法術可再指定第二個。"
+      }
+    ]
+  },
+  "pact": {
+    "id": "pact",
+    "name": "契約贈禮",
+    "pick": 1,
+    "when": [
+      {
+        "class": "warlock",
+        "level": 3
+      }
+    ],
+    "options": [
+      {
+        "id": "chain",
+        "name": "鎖鏈契約",
+        "text": "獲得特殊魔寵，並學會尋獲魔寵。"
+      },
+      {
+        "id": "blade",
+        "name": "利刃契約",
+        "text": "可把一把武器變成契約武器，用 CHA 攻擊。"
+      },
+      {
+        "id": "tome",
+        "name": "書冊契約",
+        "text": "獲得秘法書，含三個自選戲法。"
+      }
+    ]
+  },
+  "land": {
+    "id": "land",
+    "name": "結社地形",
+    "pick": 1,
+    "when": [
+      {
+        "class": "druid",
+        "subclass": "land",
+        "level": 2
+      }
+    ],
+    "options": [
+      {
+        "id": "arctic",
+        "name": "極地",
+        "text": "結社法術偏寒冷與防護。"
+      },
+      {
+        "id": "coast",
+        "name": "海岸",
+        "text": "結社法術偏水與移動。"
+      },
+      {
+        "id": "desert",
+        "name": "沙漠",
+        "text": "結社法術偏火焰與幻術。"
+      },
+      {
+        "id": "forest",
+        "name": "森林",
+        "text": "結社法術偏植物與偵測。"
+      },
+      {
+        "id": "grassland",
+        "name": "草原",
+        "text": "結社法術偏旅行與幻術。"
+      },
+      {
+        "id": "mountain",
+        "name": "山地",
+        "text": "結社法術偏岩石與閃電。"
+      },
+      {
+        "id": "swamp",
+        "name": "沼澤",
+        "text": "結社法術偏黑暗與死靈。"
+      },
+      {
+        "id": "underdark",
+        "name": "幽暗地域",
+        "text": "結社法術偏蛛網、石化與隱形。"
+      }
+    ]
+  },
+  "invocation": {
+    "id": "invocation",
+    "name": "魔能祈喚",
+    "pickAt": [
+      {
+        "level": 2,
+        "pick": 2
+      },
+      {
+        "level": 5,
+        "pick": 3
+      },
+      {
+        "level": 7,
+        "pick": 4
+      },
+      {
+        "level": 9,
+        "pick": 5
+      },
+      {
+        "level": 12,
+        "pick": 6
+      },
+      {
+        "level": 15,
+        "pick": 7
+      },
+      {
+        "level": 18,
+        "pick": 8
+      }
+    ],
+    "when": [
+      {
+        "class": "warlock",
+        "level": 2
+      }
+    ],
+    "options": [
+      {
+        "id": "agonizing-blast",
+        "name": "痛苦魔能",
+        "text": "魔能爆傷害加上魅力調整值。"
+      },
+      {
+        "id": "repelling-blast",
+        "name": "擊退魔能",
+        "text": "魔能爆命中可把目標推 10 呎。"
+      },
+      {
+        "id": "armor-of-shadows",
+        "name": "暗影護甲",
+        "text": "隨意施法師護甲（自己）。"
+      },
+      {
+        "id": "devils-sight",
+        "name": "魔鬼視覺",
+        "text": "黑暗中（含魔法黑暗）能見 120 呎。"
+      },
+      {
+        "id": "fiendish-vigor",
+        "name": "邪魔活力",
+        "text": "隨意施虛假生命，視為 1 環。"
+      },
+      {
+        "id": "mask-of-many-faces",
+        "text": "隨意施易容術。",
+        "name": "千面之罩"
+      },
+      {
+        "id": "misty-visions",
+        "name": "霧景幻象",
+        "text": "隨意施無聲幻影。"
+      },
+      {
+        "id": "beguiling-influence",
+        "name": "誘人風采",
+        "text": "獲得欺瞞與說服熟練。"
+      },
+      {
+        "id": "eyes-of-rune-keeper",
+        "name": "符文守護者之眼",
+        "text": "能讀懂所有文字。"
+      },
+      {
+        "id": "thief-of-five-fates",
+        "name": "五劫盜賊",
+        "text": "每日一次施災禍術。",
+        "minLevel": 5
+      },
+      {
+        "id": "misfortune",
+        "name": "厄運視線",
+        "text": "對一個生物的攻擊有優勢一次。",
+        "minLevel": 5
+      },
+      {
+        "id": "ascendant-step",
+        "name": "升騰步伐",
+        "text": "隨意施漂浮術（自己）。",
+        "minLevel": 9
+      }
     ]
   }
 }
