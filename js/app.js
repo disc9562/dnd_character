@@ -39,11 +39,13 @@ let glProg = Number(localStorage.getItem('dnd5e-script-progress')) || 1
 let checkedIds = []
 let pickSubclass = ''
 let pickSpells = []
+let pickChoice = {}
 let pickFeat = ''
 let pickAsi = ['str', 'str']
 let openSpell = ''
 let openFeat = ''
 let openClassFeat = ''
+let openPower = ''
 let hpRoll = ''
 let ruleset = '2014'
 
@@ -55,7 +57,8 @@ function packFor(year) {
       classes: data.classes2024 || data.classes,
       spells: data.spells,
       feats: data.feats,
-      features: data.features || {}
+      features: data.features || {},
+      choices: data.choices || {}
     }
   }
   return {
@@ -63,7 +66,8 @@ function packFor(year) {
     classes: data.classes,
     spells: data.spells,
     feats: data.feats,
-    features: data.features || {}
+    features: data.features || {},
+    choices: data.choices || {}
   }
 }
 
@@ -251,6 +255,18 @@ function combatHtml(c) {
       </div>`
     ).join('') +
     `<button class="big lockable" data-act="addatk"${lock}>＋攻擊</button>`
+  const powers = Rules.selectedPowers(c, pack.choices)
+  const seenCat = {}
+  const powerRows = powers.map(p => {
+    const open = openPower === p.catalog + ':' + p.id
+    const reset = !c.locked && !seenCat[p.catalog]
+    seenCat[p.catalog] = true
+    return `<div class="spell-line">
+      <button class="big grow" data-act="togglepower" data-cat="${esc(p.catalog)}" data-id="${esc(p.id)}">${esc(p.name)} <span class="muted">${esc(p.catalogName)}</span>
+        ${open ? `<p class="spell-text">${esc(p.text)}</p>` : ''}</button>
+      ${reset ? `<button class="icon lockable" data-act="resetchoice" data-cat="${esc(p.catalog)}">重選</button>` : ''}
+    </div>`
+  }).join('')
   const spells = (c.spells || []).map(id => {
     const s = data.spells[id]
     if (!s) return ''
@@ -337,7 +353,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v35</p>
+    <p class="mast">冒險者紀錄 · v36</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -410,6 +426,7 @@ function combatHtml(c) {
       <div>
         <h3>攻擊</h3>
         ${attacks}
+        ${powerRows ? `<h3>職業技能</h3>${powerRows}` : ''}
         ${res ? `<h3>資源</h3><div class="slots">${res}</div>` : ''}
         <h3>法術</h3>
         ${spells}
@@ -568,6 +585,16 @@ function scriptHtml() {
   `
 }
 
+function choicePickerHtml(cat, classId, pick) {
+  if (!cat) return ''
+  const selected = pickChoice[cat.id] || []
+  const opts = (cat.options || []).filter(o => !o.classes || o.classes.indexOf(classId) >= 0)
+  return `<p class="muted">選 ${pick} 項</p>` + opts.map(o => {
+    const on = selected.indexOf(o.id) >= 0
+    return `<label class="chk"><input type="checkbox" data-act="pickch" data-cat="${esc(cat.id)}" data-id="${esc(o.id)}" ${on ? 'checked' : ''}><span><strong>${esc(o.name)}</strong><span class="spell-text">${esc(o.text)}</span></span></label>`
+  }).join('')
+}
+
 function levelHtml(c) {
   const pack = packFor(c.ruleset || '2014')
   const items = view === 'pending' ? (c.pendingChoices || []) : Rules.checklistFor(c, pack)
@@ -603,9 +630,22 @@ function levelHtml(c) {
         <select data-act="feat"><option value="">（不用專長）</option>${Object.keys(data.feats).map(id =>
           `<option value="${esc(id)}" ${pickFeat === id ? 'selected' : ''}>${esc(data.feats[id].name)}</option>`).join('')}</select>`
     }
+    if (it.type === 'choice') {
+      const cat = (pack.choices || {})[it.catalog]
+      extra = choicePickerHtml(cat, c.class, it.pick)
+    }
     if (it.type === 'missing') extra = `<p>${esc(it.label)}</p>`
     const label = it.label || ({ hp: '生命值', subclass: '子職', asi: '能力值／專長', spells: '法術 ×' + (it.count || '') }[it.type] || it.type)
     return `<label class="chk"><input type="checkbox" data-act="check" data-id="${esc(it.id)}" ${on ? 'checked' : ''}>${esc(label)}</label>${extra}`
+  }).join('')
+  const probe = Object.assign({}, c, {
+    level: view === 'levelup' ? c.level + 1 : c.level,
+    subclass: pickSubclass || c.subclass
+  })
+  const extraChoices = Rules.pendingFor(probe, cls, pack.choices).filter(x => x.type === 'choice' && items.every(it => it.catalog !== x.catalog))
+  const extraHtml = extraChoices.map(it => {
+    const cat = (pack.choices || {})[it.catalog]
+    return `<div class="choice-block"><p><strong>${esc(it.label)}</strong></p>${choicePickerHtml(cat, c.class, it.pick)}</div>`
   }).join('')
   return `
     <p class="mast">冒險者紀錄</p>
@@ -615,6 +655,7 @@ function levelHtml(c) {
     </div>
     ${banner ? `<div class="warn">${esc(banner)}</div>` : ''}
     ${boxes || '<p class="muted">沒有要選的</p>'}
+    ${extraHtml}
     <button class="big primary" data-act="apply" ${missing ? 'disabled' : ''}>套用</button>
   `
 }
@@ -710,8 +751,8 @@ el.addEventListener('click', e => {
     replace(next)
     return
   }
-  if (act === 'levelup') { view = 'levelup'; checkedIds = []; pickSpells = []; hpRoll = ''; pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''; menuOpen = false; render(); return }
-  if (act === 'pending') { view = 'pending'; checkedIds = (c.pendingChoices || []).map(x => x.id); pickSpells = []; pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''; render(); return }
+  if (act === 'levelup') { view = 'levelup'; checkedIds = []; pickSpells = []; pickChoice = {}; hpRoll = ''; pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''; menuOpen = false; render(); return }
+  if (act === 'pending') { view = 'pending'; checkedIds = (c.pendingChoices || []).map(x => x.id); pickSpells = []; pickChoice = {}; pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''; render(); return }
   if (act === 'check') {
     const id = btn.dataset.id
     const i = checkedIds.indexOf(id)
@@ -723,6 +764,18 @@ el.addEventListener('click', e => {
   if (act === 'togglespell') { openSpell = openSpell === btn.dataset.id ? '' : btn.dataset.id; render(); return }
   if (act === 'togglefeat') { openFeat = openFeat === btn.dataset.id ? '' : btn.dataset.id; render(); return }
   if (act === 'toggleclassfeat') { openClassFeat = openClassFeat === btn.dataset.id ? '' : btn.dataset.id; render(); return }
+  if (act === 'togglepower') {
+    const k = btn.dataset.cat + ':' + btn.dataset.id
+    openPower = openPower === k ? '' : k
+    render()
+    return
+  }
+  if (act === 'resetchoice') {
+    view = 'pending'
+    pickChoice = {}
+    replace(Rules.clearChoices(c, btn.dataset.cat, packFor(c.ruleset)))
+    return
+  }
   if (act === 'conc') {
     const next = JSON.parse(JSON.stringify(c))
     next.concentrating = !c.concentrating
@@ -829,16 +882,35 @@ el.addEventListener('click', e => {
     const caster = Rules.casterOf(cls, next.subclass)
     const fresh = Rules.slotsFor(caster, next.level)
     if (Object.keys(fresh).length && (!next.spellSlots || !Object.keys(next.spellSlots).length)) next.spellSlots = fresh
+    for (const catId of Object.keys(pickChoice)) {
+      const r = Rules.setChoices(next, catId, pickChoice[catId], pack)
+      if (!r.ok) {
+        banner = '請選滿「' + (((pack.choices || {})[catId] || {}).name || catId) + '」'
+        render()
+        return
+      }
+      next = r.character
+    }
     if (view === 'pending') {
-      next.pendingChoices = Rules.pendingFor(next, cls)
-      view = 'combat'
+      next.pendingChoices = Rules.pendingFor(next, cls, pack.choices)
+      pickChoice = {}
+      if (next.pendingChoices.length) {
+        banner = '還有沒選完的項目'
+        view = 'pending'
+      } else view = 'combat'
       replace(next)
       return
     }
     const applied = Rules.applyLevelUp(next, checkedIds, pack, { hpRoll: Number(hpRoll) })
     if (!applied.ok) { banner = applied.missing && applied.missing[0] === 'hpRoll' ? '請填這次生命骰點數' : '還沒勾完'; render(); return }
-    view = 'combat'
-    replace(applied.character)
+    let ch = applied.character
+    for (const catId of Object.keys(pickChoice)) {
+      const r = Rules.setChoices(ch, catId, pickChoice[catId], pack)
+      if (r.ok) ch = r.character
+    }
+    pickChoice = {}
+    view = (ch.pendingChoices || []).length ? 'pending' : 'combat'
+    replace(ch)
     return
   }
   if (act === 'noop') return
@@ -869,7 +941,21 @@ el.addEventListener('change', e => {
     return
   }
   const act = t.dataset.act
-  if (act === 'picksb') pickSubclass = t.value
+  if (act === 'picksb') { pickSubclass = t.value; render(); return }
+  if (act === 'pickch') {
+    const cat = t.dataset.cat
+    const id = t.dataset.id
+    const pick = (((packFor((current() || {}).ruleset).choices || {})[cat] || {}).pick) || 1
+    let arr = (pickChoice[cat] || []).slice()
+    const i = arr.indexOf(id)
+    if (t.checked) {
+      if (i < 0) arr.push(id)
+      if (arr.length > pick) arr = arr.slice(arr.length - pick)
+    } else if (i >= 0) arr.splice(i, 1)
+    pickChoice[cat] = arr
+    render()
+    return
+  }
   if (act === 'picksp') {
     const id = t.dataset.id
     const i = pickSpells.indexOf(id)
@@ -966,16 +1052,17 @@ el.addEventListener('change', e => {
 
 async function boot() {
   try {
-    const [races, classes, spells, feats, features, races2024, classes2024] = await Promise.all([
+    const [races, classes, spells, feats, features, races2024, classes2024, choices] = await Promise.all([
       fetch('data/races.json').then(r => r.json()),
       fetch('data/classes.json').then(r => r.json()),
       fetch('data/spells.json').then(r => r.json()),
       fetch('data/feats.json').then(r => r.json()),
       fetch('data/features.json').then(r => r.json()),
       fetch('data/races2024.json').then(r => r.json()),
-      fetch('data/classes2024.json').then(r => r.json())
+      fetch('data/classes2024.json').then(r => r.json()),
+      fetch('data/choices.json').then(r => r.json())
     ])
-    data = { races, classes, spells, feats, features, races2024, classes2024 }
+    data = { races, classes, spells, feats, features, races2024, classes2024, choices }
     state = Store.loadState(localStorage)
     view = current() ? 'combat' : 'create'
     render()

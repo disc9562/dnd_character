@@ -1,0 +1,49 @@
+{
+  "fighting-style": {
+    "id": "fighting-style",
+    "name": "戰鬥風格",
+    "pick": 1,
+    "when": [
+      { "class": "fighter", "level": 1 },
+      { "class": "ranger", "level": 2 },
+      { "class": "paladin", "level": 2 }
+    ],
+    "options": [
+      { "id": "archery", "name": "射擊", "text": "使用遠程武器攻擊時命中 +2。", "classes": ["fighter", "ranger"] },
+      { "id": "defense", "name": "防禦", "text": "著甲時 AC +1。", "classes": ["fighter", "ranger", "paladin"] },
+      { "id": "dueling", "name": "決鬥", "text": "單手持一把近戰武器、另一手沒拿武器時，傷害 +2。", "classes": ["fighter", "ranger", "paladin"] },
+      { "id": "great-weapon", "name": "巨武器戰鬥", "text": "雙手近戰武器傷害骰出 1 或 2 可重骰。", "classes": ["fighter", "paladin"] },
+      { "id": "protection", "name": "防護", "text": "持盾時，鄰格友方被打可反應讓該攻擊有劣勢。", "classes": ["fighter", "paladin"] },
+      { "id": "two-weapon", "name": "雙武器戰鬥", "text": "雙持時，副手攻擊也能加上能力調整值。", "classes": ["fighter", "ranger"] }
+    ]
+  },
+  "hunter-prey": {
+    "id": "hunter-prey",
+    "name": "獵食",
+    "pick": 1,
+    "when": [{ "class": "ranger", "subclass": "hunter", "level": 3 }],
+    "options": [
+      { "id": "colossus-slayer", "name": "巨像殺手", "text": "每回合一次，你打中的生物若未滿 HP，額外 1d8 傷害。" },
+      { "id": "giant-killer", "name": "巨人殺手", "text": "大型或更大的生物在 5 呎內攻擊你後，你可用反應攻擊它。" },
+      { "id": "horde-breaker", "name": "群體破壞者", "text": "攻擊動作打中後，可再打一次 5 呎內另一個不同生物。" }
+    ]
+  },
+  "arcane-shot": {
+    "id": "arcane-shot",
+    "name": "奧術射擊",
+    "pick": 2,
+    "when": [
+      { "class": "fighter", "subclass": "arcane-archer", "level": 3 }
+    ],
+    "options": [
+      { "id": "banishing", "name": "放逐箭", "text": "命中後目標魅力豁免，失敗則被短暫放逐（失能），你的下回合結束回來。" },
+      { "id": "beguiling", "name": "誘人箭", "text": "命中額外心靈傷害。目標感知豁免失敗則被你指定的生物魅惑。" },
+      { "id": "bursting", "name": "爆裂箭", "text": "命中後在該處爆開，10 呎內其他生物受力場傷害。" },
+      { "id": "enfeebling", "name": "衰弱箭", "text": "命中額外死靈傷害。目標力量豁免失敗則武器傷害減半，直到你下回合。" },
+      { "id": "grasping", "name": "攫抓箭", "text": "命中後荊棘纏住：速度 -10、移動會受傷，可掙脫。" },
+      { "id": "piercing", "name": "貫穿箭", "text": "箭化為線，沿直線上的生物各做豁免，失敗受傷。" },
+      { "id": "seeking", "name": "追尋箭", "text": "自動尋敵，可打你看不見但知道位置的目標；命中額外力場傷害。" },
+      { "id": "shadow", "name": "暗影箭", "text": "命中額外心靈傷害。目標感知豁免失敗則無法看見 5 呎外。" }
+    ]
+  }
+}

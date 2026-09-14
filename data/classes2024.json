@@ -193,6 +193,10 @@
       {
         "id": "eldritch-knight",
         "name": "奧法騎士"
+      },
+      {
+        "id": "arcane-archer",
+        "name": "魔射手"
       }
     ],
     "defaultAttack": {

@@ -122,10 +122,21 @@ function casterOf(classDef, subclass) {
   return classDef.caster
 }
 
-function pendingFor(character, classDef) {
+function choiceDue(catalog, character) {
+  const have = (character.choices && character.choices[catalog.id]) || []
+  if (have.length >= (catalog.pick || 1)) return false
+  return (catalog.when || []).some(w => {
+    if (w.class && w.class !== character.class) return false
+    if (w.subclass && w.subclass !== character.subclass) return false
+    if ((w.level || 1) > character.level) return false
+    return true
+  })
+}
+
+function pendingFor(character, classDef, catalogs) {
   const pending = []
   const level = character.level
-  if (classDef.subclassLevel && classDef.subclassLevel <= level && !character.subclass) {
+  if (classDef && classDef.subclassLevel && classDef.subclassLevel <= level && !character.subclass) {
     pending.push({
       id: 'subclass-' + classDef.subclassLevel,
       type: 'subclass',
@@ -133,12 +144,12 @@ function pendingFor(character, classDef) {
     })
   }
   const taken = character.asiTaken || []
-  for (const L of classDef.asiLevels || []) {
+  for (const L of (classDef && classDef.asiLevels) || []) {
     if (L <= level && !taken.includes(L)) {
       pending.push({ id: 'asi-' + L, type: 'asi', level: L })
     }
   }
-  const picks = classDef.spellPicks
+  const picks = classDef && classDef.spellPicks
   if (picks) {
     let need = 0
     if (level >= 1) need += picks[1] || 0
@@ -146,6 +157,21 @@ function pendingFor(character, classDef) {
     const have = (character.spells || []).length
     const missing = need - have
     if (missing > 0) pending.push({ id: 'spells', type: 'spells', count: missing })
+  }
+  if (catalogs) {
+    for (const cat of Object.values(catalogs)) {
+      if (!choiceDue(cat, character)) continue
+      const have = (character.choices && character.choices[cat.id]) || []
+      pending.push({
+        id: 'choice-' + cat.id,
+        type: 'choice',
+        catalog: cat.id,
+        pick: cat.pick || 1,
+        have: have.length,
+        name: cat.name,
+        label: cat.name + '（選 ' + (cat.pick || 1) + '）'
+      })
+    }
   }
   return pending
 }
@@ -201,9 +227,10 @@ function createCharacter(input, data) {
     ruleset: input.ruleset || '2014',
     money: { gp: 0, sp: 0, cp: 0 },
     concentrating: false,
-    gear: []
+    gear: [],
+    choices: {}
   }
-  character.pendingChoices = pendingFor(character, cls)
+  character.pendingChoices = pendingFor(character, cls, data.choices)
   return character
 }
 
@@ -224,23 +251,65 @@ function setSubclass(character, subclassId, data) {
   const next = clone(character)
   const cls = data.classes[next.class]
   next.subclass = subclassId || null
-  next.pendingChoices = pendingFor(next, cls)
+  next.pendingChoices = pendingFor(next, cls, data.choices)
   next.spellSlots = mergeSlots(next.spellSlots, slotsFor(casterOf(cls, next.subclass), next.level))
   return next
+}
+
+function setChoices(character, catalogId, optionIds, data) {
+  const cat = data.choices && data.choices[catalogId]
+  if (!cat) return { ok: false }
+  const allowed = {}
+  for (const o of cat.options || []) {
+    if (o.classes && o.classes.indexOf(character.class) < 0) continue
+    allowed[o.id] = true
+  }
+  const ids = []
+  for (const id of optionIds || []) {
+    if (allowed[id] && ids.indexOf(id) < 0) ids.push(id)
+  }
+  if (ids.length !== (cat.pick || 1)) return { ok: false }
+  const next = clone(character)
+  next.choices = Object.assign({}, next.choices || {})
+  next.choices[catalogId] = ids
+  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
+  return { ok: true, character: next }
+}
+
+function clearChoices(character, catalogId, data) {
+  const next = clone(character)
+  next.choices = Object.assign({}, next.choices || {})
+  delete next.choices[catalogId]
+  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
+  return next
+}
+
+function selectedPowers(character, catalogs) {
+  const out = []
+  if (!catalogs) return out
+  for (const cid of Object.keys(character.choices || {})) {
+    const cat = catalogs[cid]
+    if (!cat) continue
+    for (const id of character.choices[cid] || []) {
+      const opt = (cat.options || []).filter(o => o.id === id)[0]
+      if (opt) out.push({ catalog: cid, catalogName: cat.name, id: opt.id, name: opt.name, text: opt.text })
+    }
+  }
+  return out
 }
 
 function addSpell(character, spellId, data) {
   const next = clone(character)
   next.spells = (next.spells || []).slice()
   if (spellId && next.spells.indexOf(spellId) < 0) next.spells.push(spellId)
-  next.pendingChoices = pendingFor(next, data.classes[next.class])
+  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
   return next
 }
 
 function removeSpell(character, spellId, data) {
   const next = clone(character)
   next.spells = (next.spells || []).filter(id => id !== spellId)
-  next.pendingChoices = pendingFor(next, data.classes[next.class])
+  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
   return next
 }
 
@@ -274,6 +343,20 @@ function checklistFor(character, data) {
   if (cls.spellPicks && (cls.spellPicks.later || 0) > 0) {
     items.push({ id: 'spells', type: 'spells', count: cls.spellPicks.later })
   }
+  if (data.choices) {
+    const probe = Object.assign({}, character, { level: next })
+    for (const cat of Object.values(data.choices)) {
+      if (!choiceDue(cat, probe)) continue
+      items.push({
+        id: 'choice-' + cat.id,
+        type: 'choice',
+        catalog: cat.id,
+        pick: cat.pick || 1,
+        name: cat.name,
+        label: cat.name + '（選 ' + (cat.pick || 1) + '）'
+      })
+    }
+  }
   return items
 }
 
@@ -304,7 +387,7 @@ function applyLevelUp(character, checkedIds, data, opts) {
   if ((cls.asiLevels || []).includes(newLevel)) {
     next.asiTaken = (next.asiTaken || []).concat([newLevel])
   }
-  next.pendingChoices = pendingFor(next, cls)
+  next.pendingChoices = pendingFor(next, cls, data.choices)
   return { ok: true, character: next }
 }
 
@@ -420,6 +503,10 @@ const Rules = {
   longRest,
   shortRest,
   setSubclass,
+  setChoices,
+  clearChoices,
+  selectedPowers,
+  choiceDue,
   addSpell,
   removeSpell
 }

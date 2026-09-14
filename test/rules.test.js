@@ -206,3 +206,48 @@ const synced = R.syncSpellSlots(stale, real)
 assert.equal(synced.spellSlots['7'].max, 1)
 assert.ok(real.spells['finger-of-death'].level === 7)
 console.log('task5 ok')
+
+real.choices = JSON.parse(fs.readFileSync('data/choices.json', 'utf8'))
+const ranger3 = R.createCharacter({
+  name: '獵',
+  race: 'human',
+  class: 'ranger',
+  level: 3,
+  abilities: { str: 10, dex: 15, con: 13, int: 8, wis: 14, cha: 12 },
+  hpMax: 28
+}, real)
+assert.ok(ranger3.pendingChoices.some(x => x.type === 'subclass'))
+assert.ok(!ranger3.pendingChoices.some(x => x.catalog === 'hunter-prey'))
+const hun = R.setSubclass(ranger3, 'hunter', real)
+assert.ok(hun.pendingChoices.some(x => x.catalog === 'hunter-prey' && x.pick === 1))
+const prey = R.setChoices(hun, 'hunter-prey', ['colossus-slayer'], real)
+assert.equal(prey.ok, true)
+assert.deepEqual(prey.character.choices['hunter-prey'], ['colossus-slayer'])
+assert.ok(!prey.character.pendingChoices.some(x => x.catalog === 'hunter-prey'))
+const f1 = R.createCharacter({
+  name: '戰',
+  race: 'human',
+  class: 'fighter',
+  level: 1,
+  abilities: { str: 15, dex: 14, con: 13, int: 8, wis: 10, cha: 12 }
+}, real)
+assert.ok(f1.pendingChoices.some(x => x.catalog === 'fighting-style'))
+const styled = R.setChoices(f1, 'fighting-style', ['archery'], real)
+assert.equal(styled.ok, true)
+assert.deepEqual(styled.character.choices['fighting-style'], ['archery'])
+const aa = R.setSubclass(R.createCharacter({
+  name: '弓',
+  race: 'human',
+  class: 'fighter',
+  level: 3,
+  abilities: { str: 10, dex: 16, con: 14, int: 13, wis: 10, cha: 8 },
+  hpMax: 28
+}, real), 'arcane-archer', real)
+assert.ok(aa.pendingChoices.some(x => x.catalog === 'arcane-shot' && x.pick === 2))
+const shots = R.setChoices(aa, 'arcane-shot', ['banishing', 'grasping'], real)
+assert.equal(shots.ok, true)
+assert.equal(shots.character.choices['arcane-shot'].length, 2)
+assert.ok(!shots.character.pendingChoices.some(x => x.catalog === 'arcane-shot'))
+const tooFew = R.setChoices(aa, 'arcane-shot', ['banishing'], real)
+assert.equal(tooFew.ok, false)
+console.log('choices ok')

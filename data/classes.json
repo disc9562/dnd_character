@@ -78,7 +78,8 @@
     "subclasses": [
       { "id": "champion", "name": "勇士" },
       { "id": "battlemaster", "name": "戰鬥大師" },
-      { "id": "eldritch-knight", "name": "奧法騎士" }
+      { "id": "eldritch-knight", "name": "奧法騎士" },
+      { "id": "arcane-archer", "name": "魔射手" }
     ],
     "defaultAttack": { "name": "長劍", "damageDie": 8 },
     "resources": [
