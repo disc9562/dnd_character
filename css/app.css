@@ -1092,3 +1092,35 @@ textarea.notes-big { min-height: 60vh; margin: 10px 0 12px; }
 .mini .box.ic .num, .mini .box.ic .val-sm { font-size: 22px; }
 .box.ic .val-sm { width: 88px; min-width: 0; box-sizing: border-box; }
 .box.ic .num { width: max-content; }
+
+/* ---------- 搜尋下拉 ---------- */
+.combo { position: relative; margin: 6px 0 12px; }
+.combo-q { width: 100%; }
+.combo-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 6px;
+  max-height: 260px;
+  overflow: auto;
+  background: var(--paper-lit);
+  border: 1px solid var(--gold);
+  border-radius: var(--r);
+  box-shadow: 0 10px 24px rgba(35, 21, 14, .22);
+}
+.combo-list li { margin: 0; }
+.combo-opt {
+  display: block;
+  width: 100%;
+  text-align: left;
+  min-height: 44px;
+  padding: 8px 10px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--r);
+}
+.combo-opt:hover { background: var(--paper); }
+.combo .chip {
+  min-height: 36px;
+  padding: 4px 12px;
+  font-size: 14px;
+}

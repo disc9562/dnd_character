@@ -46,6 +46,8 @@ let openSpell = ''
 let openFeat = ''
 let openClassFeat = ''
 let openPower = ''
+let comboQ = {}
+let comboOpen = ''
 let hpRoll = ''
 let ruleset = '2014'
 
@@ -277,10 +279,11 @@ function combatHtml(c) {
       <button class="icon lockable" data-act="delspell" data-id="${esc(id)}"${lock}>×</button>
     </div>`
   }).join('')
-  const spellAdd = `<select class="lockable" data-act="addspell"${lock}><option value="">＋加入法術</option>${Object.keys(data.spells).filter(id => (c.spells || []).indexOf(id) < 0).map(id => {
+  const spellItems = Object.keys(data.spells || {}).filter(id => (c.spells || []).indexOf(id) < 0).map(id => {
     const s = data.spells[id]
-    return `<option value="${esc(id)}">${esc(s.name)}（${s.level === 0 ? '戲法' : s.level + '環'}）</option>`
-  }).join('')}</select>`
+    return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text }
+  })
+  const spellAdd = c.locked ? '' : comboHtml('spell', spellItems, [], '搜尋法術…')
   const featChips = (c.feats || []).map(id => {
     const f = data.feats[id]
     const open = openFeat === id
@@ -290,10 +293,14 @@ function combatHtml(c) {
       <button class="icon lockable" data-act="delfeat" data-id="${esc(id)}"${lock}>×</button>
     </div>`
   }).join('')
-  const featAdd = `<select class="lockable" data-act="addfeat"${lock}><option value="">＋專長</option>${Object.keys(data.feats).filter(id => (c.feats || []).indexOf(id) < 0).map(id =>
-    `<option value="${esc(id)}">${esc(data.feats[id].name)}</option>`).join('')}</select>`
-  const subOpts = `<option value="">（未選／重選）</option>` + (cls.subclasses || []).map(s =>
-    `<option value="${esc(s.id)}" ${c.subclass === s.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('')
+  const featItems = Object.keys(data.feats || {}).filter(id => (c.feats || []).indexOf(id) < 0).map(id => {
+    const f = data.feats[id]
+    return { id, name: f.name, text: f.text }
+  })
+  const featAdd = c.locked ? '' : comboHtml('feat', featItems, [], '搜尋專長…')
+  const subCombo = c.locked
+    ? `<p>${esc(((cls.subclasses || []).filter(s => s.id === c.subclass)[0] || { name: '未選' }).name)}</p>`
+    : comboHtml('subclass-live', (cls.subclasses || []).map(s => ({ id: s.id, name: s.name })), c.subclass ? [c.subclass] : [], '搜尋副職業…')
   const slotRows = Object.keys(c.spellSlots || {}).sort((a, b) => Number(a) - Number(b)).map(k => {
     const sl = c.spellSlots[k]
     const sp = slotSpent(sl)
@@ -353,7 +360,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v36</p>
+    <p class="mast">冒險者紀錄 · v37</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -370,7 +377,7 @@ function combatHtml(c) {
     ${menu}
     <div class="ident">
       <label class="field">副職業
-        <select data-act="subclass"${lock}>${subOpts}</select>
+        ${subCombo}
       </label>
     </div>
     <div class="stats">
@@ -585,6 +592,83 @@ function scriptHtml() {
   `
 }
 
+function comboFilter(items, q, exclude) {
+  const s = (q || '').trim().toLowerCase()
+  return items.filter(it => {
+    if (exclude && exclude.indexOf(it.id) >= 0) return false
+    if (!s) return true
+    return (it.name + ' ' + (it.hint || '') + ' ' + (it.text || '')).toLowerCase().indexOf(s) >= 0
+  }).slice(0, 12)
+}
+
+function comboListHtml(key, items, q, exclude) {
+  const filtered = comboFilter(items, q, exclude)
+  if (!filtered.length) return '<ul class="combo-list"><li class="muted">沒有符合的</li></ul>'
+  return '<ul class="combo-list">' + filtered.map(it =>
+    `<li><button type="button" class="combo-opt" data-act="comboadd" data-key="${esc(key)}" data-id="${esc(it.id)}">${esc(it.name)}${it.hint ? ` <span class="muted">${esc(it.hint)}</span>` : ''}${it.text ? `<span class="spell-text">${esc(it.text)}</span>` : ''}</button></li>`
+  ).join('') + '</ul>'
+}
+
+function comboHtml(key, items, selected, placeholder) {
+  const sel = selected || []
+  const chips = sel.map(id => {
+    const it = items.filter(x => x.id === id)[0] || { id, name: id }
+    return `<button type="button" class="chip" data-act="combodel" data-key="${esc(key)}" data-id="${esc(id)}">${esc(it.name)} ×</button>`
+  }).join('')
+  const open = comboOpen === key
+  return `<div class="combo" data-combo="${esc(key)}">
+    <div class="chips">${chips}</div>
+    <input class="combo-q" data-act="comboq" data-key="${esc(key)}" placeholder="${esc(placeholder || '輸入名稱搜尋…')}" value="${esc(comboQ[key] || '')}" autocomplete="off">
+    ${open ? comboListHtml(key, items, comboQ[key], sel) : ''}
+  </div>`
+}
+
+function comboItemsFor(key) {
+  const c = current()
+  const pack = packFor((c && c.ruleset) || ruleset)
+  if (key === 'spell' || key === 'pickspell') {
+    const list = Object.keys(data.spells || {}).map(id => {
+      const s = data.spells[id]
+      return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text, classes: s.classes }
+    })
+    if (key === 'pickspell' && c) return list.filter(it => (it.classes || []).indexOf(c.class) >= 0)
+    return list
+  }
+  if (key === 'feat' || key === 'pickfeat') {
+    return Object.keys(data.feats || {}).map(id => {
+      const f = data.feats[id]
+      return { id, name: f.name, text: f.text }
+    })
+  }
+  if (key === 'subclass' || key === 'subclass-live') {
+    const cls = pack.classes[(c && c.class)] || {}
+    return (cls.subclasses || []).map(s => ({ id: s.id, name: s.name }))
+  }
+  if (key.slice(0, 7) === 'choice:') {
+    const cat = (pack.choices || {})[key.slice(7)]
+    if (!cat || !c) return []
+    const lv = view === 'levelup' ? c.level + 1 : c.level
+    return (cat.options || []).filter(o => {
+      if (o.classes && o.classes.indexOf(c.class) < 0) return false
+      if (o.minLevel && lv < o.minLevel) return false
+      return true
+    }).map(o => ({ id: o.id, name: o.name, text: o.text }))
+  }
+  return []
+}
+
+function comboExclude(key) {
+  const c = current()
+  if (key === 'spell') return (c && c.spells) || []
+  if (key === 'pickspell') return pickSpells
+  if (key === 'feat') return (c && c.feats) || []
+  if (key === 'pickfeat') return pickFeat ? [pickFeat] : []
+  if (key === 'subclass') return pickSubclass ? [pickSubclass] : []
+  if (key === 'subclass-live') return (c && c.subclass) ? [c.subclass] : []
+  if (key.slice(0, 7) === 'choice:') return pickChoice[key.slice(7)] || []
+  return []
+}
+
 function choicePickerHtml(cat, classId, pick, level) {
   if (!cat) return ''
   const selected = pickChoice[cat.id] || []
@@ -594,6 +678,10 @@ function choicePickerHtml(cat, classId, pick, level) {
     if (o.minLevel && lv < o.minLevel) return false
     return true
   })
+  if (opts.length > 5) {
+    return `<p class="muted">選 ${pick} 項，輸入搜尋後點選</p>` +
+      comboHtml('choice:' + cat.id, opts.map(o => ({ id: o.id, name: o.name, text: o.text })), selected, '搜尋' + cat.name + '…')
+  }
   return `<p class="muted">選 ${pick} 項</p>` + opts.map(o => {
     const on = selected.indexOf(o.id) >= 0
     return `<label class="chk"><input type="checkbox" data-act="pickch" data-cat="${esc(cat.id)}" data-id="${esc(o.id)}" ${on ? 'checked' : ''}><span><strong>${esc(o.name)}</strong><span class="spell-text">${esc(o.text)}</span></span></label>`
@@ -609,18 +697,17 @@ function levelHtml(c) {
     const on = checkedIds.indexOf(it.id) >= 0
     let extra = ''
     if (it.type === 'subclass') {
-      extra = `<select data-act="picksb">${(cls.subclasses || []).map(s =>
-        `<option value="${esc(s.id)}" ${pickSubclass === s.id ? 'selected' : ''}>${esc(s.name)}</option>`).join('')}</select>`
+      extra = comboHtml('subclass', (cls.subclasses || []).map(s => ({ id: s.id, name: s.name })), pickSubclass ? [pickSubclass] : [], '搜尋副職業…')
     }
     if (it.type === 'spells') {
-      extra = `<p class="muted">選 ${it.count} 個加入卡片</p>` + Object.keys(data.spells).filter(id => {
-        const s = data.spells[id]
-        return s.classes.indexOf(c.class) >= 0 && (c.spells || []).indexOf(id) < 0
-      }).map(id => {
-        const s = data.spells[id]
-        const onS = pickSpells.indexOf(id) >= 0
-        return `<label class="chk"><input type="checkbox" data-act="picksp" data-id="${esc(id)}" ${onS ? 'checked' : ''}>${esc(s.name)}（${s.level === 0 ? '戲法' : s.level + '環'}）</label>`
-      }).join('')
+      extra = `<p class="muted">選 ${it.count} 個，輸入搜尋後點選</p>` +
+        comboHtml('pickspell', Object.keys(data.spells).filter(id => {
+          const s = data.spells[id]
+          return s.classes.indexOf(c.class) >= 0 && (c.spells || []).indexOf(id) < 0
+        }).map(id => {
+          const s = data.spells[id]
+          return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環' }
+        }), pickSpells, '搜尋法術…')
     }
     if (it.type === 'hp') {
       extra = `<input type="number" min="1" max="${it.hitDie}" data-act="hproll" value="${esc(hpRoll)}" placeholder="骰到幾點（1–${it.hitDie}）">`
@@ -632,8 +719,7 @@ function levelHtml(c) {
         <p class="muted">兩項 +1，或選一個專長</p>
         <select data-act="asi0">${opts(pickAsi[0])}</select>
         <select data-act="asi1">${opts(pickAsi[1])}</select>
-        <select data-act="feat"><option value="">（不用專長）</option>${Object.keys(data.feats).map(id =>
-          `<option value="${esc(id)}" ${pickFeat === id ? 'selected' : ''}>${esc(data.feats[id].name)}</option>`).join('')}</select>`
+        ${comboHtml('pickfeat', Object.keys(data.feats).map(id => ({ id, name: data.feats[id].name, text: data.feats[id].text })), pickFeat ? [pickFeat] : [], '搜尋專長（可不選）…')}`
     }
     if (it.type === 'choice') {
       const cat = (pack.choices || {})[it.catalog]
@@ -787,6 +873,52 @@ el.addEventListener('click', e => {
     render()
     return
   }
+  if (act === 'comboadd' || act === 'combodel') {
+    const key = btn.dataset.key
+    const id = btn.dataset.id
+    if (act === 'comboadd') {
+      comboQ[key] = ''
+      if (key === 'spell') { replace(Rules.addSpell(c, id, packFor(c.ruleset))); return }
+      if (key === 'feat') {
+        const next = JSON.parse(JSON.stringify(c))
+        next.feats = (next.feats || []).concat([id])
+        replace(next)
+        return
+      }
+      if (key === 'subclass-live') { replace(Rules.setSubclass(c, id, packFor(c.ruleset))); return }
+      if (key === 'subclass') { pickSubclass = id; comboOpen = ''; render(); return }
+      if (key === 'pickfeat') { pickFeat = id; comboOpen = ''; render(); return }
+      if (key === 'pickspell') {
+        if (pickSpells.indexOf(id) < 0) pickSpells.push(id)
+        comboOpen = key
+        render()
+        return
+      }
+      if (key.slice(0, 7) === 'choice:') {
+        const cat = key.slice(7)
+        const pack = packFor(c.ruleset)
+        const need = Rules.catalogPick((pack.choices || {})[cat] || {}, view === 'levelup' ? c.level + 1 : c.level)
+        let arr = (pickChoice[cat] || []).slice()
+        if (arr.indexOf(id) < 0) arr.push(id)
+        if (arr.length > need) arr = arr.slice(arr.length - need)
+        pickChoice[cat] = arr
+        comboOpen = key
+        render()
+        return
+      }
+    }
+    if (key === 'subclass') { pickSubclass = ''; render(); return }
+    if (key === 'subclass-live') { replace(Rules.setSubclass(c, '', packFor(c.ruleset))); return }
+    if (key === 'pickfeat') { pickFeat = ''; render(); return }
+    if (key === 'pickspell') { pickSpells = pickSpells.filter(x => x !== id); render(); return }
+    if (key.slice(0, 7) === 'choice:') {
+      const cat = key.slice(7)
+      pickChoice[cat] = (pickChoice[cat] || []).filter(x => x !== id)
+      render()
+      return
+    }
+    return
+  }
   if (act === 'resetchoice') {
     view = 'pending'
     pickChoice = {}
@@ -934,10 +1066,31 @@ el.addEventListener('click', e => {
 })
 
 el.addEventListener('input', e => {
-  if (e.target.dataset.act !== 'gl-q' || !script) return
-  glQ = e.target.value
-  const list = document.getElementById('gl-list')
-  if (list) list.innerHTML = glListHtml()
+  if (e.target.dataset.act === 'gl-q' && script) {
+    glQ = e.target.value
+    const list = document.getElementById('gl-list')
+    if (list) list.innerHTML = glListHtml()
+    return
+  }
+  if (e.target.dataset.act !== 'comboq') return
+  const key = e.target.dataset.key
+  comboQ[key] = e.target.value
+  comboOpen = key
+  const box = e.target.closest('.combo')
+  if (!box) return
+  const html = comboListHtml(key, comboItemsFor(key), comboQ[key], comboExclude(key))
+  const list = box.querySelector('.combo-list')
+  if (list) list.outerHTML = html
+  else box.insertAdjacentHTML('beforeend', html)
+})
+
+el.addEventListener('focusin', e => {
+  if (e.target.dataset.act !== 'comboq') return
+  const key = e.target.dataset.key
+  comboOpen = key
+  const box = e.target.closest('.combo')
+  if (!box || box.querySelector('.combo-list')) return
+  box.insertAdjacentHTML('beforeend', comboListHtml(key, comboItemsFor(key), comboQ[key], comboExclude(key)))
 })
 
 el.addEventListener('change', e => {
