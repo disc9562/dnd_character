@@ -48,6 +48,7 @@ let openClassFeat = ''
 let openPower = ''
 let comboQ = {}
 let comboOpen = ''
+let foldOpen = {}
 let hpRoll = ''
 let ruleset = '2014'
 
@@ -360,7 +361,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v37</p>
+    <p class="mast">冒險者紀錄 · v38</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -411,48 +412,50 @@ function combatHtml(c) {
     <button class="slot${c.concentrating ? ' cond-on' : ''}" data-act="conc">專注${c.concentrating ? '中' : ''}</button>
     ${death}
     </div>
-    <h3>法術環</h3>
-    ${slotRows || '<p class="muted">還沒有法術環</p>'}
-    <button class="big lockable" data-act="addcircle"${lock}>＋法術環</button>
+    ${Object.keys(c.spellSlots || {}).length || (cls.caster && cls.caster !== 'none') ? `<h3>法術環</h3>${slotRows || '<p class="muted">還沒有法術環</p>'}<button class="big lockable" data-act="addcircle"${lock}>＋法術環</button>` : ''}
     <div class="sheet-grid">
-      <div>
-        <h3>能力</h3>
-        <div class="abi-grid">${abiCards}</div>
-        <h3>豁免</h3>
-        ${saveRows}
-        <h3>技能</h3>
-        <div class="skill-grid">${skillRows}</div>
-        <h3>職業特性</h3>
-        ${(pack.features[c.class] || []).filter(f => f.level <= c.level).map(f => {
-          const id = f.level + '-' + f.name
-          const open = openClassFeat === id
-          return `<button class="big" data-act="toggleclassfeat" data-id="${esc(id)}">${esc(f.name)} <span class="muted">${f.level}級</span>
-            ${open ? `<p class="spell-text">${esc(f.text)}</p>` : ''}</button>`
-        }).join('') || '<p class="muted">沒有特性資料</p>'}
-      </div>
       <div>
         <h3>攻擊</h3>
         ${attacks}
         ${powerRows ? `<h3>職業技能</h3>${powerRows}` : ''}
         ${res ? `<h3>資源</h3><div class="slots">${res}</div>` : ''}
-        <h3>法術</h3>
-        ${spells}
-        ${spellAdd}
-        <h3>專長</h3>
-        ${featChips || '<p class="muted">點專長看效果</p>'}
-        ${featAdd}
-        <h3>錢幣</h3>
-        <div class="money">
-          <label>GP <input class="val" data-act="gp" type="number" value="${(c.money && c.money.gp) || 0}"${lock}></label>
-          <label>SP <input class="val" data-act="sp" type="number" value="${(c.money && c.money.sp) || 0}"${lock}></label>
-          <label>CP <input class="val" data-act="cp" type="number" value="${(c.money && c.money.cp) || 0}"${lock}></label>
-        </div>
-        <h3>背包</h3>
-        ${gearRows}
-        <button class="big lockable" data-act="addgear"${lock}>＋物品</button>
+        ${(c.spells || []).length || !c.locked ? `<h3>法術</h3>${spells}${spellAdd}` : ''}
         <h3>狀態</h3>
         <div class="slots">${condPick}</div>
-        <h3>備忘錄</h3>
+      </div>
+      <div>
+        <details class="fold" data-fold="stats"${foldOpen.stats ? ' open' : ''}>
+          <summary>能力／豁免／技能</summary>
+          <div class="abi-grid">${abiCards}</div>
+          <h3>豁免</h3>
+          ${saveRows}
+          <h3>技能</h3>
+          <div class="skill-grid">${skillRows}</div>
+        </details>
+        <details class="fold" data-fold="features"${foldOpen.features ? ' open' : ''}>
+          <summary>職業特性</summary>
+          ${(pack.features[c.class] || []).filter(f => f.level <= c.level).map(f => {
+            const id = f.level + '-' + f.name
+            const open = openClassFeat === id
+            return `<button class="big" data-act="toggleclassfeat" data-id="${esc(id)}">${esc(f.name)} <span class="muted">${f.level}級</span>
+              ${open ? `<p class="spell-text">${esc(f.text)}</p>` : ''}</button>`
+          }).join('') || '<p class="muted">沒有特性資料</p>'}
+        </details>
+        <details class="fold" data-fold="feats"${foldOpen.feats ? ' open' : ''}>
+          <summary>專長</summary>
+          ${featChips || '<p class="muted">點專長看效果</p>'}
+          ${featAdd}
+        </details>
+        <details class="fold" data-fold="pack"${foldOpen.pack ? ' open' : ''}>
+          <summary>錢幣／背包</summary>
+          <div class="money">
+            <label>GP <input class="val" data-act="gp" type="number" value="${(c.money && c.money.gp) || 0}"${lock}></label>
+            <label>SP <input class="val" data-act="sp" type="number" value="${(c.money && c.money.sp) || 0}"${lock}></label>
+            <label>CP <input class="val" data-act="cp" type="number" value="${(c.money && c.money.cp) || 0}"${lock}></label>
+          </div>
+          ${gearRows}
+          <button class="big lockable" data-act="addgear"${lock}>＋物品</button>
+        </details>
         <button class="big note-peek" data-act="notes-open">${(c.notes || '').trim() ? `<span class="note-snip">${esc((c.notes || '').trim().slice(0, 90))}${(c.notes || '').trim().length > 90 ? '…' : ''}</span>` : '<span class="muted">還沒寫東西，點開來記</span>'}<span class="muted">打開備忘錄 ›</span></button>
       </div>
     </div>
@@ -1083,6 +1086,12 @@ el.addEventListener('input', e => {
   if (list) list.outerHTML = html
   else box.insertAdjacentHTML('beforeend', html)
 })
+
+el.addEventListener('toggle', e => {
+  const d = e.target
+  if (!d.dataset || !d.dataset.fold) return
+  foldOpen[d.dataset.fold] = d.open
+}, true)
 
 el.addEventListener('focusin', e => {
   if (e.target.dataset.act !== 'comboq') return

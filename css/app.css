@@ -1124,3 +1124,28 @@ textarea.notes-big { min-height: 60vh; margin: 10px 0 12px; }
   padding: 4px 12px;
   font-size: 14px;
 }
+
+.fold {
+  margin: 16px 0;
+  padding: 0 12px 8px;
+  background: rgba(255, 250, 238, .4);
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--r);
+}
+.fold summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--rubric);
+  cursor: pointer;
+  list-style: none;
+}
+.fold summary::-webkit-details-marker { display: none; }
+.fold summary::before { content: "▸"; color: var(--gold); font-size: 14px; }
+.fold[open] summary::before { content: "▾"; }
+.fold[open] { padding-bottom: 12px; }
