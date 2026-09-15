@@ -190,7 +190,12 @@ function createHtml() {
     </section>
     <section class="form-card">
     <h3>屬性</h3>
-    <p class="hint">${ruleset === '2024' ? '填最終分數，2024 版種族不加點。' : '填加種族加值前的數字，系統會自動加。'}</p>
+    <p class="hint">${ruleset === '2024' ? '填最終分數，2024 版種族不加點。' : '填加種族加值前的數字。' + Object.keys(pack.races).map(id => {
+      const r = pack.races[id]
+      const b = r.bonuses || {}
+      const parts = Object.keys(b).map(k => ABI_NAME[k] + '+' + b[k])
+      return r.name + (parts.length ? ' ' + parts.join(' ') : '')
+    }).join(' · ')}</p>
     <div class="abi">${abis}</div>
     </section>
     <section class="form-card">
@@ -363,7 +368,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v45</p>
+    <p class="mast">冒險者紀錄 · v46</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>

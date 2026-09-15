@@ -386,4 +386,14 @@ prep = R.addSpell(prep, 'command', real)
 assert.equal(prep.spells.length, 4)
 const extra = R.addSpell(prep, 'bane', real)
 assert.equal(extra.spells.length, 4)
+let land = R.setSubclass(R.createCharacter({
+  name: '森',
+  race: 'human',
+  class: 'druid',
+  level: 3,
+  abilities: { str: 8, dex: 14, con: 14, int: 10, wis: 16, cha: 10 },
+  hpMax: 24
+}, real), 'land', real)
+land = R.setChoices(land, 'land', ['forest'], real).character
+assert.ok(R.alwaysPreparedIds(land, real).indexOf('barkskin') >= 0)
 console.log('choices ok')

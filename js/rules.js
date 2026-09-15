@@ -378,14 +378,22 @@ function preparedCap(character) {
 }
 
 function alwaysPreparedIds(character, data) {
-  const table = data && data.prepared && data.prepared[character.subclass]
-  if (!table) return []
   const ids = []
-  for (const k of Object.keys(table)) {
-    if (character.level < Number(k)) continue
-    for (const id of table[k]) {
-      if (data.spells && data.spells[id] && ids.indexOf(id) < 0) ids.push(id)
+  const add = table => {
+    if (!table) return
+    for (const k of Object.keys(table)) {
+      if (character.level < Number(k)) continue
+      for (const id of table[k]) {
+        if (data.spells && data.spells[id] && ids.indexOf(id) < 0) ids.push(id)
+      }
     }
+  }
+  const prep = data && data.prepared
+  if (!prep) return ids
+  add(prep[character.subclass])
+  if (character.subclass === 'land') {
+    const terrain = character.choices && character.choices.land && character.choices.land[0]
+    if (terrain) add(prep['land-' + terrain])
   }
   return ids
 }

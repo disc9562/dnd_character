@@ -214,5 +214,274 @@
       "commune-with-nature",
       "tree-stride"
     ]
+  },
+  "forge": {
+    "1": [
+      "identify"
+    ],
+    "3": [
+      "heat-metal",
+      "magic-weapon"
+    ],
+    "5": [
+      "protection-from-energy"
+    ],
+    "7": [
+      "wall-of-fire"
+    ],
+    "9": [
+      "animate-objects",
+      "creation"
+    ]
+  },
+  "grave": {
+    "1": [
+      "bane",
+      "false-life"
+    ],
+    "3": [
+      "gentle-repose",
+      "ray-of-enfeeblement"
+    ],
+    "5": [
+      "revivify",
+      "vampiric-touch"
+    ],
+    "7": [
+      "blight",
+      "death-ward"
+    ],
+    "9": [
+      "antilife-shell",
+      "raise-dead"
+    ]
+  },
+  "twilight": {
+    "1": [
+      "faerie-fire",
+      "sleep"
+    ],
+    "3": [
+      "moonbeam",
+      "see-invisibility"
+    ],
+    "5": [
+      "tiny-hut"
+    ],
+    "7": [
+      "greater-invisibility"
+    ],
+    "9": [
+      "dream"
+    ]
+  },
+  "conquest": {
+    "3": [
+      "command"
+    ],
+    "5": [
+      "hold-person",
+      "spiritual-weapon"
+    ],
+    "9": [
+      "bestow-curse",
+      "fear"
+    ],
+    "13": [
+      "dominate-beast",
+      "stoneskin"
+    ],
+    "17": [
+      "cloudkill",
+      "dominate-person"
+    ]
+  },
+  "redemption": {
+    "3": [
+      "sanctuary",
+      "sleep"
+    ],
+    "5": [
+      "calm-emotions",
+      "hold-person"
+    ],
+    "9": [
+      "counterspell",
+      "hypnotic-pattern"
+    ],
+    "13": [
+      "stoneskin",
+      "guardian-of-faith"
+    ],
+    "17": [
+      "hold-monster",
+      "wall-of-force"
+    ]
+  },
+  "glory": {
+    "3": [
+      "guiding-bolt",
+      "heroism"
+    ],
+    "5": [
+      "enhance-ability",
+      "magic-weapon"
+    ],
+    "9": [
+      "haste",
+      "protection-from-energy"
+    ],
+    "13": [
+      "freedom-of-movement",
+      "compulsion"
+    ],
+    "17": [
+      "commune",
+      "flame-strike"
+    ]
+  },
+  "land-arctic": {
+    "3": [
+      "hold-person",
+      "spike-growth"
+    ],
+    "5": [
+      "sleet-storm",
+      "slow"
+    ],
+    "7": [
+      "ice-storm",
+      "freedom-of-movement"
+    ],
+    "9": [
+      "cone-of-cold",
+      "commune-with-nature"
+    ]
+  },
+  "land-coast": {
+    "3": [
+      "mirror-image",
+      "misty-step"
+    ],
+    "5": [
+      "water-breathing",
+      "water-walk"
+    ],
+    "7": [
+      "control-water",
+      "freedom-of-movement"
+    ],
+    "9": [
+      "conjure-elemental",
+      "scrying"
+    ]
+  },
+  "land-desert": {
+    "3": [
+      "blur",
+      "silence"
+    ],
+    "5": [
+      "create-food-and-water",
+      "protection-from-energy"
+    ],
+    "7": [
+      "blight",
+      "hallucinatory-terrain"
+    ],
+    "9": [
+      "insect-plague",
+      "wall-of-stone"
+    ]
+  },
+  "land-forest": {
+    "3": [
+      "barkskin",
+      "spider-climb"
+    ],
+    "5": [
+      "call-lightning",
+      "plant-growth"
+    ],
+    "7": [
+      "divination",
+      "freedom-of-movement"
+    ],
+    "9": [
+      "commune-with-nature",
+      "tree-stride"
+    ]
+  },
+  "land-grassland": {
+    "3": [
+      "invisibility",
+      "pass-without-trace"
+    ],
+    "5": [
+      "daylight",
+      "haste"
+    ],
+    "7": [
+      "divination",
+      "freedom-of-movement"
+    ],
+    "9": [
+      "dream",
+      "insect-plague"
+    ]
+  },
+  "land-mountain": {
+    "3": [
+      "spider-climb",
+      "spike-growth"
+    ],
+    "5": [
+      "lightning-bolt",
+      "meld-into-stone"
+    ],
+    "7": [
+      "stone-shape",
+      "stoneskin"
+    ],
+    "9": [
+      "passwall",
+      "wall-of-stone"
+    ]
+  },
+  "land-swamp": {
+    "3": [
+      "darkness",
+      "acid-arrow"
+    ],
+    "5": [
+      "water-walk",
+      "stinking-cloud"
+    ],
+    "7": [
+      "freedom-of-movement",
+      "locate-creature"
+    ],
+    "9": [
+      "insect-plague",
+      "scrying"
+    ]
+  },
+  "land-underdark": {
+    "3": [
+      "spider-climb",
+      "web"
+    ],
+    "5": [
+      "gaseous-form",
+      "stinking-cloud"
+    ],
+    "7": [
+      "greater-invisibility",
+      "stone-shape"
+    ],
+    "9": [
+      "cloudkill",
+      "insect-plague"
+    ]
   }
 }
