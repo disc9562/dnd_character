@@ -291,6 +291,8 @@ function createCharacter(input, data) {
     money: { gp: 0, sp: 0, cp: 0 },
     concentrating: false,
     gear: [],
+    armor: null,
+    shield: false,
     choices: {}
   }
   character.pendingChoices = pendingFor(character, cls, data.choices)
@@ -362,18 +364,107 @@ function selectedPowers(character, catalogs) {
   return out
 }
 
+function isPreparedCaster(classId) {
+  return classId === 'cleric' || classId === 'druid' || classId === 'paladin'
+}
+
+function preparedCap(character) {
+  if (!isPreparedCaster(character.class)) return 0
+  if (character.class === 'paladin') {
+    if (character.level < 2) return 0
+    return Math.max(1, Math.floor(character.level / 2) + abilityMod((character.abilities && character.abilities.cha) || 10))
+  }
+  return Math.max(1, character.level + abilityMod((character.abilities && character.abilities.wis) || 10))
+}
+
+function alwaysPreparedIds(character, data) {
+  const table = data && data.prepared && data.prepared[character.subclass]
+  if (!table) return []
+  const ids = []
+  for (const k of Object.keys(table)) {
+    if (character.level < Number(k)) continue
+    for (const id of table[k]) {
+      if (data.spells && data.spells[id] && ids.indexOf(id) < 0) ids.push(id)
+    }
+  }
+  return ids
+}
+
+function visibleSpells(character, data) {
+  const out = alwaysPreparedIds(character, data)
+  for (const id of character.spells || []) if (out.indexOf(id) < 0) out.push(id)
+  return out
+}
+
 function addSpell(character, spellId, data) {
+  if (!spellId) return character
+  const auto = alwaysPreparedIds(character, data)
+  if (auto.indexOf(spellId) >= 0) return character
+  if ((character.spells || []).indexOf(spellId) >= 0) return character
+  if (isPreparedCaster(character.class)) {
+    const used = (character.spells || []).filter(id => auto.indexOf(id) < 0).length
+    if (used >= preparedCap(character)) return character
+  }
   const next = clone(character)
-  next.spells = (next.spells || []).slice()
-  if (spellId && next.spells.indexOf(spellId) < 0) next.spells.push(spellId)
+  next.spells = (next.spells || []).concat([spellId])
   next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
   return next
 }
 
 function removeSpell(character, spellId, data) {
+  if (alwaysPreparedIds(character, data).indexOf(spellId) >= 0) return character
   const next = clone(character)
   next.spells = (next.spells || []).filter(id => id !== spellId)
   next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
+  return next
+}
+
+function acFor(character, equipment) {
+  const dex = abilityMod((character.abilities && character.abilities.dex) || 10)
+  const arm = equipment && equipment.armor && character.armor && equipment.armor[character.armor]
+  let ac
+  if (!arm) ac = 10 + dex
+  else {
+    ac = arm.ac
+    if (arm.addDex) {
+      const bonus = arm.maxDex == null ? dex : Math.min(dex, arm.maxDex)
+      ac += bonus
+    }
+  }
+  if (character.shield) ac += 2
+  return ac
+}
+
+function setArmor(character, armorId, data) {
+  const next = clone(character)
+  next.armor = armorId || null
+  next.ac = acFor(next, data && data.equipment)
+  return next
+}
+
+function setShield(character, on, data) {
+  const next = clone(character)
+  next.shield = !!on
+  next.ac = acFor(next, data && data.equipment)
+  return next
+}
+
+function weaponAttack(character, w) {
+  const prof = character.proficiency || 2
+  const str = abilityMod((character.abilities && character.abilities.str) || 10)
+  const dex = abilityMod((character.abilities && character.abilities.dex) || 10)
+  let mod = str
+  if (w.ability === 'dex') mod = dex
+  if (w.ability === 'finesse') mod = Math.max(str, dex)
+  const dmg = mod >= 0 ? w.damage + '+' + mod : w.damage + String(mod)
+  return { name: w.name, bonus: prof + mod, damage: dmg }
+}
+
+function addWeapon(character, weaponId, data) {
+  const w = data && data.equipment && data.equipment.weapons && data.equipment.weapons[weaponId]
+  if (!w) return character
+  const next = clone(character)
+  next.attacks = (next.attacks || []).concat([weaponAttack(next, w)])
   return next
 }
 
@@ -579,7 +670,15 @@ const Rules = {
   choiceDue,
   catalogPick,
   addSpell,
-  removeSpell
+  removeSpell,
+  isPreparedCaster,
+  preparedCap,
+  alwaysPreparedIds,
+  visibleSpells,
+  acFor,
+  setArmor,
+  setShield,
+  addWeapon
 }
 
 if (typeof module !== 'undefined') module.exports = Rules

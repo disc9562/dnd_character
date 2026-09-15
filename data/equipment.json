@@ -1,0 +1,36 @@
+{
+  "armor": {
+    "leather": { "name": "皮甲", "ac": 11, "addDex": true },
+    "studded": { "name": "鑲釘皮甲", "ac": 12, "addDex": true },
+    "hide": { "name": "獸皮甲", "ac": 12, "addDex": true, "maxDex": 2 },
+    "chain-shirt": { "name": "鏈衫", "ac": 13, "addDex": true, "maxDex": 2 },
+    "scale": { "name": "鱗甲", "ac": 14, "addDex": true, "maxDex": 2 },
+    "breastplate": { "name": "胸甲", "ac": 14, "addDex": true, "maxDex": 2 },
+    "half-plate": { "name": "半身板甲", "ac": 15, "addDex": true, "maxDex": 2 },
+    "ring": { "name": "環甲", "ac": 14, "addDex": false },
+    "chain": { "name": "鎖子甲", "ac": 16, "addDex": false },
+    "splint": { "name": "板條甲", "ac": 17, "addDex": false },
+    "plate": { "name": "全身板甲", "ac": 18, "addDex": false }
+  },
+  "weapons": {
+    "club": { "name": "棍棒", "damage": "1d4", "ability": "str" },
+    "dagger": { "name": "匕首", "damage": "1d4", "ability": "finesse" },
+    "handaxe": { "name": "手斧", "damage": "1d6", "ability": "str" },
+    "javelin": { "name": "標槍", "damage": "1d6", "ability": "str" },
+    "mace": { "name": "釘頭錘", "damage": "1d6", "ability": "str" },
+    "quarterstaff": { "name": "木杖", "damage": "1d6", "ability": "str" },
+    "spear": { "name": "矛", "damage": "1d6", "ability": "str" },
+    "shortbow": { "name": "短弓", "damage": "1d6", "ability": "dex" },
+    "scimitar": { "name": "彎刀", "damage": "1d6", "ability": "finesse" },
+    "shortsword": { "name": "短劍", "damage": "1d6", "ability": "finesse" },
+    "battleaxe": { "name": "戰斧", "damage": "1d8", "ability": "str" },
+    "longsword": { "name": "長劍", "damage": "1d8", "ability": "str" },
+    "warhammer": { "name": "戰錘", "damage": "1d8", "ability": "str" },
+    "rapier": { "name": "細劍", "damage": "1d8", "ability": "finesse" },
+    "longbow": { "name": "長弓", "damage": "1d8", "ability": "dex" },
+    "light-crossbow": { "name": "輕弩", "damage": "1d8", "ability": "dex" },
+    "greataxe": { "name": "巨斧", "damage": "1d12", "ability": "str" },
+    "greatsword": { "name": "巨劍", "damage": "2d6", "ability": "str" },
+    "maul": { "name": "大錘", "damage": "2d6", "ability": "str" }
+  }
+}

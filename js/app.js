@@ -61,7 +61,9 @@ function packFor(year) {
       spells: data.spells,
       feats: data.feats,
       features: data.features || {},
-      choices: data.choices || {}
+      choices: data.choices || {},
+      equipment: data.equipment || {},
+      prepared: data.prepared || {}
     }
   }
   return {
@@ -70,7 +72,9 @@ function packFor(year) {
     spells: data.spells,
     feats: data.feats,
     features: data.features || {},
-    choices: data.choices || {}
+    choices: data.choices || {},
+    equipment: data.equipment || {},
+    prepared: data.prepared || {}
   }
 }
 
@@ -270,14 +274,16 @@ function combatHtml(c) {
       ${reset ? `<button class="icon lockable" data-act="resetchoice" data-cat="${esc(p.catalog)}">重選</button>` : ''}
     </div>`
   }).join('')
-  const spells = (c.spells || []).map(id => {
+  const autoPrep = Rules.alwaysPreparedIds(c, pack)
+  const spells = Rules.visibleSpells(c, pack).map(id => {
     const s = data.spells[id]
     if (!s) return ''
     const open = openSpell === id
+    const domain = autoPrep.indexOf(id) >= 0
     return `<div class="spell-line">
-      <button class="big grow" data-act="togglespell" data-id="${esc(id)}">${esc(s.name)} <span class="muted">${s.level === 0 ? '戲法' : s.level + '環'}</span>
+      <button class="big grow" data-act="togglespell" data-id="${esc(id)}">${esc(s.name)} <span class="muted">${s.level === 0 ? '戲法' : s.level + '環'}${domain ? ' · 領域' : ''}</span>
         ${open ? `<p class="spell-text">${esc(s.text)}</p>` : ''}</button>
-      <button class="icon lockable" data-act="delspell" data-id="${esc(id)}"${lock}>×</button>
+      ${domain ? '' : `<button class="icon lockable" data-act="delspell" data-id="${esc(id)}"${lock}>×</button>`}
     </div>`
   }).join('')
   const spellAdd = c.locked ? '' : comboHtml('spell', spellPickItems(c, { cantrips: true }), [], '搜尋可用法術…')
@@ -357,7 +363,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v44</p>
+    <p class="mast">冒險者紀錄 · v45</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -415,7 +421,7 @@ function combatHtml(c) {
         ${attacks}
         ${powerRows ? `<h3>職業技能</h3>${powerRows}` : ''}
         ${res ? `<h3>資源</h3><div class="slots">${res}</div>` : ''}
-        ${(c.spells || []).length || !c.locked ? `<h3>法術</h3>${spells}${spellAdd}` : ''}
+        ${Rules.isPreparedCaster(c.class) || (c.spells || []).length || !c.locked ? `<h3>${Rules.isPreparedCaster(c.class) ? '今日準備' : '法術'}</h3>${Rules.isPreparedCaster(c.class) ? `<p class="muted">${(c.spells || []).length}／${Rules.preparedCap(c)}（領域不佔格）</p>` : ''}${spells}${spellAdd}` : ''}
         <h3>狀態</h3>
         <div class="slots">${condPick}</div>
       </div>
@@ -441,6 +447,14 @@ function combatHtml(c) {
           <summary>專長</summary>
           ${featChips || '<p class="muted">點專長看效果</p>'}
           ${featAdd}
+        </details>
+        <details class="fold" data-fold="eq"${foldOpen.eq ? ' open' : ''}>
+          <summary>裝備</summary>
+          <label class="field">護甲
+            ${c.locked ? `<p>${esc(((pack.equipment && pack.equipment.armor && pack.equipment.armor[c.armor]) || { name: '無' }).name)}</p>` : comboHtml('armor', Object.keys((pack.equipment && pack.equipment.armor) || {}).map(id => ({ id, name: pack.equipment.armor[id].name, hint: 'AC ' + pack.equipment.armor[id].ac })), c.armor ? [c.armor] : [], '搜尋護甲…')}
+          </label>
+          <label class="chk"><input type="checkbox" data-act="shield" ${c.shield ? 'checked' : ''}${lock}>盾牌（AC +2）</label>
+          ${c.locked ? '' : comboHtml('weapon', Object.keys((pack.equipment && pack.equipment.weapons) || {}).map(id => ({ id, name: pack.equipment.weapons[id].name, hint: pack.equipment.weapons[id].damage })), [], '加入武器到攻擊…')}
         </details>
         <details class="fold" data-fold="pack"${foldOpen.pack ? ' open' : ''}>
           <summary>錢幣／背包</summary>
@@ -654,8 +668,10 @@ function spellPickItems(c, opts) {
   const max = Rules.maxSlotLevel(Rules.casterOf(cls, sub), lv)
   const listClass = Rules.spellListClass(c.class, sub)
   const cantrips = !!(opts && opts.cantrips)
+  const auto = Rules.alwaysPreparedIds(c, pack)
   return Object.keys(data.spells || {}).filter(id => {
     if ((c.spells || []).indexOf(id) >= 0) return false
+    if (auto.indexOf(id) >= 0) return false
     return Rules.canLearnSpell(data.spells[id], listClass, max, { cantrips })
   }).map(id => {
     const s = data.spells[id]
@@ -668,6 +684,14 @@ function comboItemsFor(key) {
   const pack = packFor((c && c.ruleset) || ruleset)
   if (key === 'pickspell') return c ? spellPickItems(c) : []
   if (key === 'spell') return c ? spellPickItems(c, { cantrips: true }) : []
+  if (key === 'armor') {
+    const arm = (pack.equipment && pack.equipment.armor) || {}
+    return Object.keys(arm).map(id => ({ id, name: arm[id].name, hint: 'AC ' + arm[id].ac }))
+  }
+  if (key === 'weapon') {
+    const wpn = (pack.equipment && pack.equipment.weapons) || {}
+    return Object.keys(wpn).map(id => ({ id, name: wpn[id].name, hint: wpn[id].damage }))
+  }
   if (key === 'feat' || key === 'pickfeat') {
     return Object.keys(data.feats || {}).map(id => {
       const f = data.feats[id]
@@ -918,7 +942,18 @@ el.addEventListener('click', e => {
     const key = btn.dataset.key
     const id = btn.dataset.id
     if (act === 'comboadd') {
-      if (key === 'spell') { comboQ[key] = ''; replace(Rules.addSpell(c, id, packFor(c.ruleset))); return }
+      if (key === 'spell') {
+        comboQ[key] = ''
+        const pack = packFor(c.ruleset)
+        const next = Rules.addSpell(c, id, pack)
+        if (Rules.isPreparedCaster(c.class) && (next.spells || []).length === (c.spells || []).length) {
+          banner = '準備已滿（' + Rules.preparedCap(c) + '）'
+        }
+        replace(next)
+        return
+      }
+      if (key === 'armor') { comboQ[key] = ''; replace(Rules.setArmor(c, id, packFor(c.ruleset))); return }
+      if (key === 'weapon') { comboQ[key] = ''; replace(Rules.addWeapon(c, id, packFor(c.ruleset))); return }
       if (key === 'feat') {
         comboQ[key] = ''
         const next = JSON.parse(JSON.stringify(c))
@@ -951,6 +986,7 @@ el.addEventListener('click', e => {
         return
       }
     }
+    if (key === 'armor') { replace(Rules.setArmor(c, '', packFor(c.ruleset))); return }
     if (key === 'subclass') { pickSubclass = ''; render(); return }
     if (key === 'subclass-live') { replace(Rules.setSubclass(c, '', packFor(c.ruleset))); return }
     if (key === 'pickfeat') { pickFeat = ''; render(); return }
@@ -1174,6 +1210,12 @@ el.addEventListener('change', e => {
     return
   }
   const act = t.dataset.act
+  if (act === 'shield') {
+    const c = current()
+    if (!c) return
+    replace(Rules.setShield(c, t.checked, packFor(c.ruleset)))
+    return
+  }
   if (act === 'picksb') { pickSubclass = t.value; render(); return }
   if (act === 'pickch') {
     const cat = t.dataset.cat
@@ -1283,7 +1325,7 @@ el.addEventListener('change', e => {
 
 async function boot() {
   try {
-    const [races, classes, spells, feats, features, races2024, classes2024, choices] = await Promise.all([
+    const [races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared] = await Promise.all([
       fetch('data/races.json').then(r => r.json()),
       fetch('data/classes.json').then(r => r.json()),
       fetch('data/spells.json').then(r => r.json()),
@@ -1291,9 +1333,11 @@ async function boot() {
       fetch('data/features.json').then(r => r.json()),
       fetch('data/races2024.json').then(r => r.json()),
       fetch('data/classes2024.json').then(r => r.json()),
-      fetch('data/choices.json').then(r => r.json())
+      fetch('data/choices.json').then(r => r.json()),
+      fetch('data/equipment.json').then(r => r.json()),
+      fetch('data/prepared.json').then(r => r.json())
     ])
-    data = { races, classes, spells, feats, features, races2024, classes2024, choices }
+    data = { races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared }
     state = Store.loadState(localStorage)
     view = current() ? 'combat' : 'create'
     render()

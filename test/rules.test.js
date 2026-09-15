@@ -352,4 +352,38 @@ const ek = R.setSubclass(R.createCharacter({
 }, real), 'eldritch-knight', real)
 const ekSp = ek.pendingChoices.filter(x => x.type === 'spells')[0]
 assert.equal(ekSp && ekSp.count, 3)
+real.equipment = JSON.parse(fs.readFileSync('data/equipment.json', 'utf8'))
+real.prepared = JSON.parse(fs.readFileSync('data/prepared.json', 'utf8'))
+assert.equal(R.acFor({ abilities: { dex: 16 }, armor: null, shield: false }, real.equipment), 13)
+assert.equal(R.acFor({ abilities: { dex: 16 }, armor: 'chain', shield: true }, real.equipment), 18)
+assert.equal(R.acFor({ abilities: { dex: 16 }, armor: 'hide', shield: false }, real.equipment), 14)
+const geared = R.setArmor(f1, 'chain', real)
+assert.equal(geared.armor, 'chain')
+assert.equal(geared.ac, 16)
+const shielded = R.setShield(geared, true, real)
+assert.equal(shielded.ac, 18)
+const armed = R.addWeapon(f1, 'longsword', real)
+assert.equal(armed.attacks[armed.attacks.length - 1].name, '長劍')
+assert.equal(R.preparedCap({ class: 'cleric', level: 1, abilities: { wis: 16 } }), 4)
+assert.equal(R.preparedCap({ class: 'paladin', level: 1, abilities: { cha: 16 } }), 0)
+assert.equal(R.preparedCap({ class: 'paladin', level: 2, abilities: { cha: 16 } }), 4)
+const cleric = R.setSubclass(R.createCharacter({
+  name: '光',
+  race: 'human',
+  class: 'cleric',
+  level: 1,
+  abilities: { str: 10, dex: 10, con: 14, int: 8, wis: 16, cha: 12 }
+}, real), 'life', real)
+assert.deepEqual(R.alwaysPreparedIds(cleric, real), ['bless', 'cure-wounds'])
+assert.ok(R.visibleSpells(cleric, real).indexOf('bless') >= 0)
+const noDel = R.removeSpell(cleric, 'bless', real)
+assert.ok(R.visibleSpells(noDel, real).indexOf('bless') >= 0)
+let prep = cleric
+prep = R.addSpell(prep, 'shield-of-faith', real)
+prep = R.addSpell(prep, 'guiding-bolt', real)
+prep = R.addSpell(prep, 'healing-word', real)
+prep = R.addSpell(prep, 'command', real)
+assert.equal(prep.spells.length, 4)
+const extra = R.addSpell(prep, 'bane', real)
+assert.equal(extra.spells.length, 4)
 console.log('choices ok')
