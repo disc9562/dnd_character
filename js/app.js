@@ -293,7 +293,8 @@ function combatHtml(c) {
       ${domain ? '' : `<button class="icon lockable" data-act="delspell" data-id="${esc(id)}"${lock}>×</button>`}
     </div>`
   }).join('')
-  const spellAdd = c.locked ? '' : comboHtml('spell', spellPickItems(c, { cantrips: true }), [], '搜尋可用法術…')
+  const maxRing = Rules.maxSlotLevel(Rules.casterOf(cls, c.subclass), c.level)
+  const spellAdd = c.locked ? '' : comboHtml('spell', spellPickItems(c, { cantrips: true }), [], maxRing ? ('搜尋法術（現在最高 ' + maxRing + ' 環）…') : '搜尋法術…')
   const featChips = (c.feats || []).map(id => {
     const f = data.feats[id]
     const open = openFeat === id
@@ -370,7 +371,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v47</p>
+    <p class="mast">冒險者紀錄 · v48</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -625,8 +626,8 @@ function comboFilter(items, q, exclude) {
   return items.filter(it => {
     if (exclude && exclude.indexOf(it.id) >= 0) return false
     if (!s) return true
-    return (it.name + ' ' + (it.hint || '') + ' ' + (it.text || '')).toLowerCase().indexOf(s) >= 0
-  }).slice(0, 12)
+    return (it.name + ' ' + (it.nameEn || '') + ' ' + it.id + ' ' + (it.hint || '') + ' ' + (it.text || '')).toLowerCase().indexOf(s) >= 0
+  }).slice(0, 20)
 }
 
 function comboOptInner(it) {
@@ -636,7 +637,7 @@ function comboOptInner(it) {
 function comboListHtml(key, items, q, exclude) {
   const filtered = comboFilter(items, q, exclude)
   const selected = comboSelected(key)
-  if (!filtered.length) return '<ul class="combo-list"><li class="muted">沒有符合的</li></ul>'
+  if (!filtered.length) return '<ul class="combo-list"><li class="muted">沒有符合的（只顯示你現在能施的環數）</li></ul>'
   return '<ul class="combo-list">' + filtered.map(it => {
     const on = selected.indexOf(it.id) >= 0
     return `<li><button type="button" class="combo-opt${on ? ' is-on' : ''}" data-act="comboadd" data-key="${esc(key)}" data-id="${esc(it.id)}">${comboOptInner(it)}</button></li>`
@@ -670,7 +671,7 @@ function comboHtml(key, items, selected, placeholder) {
 function spellPickItems(c, opts) {
   const pack = packFor((c && c.ruleset) || ruleset)
   const cls = pack.classes[c.class] || {}
-  const sub = c.subclass || pickSubclass
+  const sub = c.subclass || ((view === 'levelup' || view === 'pending') ? pickSubclass : null)
   const lv = view === 'levelup' ? c.level + 1 : c.level
   const max = Rules.maxSlotLevel(Rules.casterOf(cls, sub), lv)
   const listClass = Rules.spellListClass(c.class, sub)
@@ -683,7 +684,7 @@ function spellPickItems(c, opts) {
     return Rules.canLearnSpell(data.spells[id], listClass, max, { cantrips, subclass: sub })
   }).map(id => {
     const s = data.spells[id]
-    return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text }
+    return { id, name: s.name, nameEn: s.nameEn || '', hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text }
   })
 }
 
