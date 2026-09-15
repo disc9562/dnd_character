@@ -361,7 +361,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v42</p>
+    <p class="mast">冒險者紀錄 · v43</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -593,18 +593,6 @@ function scriptHtml() {
     </section>
     <div id="gl-list">${glListHtml()}</div>
   `
-}
-
-function togglePick(arr, id, need) {
-  const next = (arr || []).slice()
-  const i = next.indexOf(id)
-  if (i >= 0) {
-    next.splice(i, 1)
-    return { ok: true, arr: next }
-  }
-  if (need && next.length >= need) return { ok: false, arr: next }
-  next.push(id)
-  return { ok: true, arr: next }
 }
 
 function comboSelected(key) {
@@ -931,21 +919,22 @@ el.addEventListener('click', e => {
     const key = btn.dataset.key
     const id = btn.dataset.id
     if (act === 'comboadd') {
-      comboQ[key] = ''
-      if (key === 'spell') { replace(Rules.addSpell(c, id, packFor(c.ruleset))); return }
+      if (key === 'spell') { comboQ[key] = ''; replace(Rules.addSpell(c, id, packFor(c.ruleset))); return }
       if (key === 'feat') {
+        comboQ[key] = ''
         const next = JSON.parse(JSON.stringify(c))
         next.feats = (next.feats || []).concat([id])
         replace(next)
         return
       }
-      if (key === 'subclass-live') { replace(Rules.setSubclass(c, id, packFor(c.ruleset))); return }
-      if (key === 'subclass') { pickSubclass = id; comboOpen = ''; render(); return }
-      if (key === 'pickfeat') { pickFeat = id; comboOpen = ''; render(); return }
+      if (key === 'subclass-live') { comboQ[key] = ''; replace(Rules.setSubclass(c, id, packFor(c.ruleset))); return }
+      if (key === 'subclass') { comboQ[key] = ''; pickSubclass = id; comboOpen = ''; render(); return }
+      if (key === 'pickfeat') { comboQ[key] = ''; pickFeat = id; comboOpen = ''; render(); return }
       if (key === 'pickspell') {
-        const r = togglePick(pickSpells, id, spellPickNeed(c))
-        if (!r.ok) { banner = '已經選滿 ' + spellPickNeed(c) + ' 個，先點已選的再換'; comboOpen = key; render(); return }
+        const r = Rules.togglePick(pickSpells, id, spellPickNeed(c))
+        if (!r.ok) return
         pickSpells = r.arr
+        comboQ[key] = ''
         comboOpen = key
         render()
         return
@@ -954,9 +943,10 @@ el.addEventListener('click', e => {
         const cat = key.slice(7)
         const pack = packFor(c.ruleset)
         const need = Rules.catalogPick((pack.choices || {})[cat] || {}, view === 'levelup' ? c.level + 1 : c.level)
-        const r = togglePick(pickChoice[cat] || [], id, need)
-        if (!r.ok) { banner = '已經選滿 ' + need + ' 個，先點已選的再換'; comboOpen = key; render(); return }
+        const r = Rules.togglePick(pickChoice[cat] || [], id, need)
+        if (!r.ok) return
         pickChoice[cat] = r.arr
+        comboQ[key] = ''
         comboOpen = key
         render()
         return
@@ -1192,8 +1182,8 @@ el.addEventListener('change', e => {
     const c = current()
     const pack = packFor((c || {}).ruleset)
     const need = Rules.catalogPick((pack.choices || {})[cat] || {}, view === 'levelup' ? c.level + 1 : c.level)
-    const r = togglePick(pickChoice[cat] || [], id, need)
-    if (!r.ok) { banner = '已經選滿 ' + need + ' 個，先取消已選的再換'; render(); return }
+    const r = Rules.togglePick(pickChoice[cat] || [], id, need)
+    if (!r.ok) { t.checked = false; return }
     pickChoice[cat] = r.arr
     render()
     return

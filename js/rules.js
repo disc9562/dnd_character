@@ -134,6 +134,19 @@ function canLearnSpell(spell, classId, maxLevel) {
   return true
 }
 
+function togglePick(arr, id, need) {
+  if (!id) return { ok: false, arr: (arr || []).slice() }
+  const next = (arr || []).slice()
+  const i = next.indexOf(id)
+  if (i >= 0) {
+    next.splice(i, 1)
+    return { ok: true, arr: next }
+  }
+  if (need && next.length >= need) return { ok: false, arr: next }
+  next.push(id)
+  return { ok: true, arr: next }
+}
+
 function casterOf(classDef, subclass) {
   if (subclass === 'eldritch-knight' || subclass === 'arcane-trickster') return 'third'
   return classDef.caster
@@ -522,6 +535,7 @@ const Rules = {
   slotsFor,
   maxSlotLevel,
   canLearnSpell,
+  togglePick,
   pendingFor,
   createCharacter,
   casterOf,
