@@ -361,7 +361,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v40</p>
+    <p class="mast">冒險者紀錄 · v41</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -604,11 +604,15 @@ function comboFilter(items, q, exclude) {
   }).slice(0, 12)
 }
 
+function comboOptInner(it) {
+  return `<span class="pick-name">${esc(it.name)}</span>${it.hint ? `<span class="pick-ring">${esc(it.hint)}</span>` : ''}${it.text ? `<span class="pick-body">${esc(it.text)}</span>` : ''}`
+}
+
 function comboListHtml(key, items, q, exclude) {
   const filtered = comboFilter(items, q, exclude)
   if (!filtered.length) return '<ul class="combo-list"><li class="muted">沒有符合的</li></ul>'
   return '<ul class="combo-list">' + filtered.map(it =>
-    `<li><button type="button" class="combo-opt" data-act="comboadd" data-key="${esc(key)}" data-id="${esc(it.id)}">${esc(it.name)}${it.hint ? ` <span class="muted">${esc(it.hint)}</span>` : ''}${it.text ? `<span class="spell-text">${esc(it.text)}</span>` : ''}</button></li>`
+    `<li><button type="button" class="combo-opt" data-act="comboadd" data-key="${esc(key)}" data-id="${esc(it.id)}">${comboOptInner(it)}</button></li>`
   ).join('') + '</ul>'
 }
 
@@ -616,6 +620,16 @@ function comboHtml(key, items, selected, placeholder) {
   const sel = selected || []
   const chips = sel.map(id => {
     const it = items.filter(x => x.id === id)[0] || { id, name: id }
+    if (it.text || it.hint) {
+      return `<div class="pick-card">
+        <div class="pick-head">
+          <span class="pick-name">${esc(it.name)}</span>
+          ${it.hint ? `<span class="pick-ring">${esc(it.hint)}</span>` : ''}
+          <button type="button" class="icon" data-act="combodel" data-key="${esc(key)}" data-id="${esc(id)}">×</button>
+        </div>
+        ${it.text ? `<p class="pick-body">${esc(it.text)}</p>` : ''}
+      </div>`
+    }
     return `<button type="button" class="chip" data-act="combodel" data-key="${esc(key)}" data-id="${esc(id)}">${esc(it.name)} ×</button>`
   }).join('')
   const open = comboOpen === key
@@ -626,16 +640,29 @@ function comboHtml(key, items, selected, placeholder) {
   </div>`
 }
 
+function spellPickItems(c) {
+  const pack = packFor((c && c.ruleset) || ruleset)
+  const cls = pack.classes[c.class] || {}
+  const lv = view === 'levelup' ? c.level + 1 : c.level
+  const max = Rules.maxSlotLevel(Rules.casterOf(cls, c.subclass || pickSubclass), lv)
+  return Object.keys(data.spells || {}).filter(id => {
+    if ((c.spells || []).indexOf(id) >= 0) return false
+    return Rules.canLearnSpell(data.spells[id], c.class, max)
+  }).map(id => {
+    const s = data.spells[id]
+    return { id, name: s.name, hint: s.level + '環', text: s.text }
+  })
+}
+
 function comboItemsFor(key) {
   const c = current()
   const pack = packFor((c && c.ruleset) || ruleset)
-  if (key === 'spell' || key === 'pickspell') {
-    const list = Object.keys(data.spells || {}).map(id => {
+  if (key === 'pickspell') return c ? spellPickItems(c) : []
+  if (key === 'spell') {
+    return Object.keys(data.spells || {}).map(id => {
       const s = data.spells[id]
-      return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text, classes: s.classes }
+      return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text }
     })
-    if (key === 'pickspell' && c) return list.filter(it => (it.classes || []).indexOf(c.class) >= 0)
-    return list
   }
   if (key === 'feat' || key === 'pickfeat') {
     return Object.keys(data.feats || {}).map(id => {
@@ -671,7 +698,7 @@ function spellPickNeed(c) {
 function comboExclude(key) {
   const c = current()
   if (key === 'spell') return (c && c.spells) || []
-  if (key === 'pickspell') return pickSpells
+  if (key === 'pickspell') return pickSpells.concat((c && c.spells) || [])
   if (key === 'feat') return (c && c.feats) || []
   if (key === 'pickfeat') return pickFeat ? [pickFeat] : []
   if (key === 'subclass') return pickSubclass ? [pickSubclass] : []
@@ -711,14 +738,8 @@ function levelHtml(c) {
       extra = comboHtml('subclass', (cls.subclasses || []).map(s => ({ id: s.id, name: s.name })), pickSubclass ? [pickSubclass] : [], '搜尋副職業…')
     }
     if (it.type === 'spells') {
-      extra = `<p class="muted">選 ${it.count} 個，輸入搜尋後點選</p>` +
-        comboHtml('pickspell', Object.keys(data.spells).filter(id => {
-          const s = data.spells[id]
-          return s.classes.indexOf(c.class) >= 0 && (c.spells || []).indexOf(id) < 0
-        }).map(id => {
-          const s = data.spells[id]
-          return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環' }
-        }), pickSpells, '搜尋法術…')
+      extra = `<p class="muted">選 ${it.count} 個（只能選你現在能施的環數）</p>` +
+        comboHtml('pickspell', spellPickItems(c), pickSpells, '搜尋可學法術…')
     }
     if (it.type === 'hp') {
       extra = `<input type="number" min="1" max="${it.hitDie}" data-act="hproll" value="${esc(hpRoll)}" placeholder="骰到幾點（1–${it.hitDie}）">`

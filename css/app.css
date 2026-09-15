@@ -1109,14 +1109,17 @@ textarea.notes-big { min-height: 60vh; margin: 10px 0 12px; }
 }
 .combo-list li { margin: 0; }
 .combo-opt {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
   text-align: left;
   min-height: 44px;
-  padding: 8px 10px;
+  padding: 10px 12px;
   border: 0;
   background: transparent;
   border-radius: var(--r);
+  border-bottom: 1px dotted var(--gold-dim);
 }
 .combo-opt:hover { background: var(--paper); }
 .combo .chip {
@@ -1124,6 +1127,47 @@ textarea.notes-big { min-height: 60vh; margin: 10px 0 12px; }
   padding: 4px 12px;
   font-size: 14px;
 }
+.pick-name {
+  display: block;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  letter-spacing: .04em;
+}
+.pick-ring {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 12px;
+  letter-spacing: .1em;
+  color: var(--rubric);
+  border: 1px solid var(--gold-dim);
+  border-radius: 999px;
+  padding: 1px 8px;
+  background: var(--paper-lit);
+}
+.pick-body {
+  display: block;
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.pick-card {
+  margin: 8px 0;
+  padding: 10px 12px;
+  background: var(--paper-lit);
+  border: 1px solid var(--gold);
+  border-radius: var(--r);
+}
+.pick-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.pick-head .icon { margin-left: auto; }
 
 .fold {
   margin: 16px 0;

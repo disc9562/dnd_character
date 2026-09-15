@@ -117,6 +117,23 @@ function slotsFor(caster, level) {
   return {}
 }
 
+function maxSlotLevel(caster, level) {
+  const slots = slotsFor(caster, level)
+  let m = 0
+  for (const k of Object.keys(slots)) {
+    const n = Number(k)
+    if (n > m) m = n
+  }
+  return m
+}
+
+function canLearnSpell(spell, classId, maxLevel) {
+  if (!spell) return false
+  if ((spell.classes || []).indexOf(classId) < 0) return false
+  if (spell.level < 1 || spell.level > maxLevel) return false
+  return true
+}
+
 function casterOf(classDef, subclass) {
   if (subclass === 'eldritch-knight' || subclass === 'arcane-trickster') return 'third'
   return classDef.caster
@@ -503,6 +520,8 @@ const Rules = {
   hpGain,
   maxHp,
   slotsFor,
+  maxSlotLevel,
+  canLearnSpell,
   pendingFor,
   createCharacter,
   casterOf,

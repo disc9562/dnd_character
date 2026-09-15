@@ -293,4 +293,8 @@ assert.ok(fe.pendingChoices.some(x => x.catalog === 'four-elements' && x.pick ==
 const once = R.addSpell(f1, 'fireball', real)
 const twice = R.addSpell(once, 'fireball', real)
 assert.equal(twice.spells.filter(x => x === 'fireball').length, 1)
+assert.equal(R.maxSlotLevel('full', 5), 3)
+assert.equal(R.canLearnSpell(real.spells.fireball, 'wizard', 3), true)
+assert.equal(R.canLearnSpell(real.spells['finger-of-death'], 'wizard', 3), false)
+assert.equal(R.canLearnSpell(real.spells['acid-splash'], 'wizard', 3), false)
 console.log('choices ok')
