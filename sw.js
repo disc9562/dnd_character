@@ -1,10 +1,11 @@
-const CACHE = 'dnd5e-pwa-v52'
+const CACHE = 'dnd5e-pwa-v53'
 const ASSETS = [
   './',
   './index.html',
   './css/app.css',
   './js/rules.js',
   './js/store.js',
+  './js/tag-icons.js',
   './js/app.js',
   './data/races.json',
   './data/classes.json',
