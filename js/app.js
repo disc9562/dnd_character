@@ -371,7 +371,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v48</p>
+    <p class="mast">冒險者紀錄 · v49</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -672,7 +672,7 @@ function spellPickItems(c, opts) {
   const pack = packFor((c && c.ruleset) || ruleset)
   const cls = pack.classes[c.class] || {}
   const sub = c.subclass || ((view === 'levelup' || view === 'pending') ? pickSubclass : null)
-  const lv = view === 'levelup' ? c.level + 1 : c.level
+  const lv = (opts && opts.level) || (view === 'levelup' ? c.level + 1 : c.level)
   const max = Rules.maxSlotLevel(Rules.casterOf(cls, sub), lv)
   const listClass = Rules.spellListClass(c.class, sub)
   const cantrips = !!(opts && opts.cantrips)
@@ -691,7 +691,11 @@ function spellPickItems(c, opts) {
 function comboItemsFor(key) {
   const c = current()
   const pack = packFor((c && c.ruleset) || ruleset)
-  if (key === 'pickspell') return c ? spellPickItems(c) : []
+  if (key === 'pickspell') {
+    if (!c) return []
+    const at = view === 'levelup' ? c.level + 1 : c.level
+    return spellPickItems(c, { level: at })
+  }
   if (key === 'spell') return c ? spellPickItems(c, { cantrips: true }) : []
   if (key === 'armor') {
     const arm = (pack.equipment && pack.equipment.armor) || {}
@@ -775,8 +779,10 @@ function levelHtml(c) {
       extra = comboHtml('subclass', (cls.subclasses || []).map(s => ({ id: s.id, name: s.name })), pickSubclass ? [pickSubclass] : [], '搜尋副職業…')
     }
     if (it.type === 'spells') {
-      extra = `<p class="muted">選 ${it.count} 個（只能選你現在能施的環數）</p>` +
-        comboHtml('pickspell', spellPickItems(c), pickSpells, '搜尋可學法術…')
+      const at = view === 'levelup' ? c.level + 1 : c.level
+      const max = Rules.maxSlotLevel(Rules.casterOf(cls, c.subclass || pickSubclass), at)
+      extra = `<p class="muted">選 ${it.count} 個 · 升到 ${at} 級可選到 ${max} 環</p>` +
+        comboHtml('pickspell', spellPickItems(c, { level: at }), pickSpells, '搜尋可學法術（' + at + '級最高' + max + '環）…')
     }
     if (it.type === 'hp') {
       extra = `<input type="number" min="1" max="${it.hitDie}" data-act="hproll" value="${esc(hpRoll)}" placeholder="骰到幾點（1–${it.hitDie}）">`
