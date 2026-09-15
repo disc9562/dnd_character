@@ -1096,6 +1096,20 @@ textarea.notes-big { min-height: 60vh; margin: 10px 0 12px; }
 /* ---------- 搜尋下拉 ---------- */
 .combo { position: relative; margin: 6px 0 12px; }
 .combo-q { width: 100%; }
+.combo-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
+.tag {
+  min-height: 32px;
+  padding: 4px 10px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 999px;
+  background: rgba(255, 250, 238, .55);
+  font-size: 13px;
+}
+.tag.on {
+  background: var(--rubric);
+  color: var(--gold-lit);
+  border-color: var(--gold);
+}
 .combo-list {
   list-style: none;
   margin: 4px 0 0;

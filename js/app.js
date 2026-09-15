@@ -48,6 +48,7 @@ let openClassFeat = ''
 let openPower = ''
 let comboQ = {}
 let comboOpen = ''
+let comboTag = {}
 let foldOpen = {}
 let hpRoll = ''
 let ruleset = '2014'
@@ -371,7 +372,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v50</p>
+    <p class="mast">冒險者紀錄 · v51</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -621,12 +622,19 @@ function comboSelected(key) {
   return []
 }
 
-function comboFilter(items, q, exclude) {
+function comboTagsOf(key) {
+  return comboTag[key] || { ring: '', school: '' }
+}
+
+function comboFilter(items, q, exclude, key) {
   const s = (q || '').trim().toLowerCase()
+  const tags = comboTagsOf(key)
   return items.filter(it => {
     if (exclude && exclude.indexOf(it.id) >= 0) return false
+    if (tags.ring && it.hint !== tags.ring) return false
+    if (tags.school && it.school !== tags.school) return false
     if (!s) return true
-    return (it.name + ' ' + (it.nameEn || '') + ' ' + it.id + ' ' + (it.hint || '') + ' ' + (it.text || '')).toLowerCase().indexOf(s) >= 0
+    return (it.name + ' ' + (it.nameEn || '') + ' ' + it.id + ' ' + (it.hint || '') + ' ' + (it.school || '') + ' ' + (it.text || '')).toLowerCase().indexOf(s) >= 0
   })
 }
 
@@ -634,8 +642,29 @@ function comboOptInner(it) {
   return `<span class="pick-name">${esc(it.name)}</span>${it.hint ? `<span class="pick-ring">${esc(it.hint)}</span>` : ''}${it.text ? `<span class="pick-body">${esc(it.text)}</span>` : ''}`
 }
 
+function comboTagHtml(key, items) {
+  if (key !== 'spell' && key !== 'pickspell') return ''
+  const tags = comboTagsOf(key)
+  const rings = []
+  const schools = []
+  for (const it of items) {
+    if (it.hint && rings.indexOf(it.hint) < 0) rings.push(it.hint)
+    if (it.school && schools.indexOf(it.school) < 0) schools.push(it.school)
+  }
+  rings.sort((a, b) => {
+    const na = a === '戲法' ? 0 : parseInt(a, 10) || 99
+    const nb = b === '戲法' ? 0 : parseInt(b, 10) || 99
+    return na - nb
+  })
+  const btn = (kind, val) => {
+    const on = tags[kind] === val
+    return `<button type="button" class="tag${on ? ' on' : ''}" data-act="combotag" data-key="${esc(key)}" data-kind="${kind}" data-val="${esc(val)}">${esc(val)}</button>`
+  }
+  return `<div class="combo-tags">${rings.map(v => btn('ring', v)).join('')}</div><div class="combo-tags">${schools.map(v => btn('school', v)).join('')}</div>`
+}
+
 function comboListHtml(key, items, q, exclude) {
-  const filtered = comboFilter(items, q, exclude)
+  const filtered = comboFilter(items, q, exclude, key)
   const selected = comboSelected(key)
   if (!filtered.length) return '<ul class="combo-list"><li class="muted">沒有符合的（只顯示你現在能施的環數）</li></ul>'
   return '<ul class="combo-list">' + filtered.map(it => {
@@ -663,6 +692,7 @@ function comboHtml(key, items, selected, placeholder) {
   const open = comboOpen === key
   return `<div class="combo" data-combo="${esc(key)}">
     <div class="chips">${chips}</div>
+    ${comboTagHtml(key, items)}
     <input class="combo-q" data-act="comboq" data-key="${esc(key)}" placeholder="${esc(placeholder || '輸入名稱搜尋…')}" value="${esc(comboQ[key] || '')}" autocomplete="off">
     ${open ? comboListHtml(key, items, comboQ[key], comboExclude(key)) : ''}
   </div>`
@@ -684,7 +714,7 @@ function spellPickItems(c, opts) {
     return Rules.canLearnSpell(data.spells[id], listClass, max, { cantrips, subclass: sub })
   }).map(id => {
     const s = data.spells[id]
-    return { id, name: s.name, nameEn: s.nameEn || '', hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text }
+    return { id, name: s.name, nameEn: s.nameEn || '', hint: s.level === 0 ? '戲法' : s.level + '環', school: s.school || '', text: s.text }
   })
 }
 
@@ -927,6 +957,7 @@ el.addEventListener('click', e => {
     pickChoice = {}
     for (const [k, v] of Object.entries(c.choices || {})) pickChoice[k] = v.slice()
     pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''
+    comboTag = {}
     menuOpen = false; render(); return
   }
   if (act === 'pending') {
@@ -934,6 +965,7 @@ el.addEventListener('click', e => {
     pickChoice = {}
     for (const [k, v] of Object.entries(c.choices || {})) pickChoice[k] = v.slice()
     pickSubclass = ((packFor(c.ruleset).classes[c.class] || {}).subclasses || [])[0] && packFor(c.ruleset).classes[c.class].subclasses[0].id || ''
+    comboTag = {}
     render(); return
   }
   if (act === 'check') {
@@ -951,6 +983,24 @@ el.addEventListener('click', e => {
     const k = btn.dataset.cat + ':' + btn.dataset.id
     openPower = openPower === k ? '' : k
     render()
+    return
+  }
+  if (act === 'combotag') {
+    const key = btn.dataset.key
+    const kind = btn.dataset.kind
+    const val = btn.dataset.val
+    comboTag[key] = comboTag[key] || { ring: '', school: '' }
+    comboTag[key][kind] = comboTag[key][kind] === val ? '' : val
+    comboOpen = key
+    const box = btn.closest('.combo')
+    if (!box) { render(); return }
+    box.querySelectorAll('[data-act="combotag"]').forEach(b => {
+      b.classList.toggle('on', comboTag[key][b.dataset.kind] === b.dataset.val)
+    })
+    const html = comboListHtml(key, comboItemsFor(key), comboQ[key], comboExclude(key))
+    const list = box.querySelector('.combo-list')
+    if (list) list.outerHTML = html
+    else box.insertAdjacentHTML('beforeend', html)
     return
   }
   if (act === 'comboadd' || act === 'combodel') {
