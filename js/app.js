@@ -371,7 +371,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v49</p>
+    <p class="mast">冒險者紀錄 · v50</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -627,7 +627,7 @@ function comboFilter(items, q, exclude) {
     if (exclude && exclude.indexOf(it.id) >= 0) return false
     if (!s) return true
     return (it.name + ' ' + (it.nameEn || '') + ' ' + it.id + ' ' + (it.hint || '') + ' ' + (it.text || '')).toLowerCase().indexOf(s) >= 0
-  }).slice(0, 20)
+  })
 }
 
 function comboOptInner(it) {
