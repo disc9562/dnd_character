@@ -361,7 +361,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v41</p>
+    <p class="mast">冒險者紀錄 · v42</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -595,6 +595,26 @@ function scriptHtml() {
   `
 }
 
+function togglePick(arr, id, need) {
+  const next = (arr || []).slice()
+  const i = next.indexOf(id)
+  if (i >= 0) {
+    next.splice(i, 1)
+    return { ok: true, arr: next }
+  }
+  if (need && next.length >= need) return { ok: false, arr: next }
+  next.push(id)
+  return { ok: true, arr: next }
+}
+
+function comboSelected(key) {
+  if (key === 'pickspell') return pickSpells
+  if (key === 'pickfeat') return pickFeat ? [pickFeat] : []
+  if (key === 'subclass') return pickSubclass ? [pickSubclass] : []
+  if (key.slice(0, 7) === 'choice:') return pickChoice[key.slice(7)] || []
+  return []
+}
+
 function comboFilter(items, q, exclude) {
   const s = (q || '').trim().toLowerCase()
   return items.filter(it => {
@@ -610,10 +630,12 @@ function comboOptInner(it) {
 
 function comboListHtml(key, items, q, exclude) {
   const filtered = comboFilter(items, q, exclude)
+  const selected = comboSelected(key)
   if (!filtered.length) return '<ul class="combo-list"><li class="muted">沒有符合的</li></ul>'
-  return '<ul class="combo-list">' + filtered.map(it =>
-    `<li><button type="button" class="combo-opt" data-act="comboadd" data-key="${esc(key)}" data-id="${esc(it.id)}">${comboOptInner(it)}</button></li>`
-  ).join('') + '</ul>'
+  return '<ul class="combo-list">' + filtered.map(it => {
+    const on = selected.indexOf(it.id) >= 0
+    return `<li><button type="button" class="combo-opt${on ? ' is-on' : ''}" data-act="comboadd" data-key="${esc(key)}" data-id="${esc(it.id)}">${comboOptInner(it)}</button></li>`
+  }).join('') + '</ul>'
 }
 
 function comboHtml(key, items, selected, placeholder) {
@@ -636,7 +658,7 @@ function comboHtml(key, items, selected, placeholder) {
   return `<div class="combo" data-combo="${esc(key)}">
     <div class="chips">${chips}</div>
     <input class="combo-q" data-act="comboq" data-key="${esc(key)}" placeholder="${esc(placeholder || '輸入名稱搜尋…')}" value="${esc(comboQ[key] || '')}" autocomplete="off">
-    ${open ? comboListHtml(key, items, comboQ[key], sel) : ''}
+    ${open ? comboListHtml(key, items, comboQ[key], comboExclude(key)) : ''}
   </div>`
 }
 
@@ -698,12 +720,12 @@ function spellPickNeed(c) {
 function comboExclude(key) {
   const c = current()
   if (key === 'spell') return (c && c.spells) || []
-  if (key === 'pickspell') return pickSpells.concat((c && c.spells) || [])
+  if (key === 'pickspell') return (c && c.spells) || []
   if (key === 'feat') return (c && c.feats) || []
   if (key === 'pickfeat') return pickFeat ? [pickFeat] : []
   if (key === 'subclass') return pickSubclass ? [pickSubclass] : []
   if (key === 'subclass-live') return (c && c.subclass) ? [c.subclass] : []
-  if (key.slice(0, 7) === 'choice:') return pickChoice[key.slice(7)] || []
+  if (key.slice(0, 7) === 'choice:') return []
   return []
 }
 
@@ -921,11 +943,9 @@ el.addEventListener('click', e => {
       if (key === 'subclass') { pickSubclass = id; comboOpen = ''; render(); return }
       if (key === 'pickfeat') { pickFeat = id; comboOpen = ''; render(); return }
       if (key === 'pickspell') {
-        const need = spellPickNeed(c)
-        let arr = pickSpells.slice()
-        if (arr.indexOf(id) < 0) arr.push(id)
-        if (need && arr.length > need) arr = arr.slice(arr.length - need)
-        pickSpells = arr
+        const r = togglePick(pickSpells, id, spellPickNeed(c))
+        if (!r.ok) { banner = '已經選滿 ' + spellPickNeed(c) + ' 個，先點已選的再換'; comboOpen = key; render(); return }
+        pickSpells = r.arr
         comboOpen = key
         render()
         return
@@ -934,10 +954,9 @@ el.addEventListener('click', e => {
         const cat = key.slice(7)
         const pack = packFor(c.ruleset)
         const need = Rules.catalogPick((pack.choices || {})[cat] || {}, view === 'levelup' ? c.level + 1 : c.level)
-        let arr = (pickChoice[cat] || []).slice()
-        if (arr.indexOf(id) < 0) arr.push(id)
-        if (arr.length > need) arr = arr.slice(arr.length - need)
-        pickChoice[cat] = arr
+        const r = togglePick(pickChoice[cat] || [], id, need)
+        if (!r.ok) { banner = '已經選滿 ' + need + ' 個，先點已選的再換'; comboOpen = key; render(); return }
+        pickChoice[cat] = r.arr
         comboOpen = key
         render()
         return
@@ -1170,14 +1189,12 @@ el.addEventListener('change', e => {
   if (act === 'pickch') {
     const cat = t.dataset.cat
     const id = t.dataset.id
-    const pick = (((packFor((current() || {}).ruleset).choices || {})[cat] || {}).pick) || 1
-    let arr = (pickChoice[cat] || []).slice()
-    const i = arr.indexOf(id)
-    if (t.checked) {
-      if (i < 0) arr.push(id)
-      if (arr.length > pick) arr = arr.slice(arr.length - pick)
-    } else if (i >= 0) arr.splice(i, 1)
-    pickChoice[cat] = arr
+    const c = current()
+    const pack = packFor((c || {}).ruleset)
+    const need = Rules.catalogPick((pack.choices || {})[cat] || {}, view === 'levelup' ? c.level + 1 : c.level)
+    const r = togglePick(pickChoice[cat] || [], id, need)
+    if (!r.ok) { banner = '已經選滿 ' + need + ' 個，先取消已選的再換'; render(); return }
+    pickChoice[cat] = r.arr
     render()
     return
   }

@@ -1122,6 +1122,11 @@ textarea.notes-big { min-height: 60vh; margin: 10px 0 12px; }
   border-bottom: 1px dotted var(--gold-dim);
 }
 .combo-opt:hover { background: var(--paper); }
+.combo-opt.is-on {
+  background: rgba(122, 26, 31, .12);
+  box-shadow: inset 4px 0 0 var(--rubric);
+}
+.combo-opt.is-on .pick-name { color: var(--rubric); }
 .combo .chip {
   min-height: 36px;
   padding: 4px 12px;
@@ -1157,9 +1162,10 @@ textarea.notes-big { min-height: 60vh; margin: 10px 0 12px; }
 .pick-card {
   margin: 8px 0;
   padding: 10px 12px;
-  background: var(--paper-lit);
-  border: 1px solid var(--gold);
+  background: rgba(122, 26, 31, .08);
+  border: 1px solid var(--rubric);
   border-radius: var(--r);
+  box-shadow: inset 0 0 0 2px rgba(228, 200, 119, .45);
 }
 .pick-head {
   display: flex;
