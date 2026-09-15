@@ -952,5 +952,44 @@
         "minLevel": 17
       }
     ]
+  },
+  "half-elf-asi": {
+    "id": "half-elf-asi",
+    "name": "半精靈屬性 +1",
+    "pick": 2,
+    "apply": "abi1",
+    "when": [
+      {
+        "race": "half-elf",
+        "level": 1
+      }
+    ],
+    "options": [
+      {
+        "id": "str",
+        "name": "力量 +1",
+        "text": "力量分數 +1。"
+      },
+      {
+        "id": "dex",
+        "name": "敏捷 +1",
+        "text": "敏捷分數 +1。"
+      },
+      {
+        "id": "con",
+        "name": "體質 +1",
+        "text": "體質分數 +1。"
+      },
+      {
+        "id": "int",
+        "name": "智力 +1",
+        "text": "智力分數 +1。"
+      },
+      {
+        "id": "wis",
+        "name": "感知 +1",
+        "text": "感知分數 +1。"
+      }
+    ]
   }
 }

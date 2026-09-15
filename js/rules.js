@@ -132,11 +132,21 @@ function spellListClass(classId, subclass) {
   return classId
 }
 
+function subclassSchools(subclass) {
+  if (subclass === 'eldritch-knight') return ['防護', '塑能']
+  if (subclass === 'arcane-trickster') return ['惑控', '幻術']
+  return null
+}
+
 function canLearnSpell(spell, classId, maxLevel, opts) {
   if (!spell) return false
   if ((spell.classes || []).indexOf(classId) < 0) return false
   const min = opts && opts.cantrips ? 0 : 1
   if (spell.level < min || spell.level > maxLevel) return false
+  if (!(opts && opts.cantrips)) {
+    const schools = subclassSchools(opts && opts.subclass)
+    if (schools && schools.indexOf(spell.school) < 0) return false
+  }
   return true
 }
 
@@ -190,6 +200,7 @@ function choiceDue(catalog, character) {
   const have = (character.choices && character.choices[catalog.id]) || []
   if (have.length >= need) return false
   return (catalog.when || []).some(w => {
+    if (w.race && w.race !== character.race) return false
     if (w.class && w.class !== character.class) return false
     if (w.subclass && w.subclass !== character.subclass) return false
     if ((w.level || 1) > character.level) return false
@@ -197,7 +208,7 @@ function choiceDue(catalog, character) {
   })
 }
 
-function pendingFor(character, classDef, catalogs) {
+function pendingFor(character, classDef, catalogs, spells) {
   const pending = []
   const level = character.level
   if (classDef && classDef.subclassLevel && classDef.subclassLevel <= level && !character.subclass) {
@@ -216,7 +227,10 @@ function pendingFor(character, classDef, catalogs) {
   const picks = spellPicksOf(classDef, character.subclass)
   if (picks) {
     const need = knownSpellNeed(picks, level)
-    const have = (character.spells || []).length
+    const have = (character.spells || []).filter(id => {
+      if (!spells || !spells[id]) return true
+      return spells[id].level >= 1
+    }).length
     const missing = need - have
     if (missing > 0) pending.push({ id: 'spells', type: 'spells', count: missing })
   }
@@ -274,6 +288,7 @@ function createCharacter(input, data) {
     ac: 10 + dexMod,
     spellSlots: slotsFor(caster, input.level),
     spells: [],
+    cantrips: [],
     attacks: [{ name: atk.name, bonus: prof + strMod, damage: dmg }],
     feats: [],
     subclass: null,
@@ -295,7 +310,7 @@ function createCharacter(input, data) {
     shield: false,
     choices: {}
   }
-  character.pendingChoices = pendingFor(character, cls, data.choices)
+  character.pendingChoices = pendingFor(character, cls, data.choices, data.spells)
   return character
 }
 
@@ -316,7 +331,7 @@ function setSubclass(character, subclassId, data) {
   const next = clone(character)
   const cls = data.classes[next.class]
   next.subclass = subclassId || null
-  next.pendingChoices = pendingFor(next, cls, data.choices)
+  next.pendingChoices = pendingFor(next, cls, data.choices, data.spells)
   next.spellSlots = mergeSlots(next.spellSlots, slotsFor(casterOf(cls, next.subclass), next.level))
   return next
 }
@@ -336,17 +351,27 @@ function setChoices(character, catalogId, optionIds, data) {
   }
   if (ids.length !== catalogPick(cat, character.level)) return { ok: false }
   const next = clone(character)
+  const prev = (next.choices && next.choices[catalogId]) || []
+  if (cat.apply === 'abi1') {
+    for (const id of prev) next.abilities[id] = (next.abilities[id] || 10) - 1
+    for (const id of ids) next.abilities[id] = (next.abilities[id] || 10) + 1
+  }
   next.choices = Object.assign({}, next.choices || {})
   next.choices[catalogId] = ids
-  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
+  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices, data.spells)
   return { ok: true, character: next }
 }
 
 function clearChoices(character, catalogId, data) {
   const next = clone(character)
+  const cat = data.choices && data.choices[catalogId]
+  const prev = (next.choices && next.choices[catalogId]) || []
+  if (cat && cat.apply === 'abi1') {
+    for (const id of prev) next.abilities[id] = (next.abilities[id] || 10) - 1
+  }
   next.choices = Object.assign({}, next.choices || {})
   delete next.choices[catalogId]
-  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
+  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices, data.spells)
   return next
 }
 
@@ -399,15 +424,25 @@ function alwaysPreparedIds(character, data) {
 }
 
 function visibleSpells(character, data) {
-  const out = alwaysPreparedIds(character, data)
+  const out = []
+  for (const id of character.cantrips || []) if (out.indexOf(id) < 0) out.push(id)
+  for (const id of alwaysPreparedIds(character, data)) if (out.indexOf(id) < 0) out.push(id)
   for (const id of character.spells || []) if (out.indexOf(id) < 0) out.push(id)
   return out
 }
 
 function addSpell(character, spellId, data) {
   if (!spellId) return character
+  const spell = data && data.spells && data.spells[spellId]
   const auto = alwaysPreparedIds(character, data)
   if (auto.indexOf(spellId) >= 0) return character
+  if (spell && spell.level === 0) {
+    if ((character.cantrips || []).indexOf(spellId) >= 0) return character
+    const next = clone(character)
+    next.cantrips = (next.cantrips || []).concat([spellId])
+    next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices, data.spells)
+    return next
+  }
   if ((character.spells || []).indexOf(spellId) >= 0) return character
   if (isPreparedCaster(character.class)) {
     const used = (character.spells || []).filter(id => auto.indexOf(id) < 0).length
@@ -415,7 +450,7 @@ function addSpell(character, spellId, data) {
   }
   const next = clone(character)
   next.spells = (next.spells || []).concat([spellId])
-  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
+  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices, data.spells)
   return next
 }
 
@@ -423,7 +458,8 @@ function removeSpell(character, spellId, data) {
   if (alwaysPreparedIds(character, data).indexOf(spellId) >= 0) return character
   const next = clone(character)
   next.spells = (next.spells || []).filter(id => id !== spellId)
-  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices)
+  next.cantrips = (next.cantrips || []).filter(id => id !== spellId)
+  next.pendingChoices = pendingFor(next, data.classes[next.class], data.choices, data.spells)
   return next
 }
 
@@ -550,7 +586,7 @@ function applyLevelUp(character, checkedIds, data, opts) {
   if ((cls.asiLevels || []).includes(newLevel)) {
     next.asiTaken = (next.asiTaken || []).concat([newLevel])
   }
-  next.pendingChoices = pendingFor(next, cls, data.choices)
+  next.pendingChoices = pendingFor(next, cls, data.choices, data.spells)
   return { ok: true, character: next }
 }
 
@@ -653,6 +689,7 @@ const Rules = {
   slotsFor,
   maxSlotLevel,
   canLearnSpell,
+  subclassSchools,
   spellListClass,
   knownSpellNeed,
   spellPicksOf,

@@ -63,7 +63,8 @@ function packFor(year) {
       features: data.features || {},
       choices: data.choices || {},
       equipment: data.equipment || {},
-      prepared: data.prepared || {}
+      prepared: data.prepared || {},
+      subclassFeatures: data.subclassFeatures || {}
     }
   }
   return {
@@ -74,7 +75,8 @@ function packFor(year) {
     features: data.features || {},
     choices: data.choices || {},
     equipment: data.equipment || {},
-    prepared: data.prepared || {}
+    prepared: data.prepared || {},
+    subclassFeatures: data.subclassFeatures || {}
   }
 }
 
@@ -368,7 +370,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v46</p>
+    <p class="mast">冒險者紀錄 · v47</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -441,12 +443,12 @@ function combatHtml(c) {
         </details>
         <details class="fold" data-fold="features"${foldOpen.features ? ' open' : ''}>
           <summary>職業特性</summary>
-          ${(pack.features[c.class] || []).filter(f => f.level <= c.level).map(f => {
-            const id = f.level + '-' + f.name
+          ${((pack.features[c.class] || []).concat(((pack.subclassFeatures || {})[c.subclass] || [])).filter(f => f.level <= c.level).map(f => {
+            const id = (f.sub ? 's' : 'c') + f.level + '-' + f.name
             const open = openClassFeat === id
-            return `<button class="big" data-act="toggleclassfeat" data-id="${esc(id)}">${esc(f.name)} <span class="muted">${f.level}級</span>
+            return `<button class="big" data-act="toggleclassfeat" data-id="${esc(id)}">${esc(f.name)} <span class="muted">${f.level}級${c.subclass && ((pack.subclassFeatures || {})[c.subclass] || []).indexOf(f) >= 0 ? ' · 子職' : ''}</span>
               ${open ? `<p class="spell-text">${esc(f.text)}</p>` : ''}</button>`
-          }).join('') || '<p class="muted">沒有特性資料</p>'}
+          }).join('') || '<p class="muted">沒有特性資料</p>')}
         </details>
         <details class="fold" data-fold="feats"${foldOpen.feats ? ' open' : ''}>
           <summary>專長</summary>
@@ -676,8 +678,9 @@ function spellPickItems(c, opts) {
   const auto = Rules.alwaysPreparedIds(c, pack)
   return Object.keys(data.spells || {}).filter(id => {
     if ((c.spells || []).indexOf(id) >= 0) return false
+    if ((c.cantrips || []).indexOf(id) >= 0) return false
     if (auto.indexOf(id) >= 0) return false
-    return Rules.canLearnSpell(data.spells[id], listClass, max, { cantrips })
+    return Rules.canLearnSpell(data.spells[id], listClass, max, { cantrips, subclass: sub })
   }).map(id => {
     const s = data.spells[id]
     return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text }
@@ -798,7 +801,7 @@ function levelHtml(c) {
     level: view === 'levelup' ? c.level + 1 : c.level,
     subclass: pickSubclass || c.subclass
   })
-  const extraChoices = Rules.pendingFor(probe, cls, pack.choices).filter(x => x.type === 'choice' && items.every(it => it.catalog !== x.catalog))
+  const extraChoices = Rules.pendingFor(probe, cls, pack.choices, pack.spells).filter(x => x.type === 'choice' && items.every(it => it.catalog !== x.catalog))
   const extraHtml = extraChoices.map(it => {
     const cat = (pack.choices || {})[it.catalog]
     return `<div class="choice-block"><p><strong>${esc(it.label)}</strong></p>${choicePickerHtml(cat, c.class, it.pick, probe.level)}</div>`
@@ -1137,7 +1140,7 @@ el.addEventListener('click', e => {
       next = r.character
     }
     if (view === 'pending') {
-      next.pendingChoices = Rules.pendingFor(next, cls, pack.choices)
+      next.pendingChoices = Rules.pendingFor(next, cls, pack.choices, pack.spells)
       pickChoice = {}
       pickSpells = []
       if (next.pendingChoices.length) {
@@ -1330,7 +1333,7 @@ el.addEventListener('change', e => {
 
 async function boot() {
   try {
-    const [races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared] = await Promise.all([
+    const [races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures] = await Promise.all([
       fetch('data/races.json').then(r => r.json()),
       fetch('data/classes.json').then(r => r.json()),
       fetch('data/spells.json').then(r => r.json()),
@@ -1340,9 +1343,10 @@ async function boot() {
       fetch('data/classes2024.json').then(r => r.json()),
       fetch('data/choices.json').then(r => r.json()),
       fetch('data/equipment.json').then(r => r.json()),
-      fetch('data/prepared.json').then(r => r.json())
+      fetch('data/prepared.json').then(r => r.json()),
+      fetch('data/subclass-features.json').then(r => r.json())
     ])
-    data = { races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared }
+    data = { races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures }
     state = Store.loadState(localStorage)
     view = current() ? 'combat' : 'create'
     render()

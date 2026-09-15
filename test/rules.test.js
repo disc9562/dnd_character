@@ -396,4 +396,25 @@ let land = R.setSubclass(R.createCharacter({
 }, real), 'land', real)
 land = R.setChoices(land, 'land', ['forest'], real).character
 assert.ok(R.alwaysPreparedIds(land, real).indexOf('barkskin') >= 0)
+const cantriped = R.addSpell(w, 'acid-splash', real)
+assert.deepEqual(cantriped.cantrips, ['acid-splash'])
+assert.equal((cantriped.spells || []).length, 0)
+assert.ok(cantriped.pendingChoices.some(x => x.type === 'spells' && x.count === 6))
+assert.equal(R.canLearnSpell(real.spells.fireball, 'wizard', 3, { subclass: 'eldritch-knight' }), true)
+assert.equal(R.canLearnSpell(real.spells['charm-person'], 'wizard', 1, { subclass: 'eldritch-knight' }), false)
+const he = R.createCharacter({
+  name: '半',
+  race: 'half-elf',
+  class: 'wizard',
+  level: 1,
+  abilities: { str: 8, dex: 14, con: 13, int: 15, wis: 10, cha: 12 }
+}, real)
+assert.ok(he.pendingChoices.some(x => x.catalog === 'half-elf-asi'))
+const heDone = R.setChoices(he, 'half-elf-asi', ['str', 'dex'], real)
+assert.equal(heDone.ok, true)
+assert.equal(heDone.character.abilities.str, he.abilities.str + 1)
+assert.equal(heDone.character.abilities.dex, he.abilities.dex + 1)
+const sf = JSON.parse(fs.readFileSync('data/subclass-features.json', 'utf8'))
+assert.ok(sf.champion.some(x => x.name === '精通重擊'))
+assert.ok(sf.life.some(x => x.name.indexOf('保存生命') >= 0))
 console.log('choices ok')
