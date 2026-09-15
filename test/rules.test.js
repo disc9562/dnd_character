@@ -320,4 +320,36 @@ assert.deepEqual(R.togglePick(undefined, 'a', 1).arr, ['a'])
 assert.equal(R.togglePick(['a', 'b'], 'c', 0).ok, true)
 const emptyAdd = R.addSpell(f1, '', real)
 assert.deepEqual(emptyAdd.spells || [], f1.spells || [])
+assert.equal(R.spellListClass('fighter', 'eldritch-knight'), 'wizard')
+assert.equal(R.spellListClass('rogue', 'arcane-trickster'), 'wizard')
+assert.equal(R.spellListClass('wizard', null), 'wizard')
+assert.equal(R.canLearnSpell(real.spells.fireball, R.spellListClass('fighter', 'eldritch-knight'), 1), false)
+assert.equal(R.canLearnSpell(real.spells.shield, R.spellListClass('fighter', 'eldritch-knight'), 1), true)
+assert.equal(R.canLearnSpell(real.spells['acid-splash'], 'wizard', 1, { cantrips: true }), true)
+const rng3 = R.createCharacter({
+  name: '巡',
+  race: 'human',
+  class: 'ranger',
+  level: 3,
+  abilities: { str: 10, dex: 16, con: 14, int: 8, wis: 14, cha: 10 },
+  hpMax: 28
+}, real)
+const rngSp = rng3.pendingChoices.filter(x => x.type === 'spells')[0]
+assert.equal(rngSp && rngSp.count, 3)
+assert.equal(R.knownSpellNeed(real.classes.ranger.spellPicks, 2), 2)
+assert.equal(R.knownSpellNeed(real.classes.ranger.spellPicks, 4), 3)
+assert.equal(R.knownSpellNeed(real.classes.wizard.spellPicks, 1), 6)
+assert.equal(R.knownSpellNeed(real.classes.wizard.spellPicks, 2), 8)
+const rngUp = R.checklistFor(rng3, real).filter(x => x.type === 'spells')[0]
+assert.ok(!rngUp)
+const ek = R.setSubclass(R.createCharacter({
+  name: '刃',
+  race: 'human',
+  class: 'fighter',
+  level: 3,
+  abilities: { str: 10, dex: 16, con: 14, int: 14, wis: 10, cha: 8 },
+  hpMax: 28
+}, real), 'eldritch-knight', real)
+const ekSp = ek.pendingChoices.filter(x => x.type === 'spells')[0]
+assert.equal(ekSp && ekSp.count, 3)
 console.log('choices ok')

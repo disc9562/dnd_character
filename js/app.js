@@ -280,11 +280,7 @@ function combatHtml(c) {
       <button class="icon lockable" data-act="delspell" data-id="${esc(id)}"${lock}>×</button>
     </div>`
   }).join('')
-  const spellItems = Object.keys(data.spells || {}).filter(id => (c.spells || []).indexOf(id) < 0).map(id => {
-    const s = data.spells[id]
-    return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text }
-  })
-  const spellAdd = c.locked ? '' : comboHtml('spell', spellItems, [], '搜尋法術…')
+  const spellAdd = c.locked ? '' : comboHtml('spell', spellPickItems(c, { cantrips: true }), [], '搜尋可用法術…')
   const featChips = (c.feats || []).map(id => {
     const f = data.feats[id]
     const open = openFeat === id
@@ -361,7 +357,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v43</p>
+    <p class="mast">冒險者紀錄 · v44</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -650,17 +646,20 @@ function comboHtml(key, items, selected, placeholder) {
   </div>`
 }
 
-function spellPickItems(c) {
+function spellPickItems(c, opts) {
   const pack = packFor((c && c.ruleset) || ruleset)
   const cls = pack.classes[c.class] || {}
+  const sub = c.subclass || pickSubclass
   const lv = view === 'levelup' ? c.level + 1 : c.level
-  const max = Rules.maxSlotLevel(Rules.casterOf(cls, c.subclass || pickSubclass), lv)
+  const max = Rules.maxSlotLevel(Rules.casterOf(cls, sub), lv)
+  const listClass = Rules.spellListClass(c.class, sub)
+  const cantrips = !!(opts && opts.cantrips)
   return Object.keys(data.spells || {}).filter(id => {
     if ((c.spells || []).indexOf(id) >= 0) return false
-    return Rules.canLearnSpell(data.spells[id], c.class, max)
+    return Rules.canLearnSpell(data.spells[id], listClass, max, { cantrips })
   }).map(id => {
     const s = data.spells[id]
-    return { id, name: s.name, hint: s.level + '環', text: s.text }
+    return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text }
   })
 }
 
@@ -668,12 +667,7 @@ function comboItemsFor(key) {
   const c = current()
   const pack = packFor((c && c.ruleset) || ruleset)
   if (key === 'pickspell') return c ? spellPickItems(c) : []
-  if (key === 'spell') {
-    return Object.keys(data.spells || {}).map(id => {
-      const s = data.spells[id]
-      return { id, name: s.name, hint: s.level === 0 ? '戲法' : s.level + '環', text: s.text }
-    })
-  }
+  if (key === 'spell') return c ? spellPickItems(c, { cantrips: true }) : []
   if (key === 'feat' || key === 'pickfeat') {
     return Object.keys(data.feats || {}).map(id => {
       const f = data.feats[id]
@@ -859,7 +853,12 @@ el.addEventListener('click', e => {
     }, packFor(ruleset))
     state.characters.push(ch)
     state.currentId = ch.id
-    view = 'combat'
+    pickSpells = []
+    pickChoice = {}
+    if ((ch.pendingChoices || []).length) {
+      view = 'pending'
+      checkedIds = ch.pendingChoices.map(x => x.id)
+    } else view = 'combat'
     persist()
     return
   }

@@ -127,11 +127,32 @@ function maxSlotLevel(caster, level) {
   return m
 }
 
-function canLearnSpell(spell, classId, maxLevel) {
+function spellListClass(classId, subclass) {
+  if (subclass === 'eldritch-knight' || subclass === 'arcane-trickster') return 'wizard'
+  return classId
+}
+
+function canLearnSpell(spell, classId, maxLevel, opts) {
   if (!spell) return false
   if ((spell.classes || []).indexOf(classId) < 0) return false
-  if (spell.level < 1 || spell.level > maxLevel) return false
+  const min = opts && opts.cantrips ? 0 : 1
+  if (spell.level < min || spell.level > maxLevel) return false
   return true
+}
+
+function knownSpellNeed(picks, level) {
+  if (!picks || !level) return 0
+  if (picks.byLevel) return picks.byLevel[level] || 0
+  const start = picks.start || 1
+  if (level < start) return 0
+  let need = picks[start] || picks[1] || 0
+  for (let L = start + 1; L <= level; L++) need += picks.later || 0
+  return need
+}
+
+function spellPicksOf(classDef, subclassId) {
+  const sub = ((classDef && classDef.subclasses) || []).filter(s => s.id === subclassId)[0]
+  return (sub && sub.spellPicks) || (classDef && classDef.spellPicks) || null
 }
 
 function togglePick(arr, id, need) {
@@ -192,11 +213,9 @@ function pendingFor(character, classDef, catalogs) {
       pending.push({ id: 'asi-' + L, type: 'asi', level: L })
     }
   }
-  const picks = classDef && classDef.spellPicks
+  const picks = spellPicksOf(classDef, character.subclass)
   if (picks) {
-    let need = 0
-    if (level >= 1) need += picks[1] || 0
-    for (let L = 2; L <= level; L++) need += picks.later || 0
+    const need = knownSpellNeed(picks, level)
     const have = (character.spells || []).length
     const missing = need - have
     if (missing > 0) pending.push({ id: 'spells', type: 'spells', count: missing })
@@ -385,9 +404,9 @@ function checklistFor(character, data) {
   if ((cls.asiLevels || []).includes(next)) {
     items.push({ id: 'asi-' + next, type: 'asi', level: next })
   }
-  if (cls.spellPicks && (cls.spellPicks.later || 0) > 0) {
-    items.push({ id: 'spells', type: 'spells', count: cls.spellPicks.later })
-  }
+  const picks = spellPicksOf(cls, character.subclass)
+  const gained = knownSpellNeed(picks, next) - knownSpellNeed(picks, character.level)
+  if (gained > 0) items.push({ id: 'spells', type: 'spells', count: gained })
   if (data.choices) {
     const probe = Object.assign({}, character, { level: next })
     for (const cat of Object.values(data.choices)) {
@@ -535,6 +554,9 @@ const Rules = {
   slotsFor,
   maxSlotLevel,
   canLearnSpell,
+  spellListClass,
+  knownSpellNeed,
+  spellPicksOf,
   togglePick,
   pendingFor,
   createCharacter,
