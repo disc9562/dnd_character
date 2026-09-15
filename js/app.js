@@ -372,7 +372,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v51</p>
+    <p class="mast">冒險者紀錄 · v52</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -623,7 +623,27 @@ function comboSelected(key) {
 }
 
 function comboTagsOf(key) {
-  return comboTag[key] || { ring: '', school: '' }
+  return comboTag[key] || { ring: '', school: '', dmg: '' }
+}
+
+function inferDmg(s) {
+  const t = (s.name || '') + (s.text || '')
+  const keys = ['火焰', '寒冷', '閃電', '強酸', '毒素', '雷鳴', '力場', '光耀', '心靈']
+  for (let i = 0; i < keys.length; i++) if (t.indexOf(keys[i]) >= 0) return keys[i]
+  if (/死靈/.test(s.text || '')) return '死靈'
+  return ''
+}
+
+function tagTone(val) {
+  const map = {
+    '防護': 't-abj', '咒法': 't-con', '預言': 't-div', '惑控': 't-enc',
+    '塑能': 't-evo', '幻術': 't-ill', '死靈': 't-nec', '變化': 't-tra',
+    '火焰': 't-fire', '寒冷': 't-cold', '閃電': 't-lit', '強酸': 't-acid',
+    '毒素': 't-poi', '雷鳴': 't-thu', '力場': 't-for', '光耀': 't-rad', '心靈': 't-psy',
+    '戲法': 't-r0', '1環': 't-r1', '2環': 't-r2', '3環': 't-r3', '4環': 't-r4',
+    '5環': 't-r5', '6環': 't-r6', '7環': 't-r7', '8環': 't-r8', '9環': 't-r9'
+  }
+  return map[val] || ''
 }
 
 function comboFilter(items, q, exclude, key) {
@@ -633,13 +653,18 @@ function comboFilter(items, q, exclude, key) {
     if (exclude && exclude.indexOf(it.id) >= 0) return false
     if (tags.ring && it.hint !== tags.ring) return false
     if (tags.school && it.school !== tags.school) return false
+    if (tags.dmg && it.dmg !== tags.dmg) return false
     if (!s) return true
-    return (it.name + ' ' + (it.nameEn || '') + ' ' + it.id + ' ' + (it.hint || '') + ' ' + (it.school || '') + ' ' + (it.text || '')).toLowerCase().indexOf(s) >= 0
+    return (it.name + ' ' + (it.nameEn || '') + ' ' + it.id + ' ' + (it.hint || '') + ' ' + (it.school || '') + ' ' + (it.dmg || '') + ' ' + (it.text || '')).toLowerCase().indexOf(s) >= 0
   })
 }
 
 function comboOptInner(it) {
-  return `<span class="pick-name">${esc(it.name)}</span>${it.hint ? `<span class="pick-ring">${esc(it.hint)}</span>` : ''}${it.text ? `<span class="pick-body">${esc(it.text)}</span>` : ''}`
+  const bits = []
+  if (it.hint) bits.push(`<span class="tag mini ${tagTone(it.hint)}">${esc(it.hint)}</span>`)
+  if (it.school) bits.push(`<span class="tag mini ${tagTone(it.school)}">${esc(it.school)}</span>`)
+  if (it.dmg) bits.push(`<span class="tag mini ${tagTone(it.dmg)}">${esc(it.dmg)}</span>`)
+  return `<span class="pick-name">${esc(it.name)}</span><span class="pick-flags">${bits.join('')}</span>${it.text ? `<span class="pick-body">${esc(it.text)}</span>` : ''}`
 }
 
 function comboTagHtml(key, items) {
@@ -647,9 +672,11 @@ function comboTagHtml(key, items) {
   const tags = comboTagsOf(key)
   const rings = []
   const schools = []
+  const dmgs = []
   for (const it of items) {
     if (it.hint && rings.indexOf(it.hint) < 0) rings.push(it.hint)
     if (it.school && schools.indexOf(it.school) < 0) schools.push(it.school)
+    if (it.dmg && dmgs.indexOf(it.dmg) < 0) dmgs.push(it.dmg)
   }
   rings.sort((a, b) => {
     const na = a === '戲法' ? 0 : parseInt(a, 10) || 99
@@ -658,9 +685,10 @@ function comboTagHtml(key, items) {
   })
   const btn = (kind, val) => {
     const on = tags[kind] === val
-    return `<button type="button" class="tag${on ? ' on' : ''}" data-act="combotag" data-key="${esc(key)}" data-kind="${kind}" data-val="${esc(val)}">${esc(val)}</button>`
+    const tone = tagTone(val)
+    return `<button type="button" class="tag${tone ? ' ' + tone : ''}${on ? ' on' : ''}" data-act="combotag" data-key="${esc(key)}" data-kind="${kind}" data-val="${esc(val)}">${esc(val)}</button>`
   }
-  return `<div class="combo-tags">${rings.map(v => btn('ring', v)).join('')}</div><div class="combo-tags">${schools.map(v => btn('school', v)).join('')}</div>`
+  return `<div class="combo-tags">${rings.map(v => btn('ring', v)).join('')}</div><div class="combo-tags">${schools.map(v => btn('school', v)).join('')}</div>${dmgs.length ? `<div class="combo-tags">${dmgs.map(v => btn('dmg', v)).join('')}</div>` : ''}`
 }
 
 function comboListHtml(key, items, q, exclude) {
@@ -714,7 +742,7 @@ function spellPickItems(c, opts) {
     return Rules.canLearnSpell(data.spells[id], listClass, max, { cantrips, subclass: sub })
   }).map(id => {
     const s = data.spells[id]
-    return { id, name: s.name, nameEn: s.nameEn || '', hint: s.level === 0 ? '戲法' : s.level + '環', school: s.school || '', text: s.text }
+    return { id, name: s.name, nameEn: s.nameEn || '', hint: s.level === 0 ? '戲法' : s.level + '環', school: s.school || '', dmg: inferDmg(s), text: s.text }
   })
 }
 
@@ -989,7 +1017,7 @@ el.addEventListener('click', e => {
     const key = btn.dataset.key
     const kind = btn.dataset.kind
     const val = btn.dataset.val
-    comboTag[key] = comboTag[key] || { ring: '', school: '' }
+    comboTag[key] = comboTag[key] || { ring: '', school: '', dmg: '' }
     comboTag[key][kind] = comboTag[key][kind] === val ? '' : val
     comboOpen = key
     const box = btn.closest('.combo')

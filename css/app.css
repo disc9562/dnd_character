@@ -1104,12 +1104,38 @@ textarea.notes-big { min-height: 60vh; margin: 10px 0 12px; }
   border-radius: 999px;
   background: rgba(255, 250, 238, .55);
   font-size: 13px;
+  font-weight: 700;
 }
-.tag.on {
-  background: var(--rubric);
-  color: var(--gold-lit);
-  border-color: var(--gold);
-}
+.tag.mini { min-height: 22px; padding: 1px 8px; font-size: 11px; pointer-events: none; }
+.pick-flags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.tag.on { outline: 2px solid var(--ink); outline-offset: 1px; filter: brightness(1.08); }
+.t-abj { background: #93c5fd; color: #1e3a8a; border-color: #3b82f6; }
+.t-con { background: #fde68a; color: #78350f; border-color: #eab308; }
+.t-div { background: #67e8f9; color: #164e63; border-color: #06b6d4; }
+.t-enc { background: #f9a8d4; color: #831843; border-color: #ec4899; }
+.t-evo { background: #fca5a5; color: #7f1d1d; border-color: #ef4444; }
+.t-ill { background: #d8b4fe; color: #581c87; border-color: #a855f7; }
+.t-nec { background: #86efac; color: #14532d; border-color: #22c55e; }
+.t-tra { background: #fdba74; color: #7c2d12; border-color: #f97316; }
+.t-fire { background: #f97316; color: #fff7ed; border-color: #c2410c; }
+.t-cold { background: #38bdf8; color: #0c4a6e; border-color: #0284c7; }
+.t-lit { background: #c4b5fd; color: #2e1065; border-color: #8b5cf6; }
+.t-acid { background: #a3e635; color: #365314; border-color: #65a30d; }
+.t-poi { background: #84cc16; color: #1a2e05; border-color: #4d7c0f; }
+.t-thu { background: #818cf8; color: #1e1b4b; border-color: #6366f1; }
+.t-for { background: #e879f9; color: #4a044e; border-color: #c026d3; }
+.t-rad { background: #fde047; color: #713f12; border-color: #eab308; }
+.t-psy { background: #f472b6; color: #500724; border-color: #db2777; }
+.t-r0 { background: #e7e5e4; color: #44403c; border-color: #a8a29e; }
+.t-r1 { background: #bbf7d0; color: #14532d; border-color: #22c55e; }
+.t-r2 { background: #bfdbfe; color: #1e3a8a; border-color: #3b82f6; }
+.t-r3 { background: #ddd6fe; color: #4c1d95; border-color: #8b5cf6; }
+.t-r4 { background: #fecaca; color: #7f1d1d; border-color: #ef4444; }
+.t-r5 { background: #fde68a; color: #78350f; border-color: #f59e0b; }
+.t-r6 { background: #fdba74; color: #7c2d12; border-color: #ea580c; }
+.t-r7 { background: #c4b5fd; color: #2e1065; border-color: #7c3aed; }
+.t-r8 { background: #f9a8d4; color: #831843; border-color: #db2777; }
+.t-r9 { background: #fafafa; color: #171717; border-color: #737373; }
 .combo-list {
   list-style: none;
   margin: 4px 0 0;
