@@ -1,4 +1,4 @@
-const CACHE = 'dnd5e-pwa-v58'
+const CACHE = 'dnd5e-pwa-v59'
 const ASSETS = [
   './',
   './index.html',
@@ -37,12 +37,23 @@ self.addEventListener('activate', event => {
 })
 
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(hit => {
-      if (hit) return hit
-      return fetch(event.request).then(res => {
+  const req = event.request
+  if (req.mode === 'navigate') {
+    event.respondWith(
+      fetch(req).then(res => {
         const copy = res.clone()
-        caches.open(CACHE).then(cache => cache.put(event.request, copy))
+        caches.open(CACHE).then(cache => cache.put(req, copy))
+        return res
+      }).catch(() => caches.match('./index.html'))
+    )
+    return
+  }
+  event.respondWith(
+    caches.match(req).then(hit => {
+      if (hit) return hit
+      return fetch(req).then(res => {
+        const copy = res.clone()
+        caches.open(CACHE).then(cache => cache.put(req, copy))
         return res
       }).catch(() => caches.match('./index.html'))
     })
