@@ -457,6 +457,25 @@ input, select {
   border-radius: var(--r);
   font-size: 16px;
 }
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path fill='none' stroke='%23b8902e' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round' d='M1.5 1.5L6 6l4.5-4.5'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px 8px;
+}
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+}
 input:hover, select:hover, textarea:hover { border-color: var(--gold); }
 textarea.notes {
   display: block;
