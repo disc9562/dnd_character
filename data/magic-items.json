@@ -1,0 +1,18 @@
+{
+  "cloak-protection": { "name": "防護斗篷", "text": "AC +1，豁免 +1。", "ac": 1 },
+  "ring-protection": { "name": "防護戒指", "text": "AC +1，豁免 +1。", "ac": 1 },
+  "armor-plus-1": { "name": "護甲 +1", "text": "穿著的護甲 AC +1。", "ac": 1 },
+  "shield-plus-1": { "name": "盾 +1", "text": "持盾時 AC 再 +1。", "ac": 1 },
+  "weapon-plus-1": { "name": "武器 +1", "text": "攻擊與傷害 +1（請自行改攻擊列）。" },
+  "amulet-health": { "name": "健康護符", "text": "體質視為 19。" },
+  "bag-holding": { "name": "次元袋", "text": "額外空間裝東西。" },
+  "boots-striding": { "name": "疾行靴", "text": "速度不受護甲降低；難地形不減速。" },
+  "bracers-archery": { "name": "射術護腕", "text": "遠程攻擊 +2 傷害。" },
+  "cloak-elvenkind": { "name": "精靈斗篷", "text": "躲藏時敏捷（潛行）有優勢。" },
+  "gauntlets-ogre": { "name": "食人魔力手套", "text": "力量視為 19。" },
+  "headband-intellect": { "name": "智力頭帶", "text": "智力視為 19。" },
+  "potion-healing": { "name": "治療藥水", "text": "動作喝下回復 2d4+2。" },
+  "potion-greater-healing": { "name": "強力治療藥水", "text": "動作喝下回復 4d4+4。" },
+  "ring-evasion": { "name": "閃避戒指", "text": "敏捷豁免失敗改半傷，成功則不受傷。" },
+  "wand-magic-missiles": { "name": "魔法飛彈魔杖", "text": "7 發，動作射出魔法飛彈。" }
+}

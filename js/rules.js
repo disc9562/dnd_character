@@ -145,7 +145,7 @@ function canLearnSpell(spell, classId, maxLevel, opts) {
   if (spell.level < min || spell.level > maxLevel) return false
   if (!(opts && opts.cantrips)) {
     const schools = subclassSchools(opts && opts.subclass)
-    if (schools && schools.indexOf(spell.school) < 0) return false
+    if (schools && schools.indexOf(spell.school) < 0 && !(opts && opts.allowOffSchool)) return false
   }
   return true
 }
@@ -158,6 +158,100 @@ function knownSpellNeed(picks, level) {
   let need = picks[start] || picks[1] || 0
   for (let L = start + 1; L <= level; L++) need += picks.later || 0
   return need
+}
+
+function anySchoolCap(level) {
+  if (level >= 20) return 4
+  if (level >= 14) return 3
+  if (level >= 8) return 2
+  if (level >= 3) return 1
+  return 0
+}
+
+function offSchoolCount(character, data, schools) {
+  let n = 0
+  const spells = data && data.spells
+  for (const id of character.spells || []) {
+    const s = spells && spells[id]
+    if (!s || s.level < 1) continue
+    if (schools.indexOf(s.school) < 0) n++
+  }
+  return n
+}
+
+function resourceDefs(character) {
+  const L = character.level || 1
+  const sub = character.subclass
+  const cha = abilityMod((character.abilities && character.abilities.cha) || 10)
+  const out = []
+  const add = (id, name, rest, max) => { if (max > 0) out.push({ id, name, rest, max }) }
+  const id = character.class
+  if (id === 'barbarian') add('rage', '狂暴', 'longRest', L >= 17 ? 6 : L >= 12 ? 5 : L >= 6 ? 4 : L >= 3 ? 3 : 2)
+  if (id === 'bard') add('bardic-inspiration', '詩人激勵', L >= 5 ? 'shortRest' : 'longRest', Math.max(1, cha))
+  if (id === 'cleric' && L >= 2) add('channel-divinity', '引導神力', 'shortRest', L >= 18 ? 3 : L >= 6 ? 2 : 1)
+  if (id === 'fighter') {
+    add('second-wind', '重整旗鼓', 'shortRest', 1)
+    add('action-surge', '動作如潮', 'shortRest', L >= 17 ? 2 : 1)
+    if (sub === 'battlemaster' && L >= 3) add('superiority', '優越骰', 'shortRest', L >= 15 ? 6 : L >= 7 ? 5 : 4)
+  }
+  if (id === 'monk' && L >= 2) add('ki', '氣', 'shortRest', L)
+  if (id === 'paladin') {
+    add('lay-on-hands', '聖療', 'longRest', 5 * L)
+    if (L >= 3) add('channel-divinity', '引導神力', 'shortRest', 1)
+  }
+  if (id === 'sorcerer') add('sorcery-points', '術法點', 'longRest', L)
+  return out
+}
+
+function syncResources(character) {
+  const next = clone(character)
+  const old = {}
+  for (const r of next.resources || []) old[r.id] = r
+  next.resources = resourceDefs(next).map(d => ({
+    id: d.id,
+    name: d.name,
+    rest: d.rest,
+    max: d.max,
+    used: Math.min((old[d.id] && old[d.id].used) || 0, d.max)
+  }))
+  return next
+}
+
+function armorProf(classId, subclass) {
+  const map = {
+    barbarian: ['light', 'medium', 'shield'],
+    bard: ['light'],
+    cleric: ['light', 'medium', 'shield'],
+    druid: ['light', 'medium', 'shield'],
+    fighter: ['light', 'medium', 'heavy', 'shield'],
+    monk: [],
+    paladin: ['light', 'medium', 'heavy', 'shield'],
+    ranger: ['light', 'medium', 'shield'],
+    rogue: ['light'],
+    sorcerer: [],
+    warlock: ['light'],
+    wizard: []
+  }
+  const prof = (map[classId] || []).slice()
+  if (subclass === 'war' || subclass === 'tempest' || subclass === 'forge' || subclass === 'life') {
+    if (subclass !== 'life' && prof.indexOf('heavy') < 0) prof.push('heavy')
+  }
+  if (subclass === 'valor' && prof.indexOf('medium') < 0) {
+    prof.push('medium')
+    if (prof.indexOf('shield') < 0) prof.push('shield')
+  }
+  return prof
+}
+
+function canWearArmor(character, armorId, data) {
+  if (!armorId) return true
+  const arm = data && data.equipment && data.equipment.armor && data.equipment.armor[armorId]
+  if (!arm) return false
+  return armorProf(character.class, character.subclass).indexOf(arm.type) >= 0
+}
+
+function canUseShield(character) {
+  return armorProf(character.class, character.subclass).indexOf('shield') >= 0
 }
 
 function spellPicksOf(classDef, subclassId) {
@@ -298,7 +392,7 @@ function createCharacter(input, data) {
     initiative: dexMod,
     saves,
     skillProf: [],
-    resources: (cls.resources || []).map(r => ({ id: r.id, name: r.name, rest: r.rest, used: 0, max: r.max || 1 })),
+    resources: resourceDefs({ class: input.class, level: input.level, subclass: null, abilities }).map(d => ({ id: d.id, name: d.name, rest: d.rest, max: d.max, used: 0 })),
     conditions: [],
     deathSaves: { success: 0, fail: 0 },
     asiTaken: [],
@@ -308,6 +402,7 @@ function createCharacter(input, data) {
     gear: [],
     armor: null,
     shield: false,
+    magicItems: [],
     choices: {}
   }
   character.pendingChoices = pendingFor(character, cls, data.choices, data.spells)
@@ -333,6 +428,7 @@ function setSubclass(character, subclassId, data) {
   next.subclass = subclassId || null
   next.pendingChoices = pendingFor(next, cls, data.choices, data.spells)
   next.spellSlots = mergeSlots(next.spellSlots, slotsFor(casterOf(cls, next.subclass), next.level))
+  next.resources = syncResources(next).resources
   return next
 }
 
@@ -476,20 +572,44 @@ function acFor(character, equipment) {
     }
   }
   if (character.shield) ac += 2
+  const magic = arguments[2]
+  for (const id of character.magicItems || []) {
+    const it = magic && magic[id]
+    if (it && it.ac) ac += it.ac
+  }
   return ac
 }
 
 function setArmor(character, armorId, data) {
+  if (armorId && !canWearArmor(character, armorId, data)) return character
   const next = clone(character)
   next.armor = armorId || null
-  next.ac = acFor(next, data && data.equipment)
+  next.ac = acFor(next, data && data.equipment, data && data.magicItems)
   return next
 }
 
 function setShield(character, on, data) {
+  if (on && !canUseShield(character)) return character
   const next = clone(character)
   next.shield = !!on
-  next.ac = acFor(next, data && data.equipment)
+  next.ac = acFor(next, data && data.equipment, data && data.magicItems)
+  return next
+}
+
+function addMagicItem(character, itemId, data) {
+  const it = data && data.magicItems && data.magicItems[itemId]
+  if (!it) return character
+  const next = clone(character)
+  next.magicItems = (next.magicItems || []).concat([itemId])
+  next.ac = acFor(next, data.equipment, data.magicItems)
+  return next
+}
+
+function removeMagicItem(character, index, data) {
+  const next = clone(character)
+  next.magicItems = (next.magicItems || []).slice()
+  next.magicItems.splice(Number(index), 1)
+  next.ac = acFor(next, data && data.equipment, data && data.magicItems)
   return next
 }
 
@@ -587,6 +707,7 @@ function applyLevelUp(character, checkedIds, data, opts) {
     next.asiTaken = (next.asiTaken || []).concat([newLevel])
   }
   next.pendingChoices = pendingFor(next, cls, data.choices, data.spells)
+  next.resources = syncResources(next).resources
   return { ok: true, character: next }
 }
 
@@ -723,7 +844,16 @@ const Rules = {
   acFor,
   setArmor,
   setShield,
-  addWeapon
+  addWeapon,
+  syncResources,
+  resourceDefs,
+  armorProf,
+  canWearArmor,
+  canUseShield,
+  anySchoolCap,
+  offSchoolCount,
+  addMagicItem,
+  removeMagicItem
 }
 
 if (typeof module !== 'undefined') module.exports = Rules

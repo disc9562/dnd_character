@@ -65,7 +65,8 @@ function packFor(year) {
       choices: data.choices || {},
       equipment: data.equipment || {},
       prepared: data.prepared || {},
-      subclassFeatures: data.subclassFeatures || {}
+      subclassFeatures: data.subclassFeatures || {},
+      magicItems: data.magicItems || {}
     }
   }
   return {
@@ -77,7 +78,8 @@ function packFor(year) {
     choices: data.choices || {},
     equipment: data.equipment || {},
     prepared: data.prepared || {},
-    subclassFeatures: data.subclassFeatures || {}
+    subclassFeatures: data.subclassFeatures || {},
+    magicItems: data.magicItems || {}
   }
 }
 
@@ -375,7 +377,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v59</p>
+    <p class="mast">冒險者紀錄 · v60</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -463,10 +465,15 @@ function combatHtml(c) {
         <details class="fold" data-fold="eq"${foldOpen.eq ? ' open' : ''}>
           <summary>裝備</summary>
           <label class="field">護甲
-            ${c.locked ? `<p>${esc(((pack.equipment && pack.equipment.armor && pack.equipment.armor[c.armor]) || { name: '無' }).name)}</p>` : comboHtml('armor', Object.keys((pack.equipment && pack.equipment.armor) || {}).map(id => ({ id, name: pack.equipment.armor[id].name, hint: 'AC ' + pack.equipment.armor[id].ac })), c.armor ? [c.armor] : [], '搜尋護甲…')}
+            ${c.locked ? `<p>${esc(((pack.equipment && pack.equipment.armor && pack.equipment.armor[c.armor]) || { name: '無' }).name)}</p>` : comboHtml('armor', Object.keys((pack.equipment && pack.equipment.armor) || {}).filter(id => Rules.canWearArmor(c, id, pack)).map(id => ({ id, name: pack.equipment.armor[id].name, hint: 'AC ' + pack.equipment.armor[id].ac })), c.armor ? [c.armor] : [], '搜尋護甲（僅熟練）…')}
           </label>
-          <label class="chk"><input type="checkbox" data-act="shield" ${c.shield ? 'checked' : ''}${lock}>盾牌（AC +2）</label>
+          ${Rules.canUseShield(c) ? `<label class="chk"><input type="checkbox" data-act="shield" ${c.shield ? 'checked' : ''}${lock}>盾牌（AC +2）</label>` : '<p class="muted">沒有盾牌熟練</p>'}
           ${c.locked ? '' : comboHtml('weapon', Object.keys((pack.equipment && pack.equipment.weapons) || {}).map(id => ({ id, name: pack.equipment.weapons[id].name, hint: pack.equipment.weapons[id].damage })), [], '加入武器到攻擊…')}
+          ${c.locked ? '' : comboHtml('magic', Object.keys(pack.magicItems || {}).map(id => ({ id, name: pack.magicItems[id].name, text: pack.magicItems[id].text })), [], '加入魔法物品…')}
+          ${((c.magicItems || []).map((id, i) => {
+            const it = (pack.magicItems || {})[id]
+            return `<div class="spell-line"><button class="big grow">${esc(it ? it.name : id)}${it && it.text ? `<p class="spell-text">${esc(it.text)}</p>` : ''}</button><button class="icon lockable" data-act="delmagic" data-i="${i}"${lock}>×</button></div>`
+          }).join(''))}
         </details>
         <details class="fold" data-fold="pack"${foldOpen.pack ? ' open' : ''}>
           <summary>錢幣／背包</summary>
@@ -764,7 +771,9 @@ function spellPickItems(c, opts) {
     if ((c.spells || []).indexOf(id) >= 0) return false
     if ((c.cantrips || []).indexOf(id) >= 0) return false
     if (auto.indexOf(id) >= 0) return false
-    return Rules.canLearnSpell(data.spells[id], listClass, max, { cantrips, subclass: sub })
+    const schools = Rules.subclassSchools(sub)
+    const allowOff = !!(schools && Rules.offSchoolCount(c, pack, schools) < Rules.anySchoolCap(lv))
+    return Rules.canLearnSpell(data.spells[id], listClass, max, { cantrips, subclass: sub, allowOffSchool: allowOff })
   }).map(id => {
     const s = data.spells[id]
     return { id, name: s.name, nameEn: s.nameEn || '', hint: s.level === 0 ? '戲法' : s.level + '環', school: s.school || '', dmg: inferDmg(s), metas: inferMeta(s), text: s.text }
@@ -787,6 +796,10 @@ function comboItemsFor(key) {
   if (key === 'weapon') {
     const wpn = (pack.equipment && pack.equipment.weapons) || {}
     return Object.keys(wpn).map(id => ({ id, name: wpn[id].name, hint: wpn[id].damage }))
+  }
+  if (key === 'magic') {
+    const mag = pack.magicItems || {}
+    return Object.keys(mag).map(id => ({ id, name: mag[id].name, text: mag[id].text }))
   }
   if (key === 'feat' || key === 'pickfeat') {
     return Object.keys(data.feats || {}).map(id => {
@@ -1082,6 +1095,7 @@ el.addEventListener('click', e => {
       }
       if (key === 'armor') { comboQ[key] = ''; comboOpen = ''; replace(Rules.setArmor(c, id, packFor(c.ruleset))); return }
       if (key === 'weapon') { comboQ[key] = ''; comboOpen = ''; replace(Rules.addWeapon(c, id, packFor(c.ruleset))); return }
+      if (key === 'magic') { comboQ[key] = ''; comboOpen = ''; replace(Rules.addMagicItem(c, id, packFor(c.ruleset))); return }
       if (key === 'feat') {
         comboQ[key] = ''
         comboOpen = ''
@@ -1155,6 +1169,10 @@ el.addEventListener('click', e => {
     const keys = Object.keys((c.spellSlots || {})).map(Number).filter(n => !Number.isNaN(n))
     const nextK = keys.length ? Math.max.apply(null, keys) + 1 : 1
     replace(Rules.setSlotMax(c, nextK, 1))
+    return
+  }
+  if (act === 'delmagic') {
+    replace(Rules.removeMagicItem(c, btn.dataset.i, packFor(c.ruleset)))
     return
   }
   if (act === 'addgear') {
@@ -1454,7 +1472,7 @@ el.addEventListener('change', e => {
 
 async function boot() {
   try {
-    const [races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures] = await Promise.all([
+    const [races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures, magicItems] = await Promise.all([
       fetch('data/races.json').then(r => r.json()),
       fetch('data/classes.json').then(r => r.json()),
       fetch('data/spells.json').then(r => r.json()),
@@ -1465,9 +1483,10 @@ async function boot() {
       fetch('data/choices.json').then(r => r.json()),
       fetch('data/equipment.json').then(r => r.json()),
       fetch('data/prepared.json').then(r => r.json()),
-      fetch('data/subclass-features.json').then(r => r.json())
+      fetch('data/subclass-features.json').then(r => r.json()),
+      fetch('data/magic-items.json').then(r => r.json())
     ])
-    data = { races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures }
+    data = { races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures, magicItems }
     state = Store.loadState(localStorage)
     view = current() ? 'combat' : 'create'
     render()

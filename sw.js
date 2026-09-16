@@ -1,4 +1,4 @@
-const CACHE = 'dnd5e-pwa-v59'
+const CACHE = 'dnd5e-pwa-v60'
 const ASSETS = [
   './',
   './index.html',
@@ -18,6 +18,7 @@ const ASSETS = [
   './data/equipment.json',
   './data/prepared.json',
   './data/subclass-features.json',
+  './data/magic-items.json',
   './data/scripts/avernus.json',
   './icon.svg',
   './manifest.webmanifest'
