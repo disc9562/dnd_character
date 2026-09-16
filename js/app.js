@@ -312,7 +312,10 @@ function combatHtml(c) {
   const featAdd = c.locked ? '' : comboHtml('feat', featItems, [], '搜尋專長…')
   const subCombo = c.locked
     ? `<p>${esc(((cls.subclasses || []).filter(s => s.id === c.subclass)[0] || { name: '未選' }).name)}</p>`
-    : comboHtml('subclass-live', (cls.subclasses || []).map(s => ({ id: s.id, name: s.name })), c.subclass ? [c.subclass] : [], '搜尋副職業…')
+    : comboHtml('subclass-live', (cls.subclasses || []).map(s => {
+        const feats = ((pack.subclassFeatures || {})[s.id] || []).slice(0, 2)
+        return { id: s.id, name: s.name, text: feats.map(f => f.name + '：' + f.text).join(' ') }
+      }), c.subclass ? [c.subclass] : [], '搜尋副職業…')
   const slotRows = Object.keys(c.spellSlots || {}).sort((a, b) => Number(a) - Number(b)).map(k => {
     const sl = c.spellSlots[k]
     const sp = slotSpent(sl)
@@ -372,7 +375,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v56</p>
+    <p class="mast">冒險者紀錄 · v57</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
@@ -793,7 +796,10 @@ function comboItemsFor(key) {
   }
   if (key === 'subclass' || key === 'subclass-live') {
     const cls = pack.classes[(c && c.class)] || {}
-    return (cls.subclasses || []).map(s => ({ id: s.id, name: s.name }))
+    return (cls.subclasses || []).map(s => {
+      const feats = ((pack.subclassFeatures || {})[s.id] || []).slice(0, 2)
+      return { id: s.id, name: s.name, text: feats.map(f => f.name + '：' + f.text).join(' ') }
+    })
   }
   if (key.slice(0, 7) === 'choice:') {
     const cat = (pack.choices || {})[key.slice(7)]
@@ -908,6 +914,13 @@ function levelHtml(c) {
 
 el.addEventListener('click', e => {
   const t = e.target
+  if (comboOpen && !t.closest('.combo')) {
+    comboOpen = ''
+    if (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || !t.closest('[data-act]')) {
+      render()
+      return
+    }
+  }
   if (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA') return
   const btn = t.closest('[data-act]')
   if (!btn) return
@@ -1067,16 +1080,17 @@ el.addEventListener('click', e => {
         replace(next)
         return
       }
-      if (key === 'armor') { comboQ[key] = ''; replace(Rules.setArmor(c, id, packFor(c.ruleset))); return }
-      if (key === 'weapon') { comboQ[key] = ''; replace(Rules.addWeapon(c, id, packFor(c.ruleset))); return }
+      if (key === 'armor') { comboQ[key] = ''; comboOpen = ''; replace(Rules.setArmor(c, id, packFor(c.ruleset))); return }
+      if (key === 'weapon') { comboQ[key] = ''; comboOpen = ''; replace(Rules.addWeapon(c, id, packFor(c.ruleset))); return }
       if (key === 'feat') {
         comboQ[key] = ''
+        comboOpen = ''
         const next = JSON.parse(JSON.stringify(c))
         next.feats = (next.feats || []).concat([id])
         replace(next)
         return
       }
-      if (key === 'subclass-live') { comboQ[key] = ''; replace(Rules.setSubclass(c, id, packFor(c.ruleset))); return }
+      if (key === 'subclass-live') { comboQ[key] = ''; comboOpen = ''; replace(Rules.setSubclass(c, id, packFor(c.ruleset))); return }
       if (key === 'subclass') { comboQ[key] = ''; pickSubclass = id; comboOpen = ''; render(); return }
       if (key === 'pickfeat') { comboQ[key] = ''; pickFeat = id; comboOpen = ''; render(); return }
       if (key === 'pickspell') {
