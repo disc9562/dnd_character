@@ -10,11 +10,23 @@
       },
       {
         "class": "ranger",
-        "level": 2
+        "level": 2,
+        "ruleset": "2014"
       },
       {
         "class": "paladin",
-        "level": 2
+        "level": 2,
+        "ruleset": "2014"
+      },
+      {
+        "class": "ranger",
+        "level": 1,
+        "ruleset": "2024"
+      },
+      {
+        "class": "paladin",
+        "level": 1,
+        "ruleset": "2024"
       }
     ],
     "options": [
@@ -989,6 +1001,76 @@
         "id": "wis",
         "name": "感知 +1",
         "text": "感知分數 +1。"
+      }
+    ]
+  },
+  "weapon-mastery": {
+    "id": "weapon-mastery",
+    "name": "武器專精",
+    "pick": 2,
+    "ruleset": "2024",
+    "when": [
+      {
+        "class": "barbarian",
+        "level": 1
+      },
+      {
+        "class": "fighter",
+        "level": 1
+      },
+      {
+        "class": "paladin",
+        "level": 1
+      },
+      {
+        "class": "ranger",
+        "level": 1
+      },
+      {
+        "class": "rogue",
+        "level": 1
+      }
+    ],
+    "options": [
+      {
+        "id": "vex",
+        "name": "擾敵",
+        "text": "命中後，你對該目標的下次攻擊有優勢。"
+      },
+      {
+        "id": "topple",
+        "name": "擊倒",
+        "text": "命中後可令目標力量豁免，失敗則倒地。"
+      },
+      {
+        "id": "nick",
+        "name": "輕擊",
+        "text": "輕型武器的額外攻擊不佔用附贈動作。"
+      },
+      {
+        "id": "sap",
+        "name": "削弱",
+        "text": "命中後，目標下次攻擊檢定有劣勢。"
+      },
+      {
+        "id": "slow",
+        "name": "緩速",
+        "text": "命中後目標速度 −10 呎（疊加有上限）。"
+      },
+      {
+        "id": "push",
+        "name": "推撞",
+        "text": "命中後可把目標推開 10 呎。"
+      },
+      {
+        "id": "graze",
+        "name": "擦擊",
+        "text": "未命中仍造成等於能力調整值的傷害。"
+      },
+      {
+        "id": "cleave",
+        "name": "橫掃",
+        "text": "命中後可對旁邊另一個目標再打一下。"
       }
     ]
   }

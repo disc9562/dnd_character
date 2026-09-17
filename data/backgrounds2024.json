@@ -1,0 +1,18 @@
+{
+  "acolyte": { "name": "侍僧", "abilities": ["int", "wis", "cha"], "feat": "magic-initiate", "skills": ["insight", "religion"] },
+  "artisan": { "name": "工匠", "abilities": ["str", "dex", "int"], "feat": "crafter", "skills": ["investigation", "persuasion"] },
+  "charlatan": { "name": "騙子", "abilities": ["dex", "con", "cha"], "feat": "skilled", "skills": ["deception", "sleight-of-hand"] },
+  "criminal": { "name": "罪犯", "abilities": ["dex", "con", "int"], "feat": "alert", "skills": ["sleight-of-hand", "stealth"] },
+  "entertainer": { "name": "藝人", "abilities": ["str", "dex", "cha"], "feat": "musician", "skills": ["acrobatics", "performance"] },
+  "farmer": { "name": "農夫", "abilities": ["str", "con", "wis"], "feat": "tough", "skills": ["animal-handling", "nature"] },
+  "guard": { "name": "衛兵", "abilities": ["str", "int", "wis"], "feat": "alert", "skills": ["athletics", "perception"] },
+  "guide": { "name": "嚮導", "abilities": ["dex", "con", "wis"], "feat": "magic-initiate", "skills": ["stealth", "survival"] },
+  "hermit": { "name": "隱士", "abilities": ["con", "wis", "cha"], "feat": "healer", "skills": ["medicine", "religion"] },
+  "merchant": { "name": "商人", "abilities": ["con", "int", "cha"], "feat": "lucky", "skills": ["animal-handling", "persuasion"] },
+  "noble": { "name": "貴族", "abilities": ["str", "int", "cha"], "feat": "skilled", "skills": ["history", "persuasion"] },
+  "sage": { "name": "學者", "abilities": ["con", "int", "wis"], "feat": "magic-initiate", "skills": ["arcana", "history"] },
+  "sailor": { "name": "水手", "abilities": ["str", "dex", "wis"], "feat": "tavern-brawler", "skills": ["acrobatics", "perception"] },
+  "scribe": { "name": "書記", "abilities": ["dex", "int", "wis"], "feat": "skilled", "skills": ["investigation", "perception"] },
+  "soldier": { "name": "士兵", "abilities": ["str", "dex", "con"], "feat": "savage-attacker", "skills": ["athletics", "intimidation"] },
+  "wayfarer": { "name": "旅人", "abilities": ["dex", "wis", "cha"], "feat": "lucky", "skills": ["insight", "stealth"] }
+}

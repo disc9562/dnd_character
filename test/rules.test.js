@@ -434,4 +434,61 @@ assert.equal(R.canLearnSpell(real.spells['charm-person'], 'wizard', 1, { subclas
 real.magicItems = JSON.parse(fs.readFileSync('data/magic-items.json', 'utf8'))
 const geared2 = R.addMagicItem(R.setArmor(f1, 'chain', real), 'cloak-protection', real)
 assert.equal(geared2.ac, 17)
+const braced = R.addMagicItem(f1, 'bracers-defense', real)
+assert.equal(braced.ac, f1.ac + 2)
+const chained = R.setArmor(f1, 'chain', real)
+const bracedArm = R.addMagicItem(chained, 'bracers-defense', real)
+assert.equal(bracedArm.ac, chained.ac)
+assert.ok(real.magicItems['potion-invisibility'])
+assert.ok(real.magicItems['winged-boots'])
 console.log('choices ok')
+
+const pack24 = Object.assign({}, real, {
+  races: JSON.parse(fs.readFileSync('data/races2024.json', 'utf8')),
+  classes: JSON.parse(fs.readFileSync('data/classes2024.json', 'utf8')),
+  backgrounds: JSON.parse(fs.readFileSync('data/backgrounds2024.json', 'utf8'))
+})
+assert.equal(pack24.classes.fighter.subclasses.filter(s => s.id === 'arcane-archer').length, 0)
+assert.equal(pack24.classes.fighter.subclasses.length, 4)
+assert.equal(pack24.classes.cleric.subclassLevel, 3)
+const pal24 = R.createCharacter({
+  name: '聖', race: 'human', class: 'paladin', level: 1,
+  abilities: { str: 16, dex: 10, con: 14, int: 8, wis: 10, cha: 14 },
+  ruleset: '2024', background: 'soldier'
+}, pack24)
+assert.equal(pal24.abilities.str, 16)
+assert.ok(pal24.feats.indexOf('savage-attacker') >= 0)
+assert.equal(pal24.background, 'soldier')
+assert.equal(pal24.spellSlots['1'].max, 2)
+assert.equal(R.isPreparedCaster('paladin', '2024'), true)
+assert.equal(R.isPreparedCaster('ranger', '2024'), true)
+assert.equal(R.isPreparedCaster('ranger', '2014'), false)
+assert.ok(pal24.resources.some(r => r.id === 'inspiration' && r.max === 1))
+const bard24 = R.createCharacter({
+  name: '詩', race: 'human', class: 'bard', level: 1,
+  abilities: { str: 8, dex: 14, con: 12, int: 10, wis: 10, cha: 16 },
+  ruleset: '2024', background: 'entertainer'
+}, pack24)
+assert.ok(bard24.resources.some(r => r.id === 'bardic-inspiration' && r.max === 2))
+assert.ok(bard24.feats.indexOf('musician') >= 0)
+const cleric24 = R.createCharacter({
+  name: '牧', race: 'human', class: 'cleric', level: 2,
+  abilities: { str: 10, dex: 10, con: 14, int: 8, wis: 16, cha: 12 },
+  hpMax: 16, ruleset: '2024', background: 'acolyte'
+}, pack24)
+assert.ok(cleric24.resources.some(r => r.id === 'channel-divinity' && r.max === 2))
+assert.ok(!cleric24.pendingChoices.some(x => x.type === 'subclass'))
+const wiz2 = R.createCharacter({
+  name: '法', race: 'human', class: 'wizard', level: 2,
+  abilities: { str: 8, dex: 14, con: 13, int: 16, wis: 10, cha: 8 },
+  hpMax: 12, ruleset: '2024', background: 'sage'
+}, pack24)
+assert.ok(!wiz2.pendingChoices.some(x => x.type === 'subclass'))
+const fight24 = R.createCharacter({
+  name: '戰', race: 'human', class: 'fighter', level: 1,
+  abilities: { str: 16, dex: 14, con: 14, int: 8, wis: 10, cha: 10 },
+  ruleset: '2024', background: 'soldier'
+}, pack24)
+assert.ok(fight24.resources.some(r => r.id === 'second-wind' && r.max === 2))
+assert.ok(fight24.pendingChoices.some(x => x.catalog === 'weapon-mastery'))
+console.log('2024 ok')

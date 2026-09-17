@@ -106,7 +106,8 @@ function toSlots(arr) {
   return out
 }
 
-function slotsFor(caster, level) {
+function slotsFor(caster, level, ruleset) {
+  if (caster === 'half' && ruleset === '2024') return toSlots(HALF[Math.min(20, (level || 1) + 1)])
   if (caster === 'full') return toSlots(FULL[level])
   if (caster === 'half') return toSlots(HALF[level])
   if (caster === 'third') return toSlots(THIRD[level])
@@ -117,8 +118,8 @@ function slotsFor(caster, level) {
   return {}
 }
 
-function maxSlotLevel(caster, level) {
-  const slots = slotsFor(caster, level)
+function maxSlotLevel(caster, level, ruleset) {
+  const slots = slotsFor(caster, level, ruleset)
   let m = 0
   for (const k of Object.keys(slots)) {
     const n = Number(k)
@@ -182,24 +183,28 @@ function offSchoolCount(character, data, schools) {
 function resourceDefs(character) {
   const L = character.level || 1
   const sub = character.subclass
+  const y = character.ruleset || '2014'
   const cha = abilityMod((character.abilities && character.abilities.cha) || 10)
+  const pb = proficiencyBonus(L)
   const out = []
   const add = (id, name, rest, max) => { if (max > 0) out.push({ id, name, rest, max }) }
   const id = character.class
+  if (y === '2024') add('inspiration', '英雄激勵', 'longRest', 1)
   if (id === 'barbarian') add('rage', '狂暴', 'longRest', L >= 17 ? 6 : L >= 12 ? 5 : L >= 6 ? 4 : L >= 3 ? 3 : 2)
-  if (id === 'bard') add('bardic-inspiration', '詩人激勵', L >= 5 ? 'shortRest' : 'longRest', Math.max(1, cha))
-  if (id === 'cleric' && L >= 2) add('channel-divinity', '引導神力', 'shortRest', L >= 18 ? 3 : L >= 6 ? 2 : 1)
+  if (id === 'bard') add('bardic-inspiration', '詩人激勵', L >= 5 ? 'shortRest' : 'longRest', y === '2024' ? pb : Math.max(1, cha))
+  if (id === 'cleric' && L >= 2) add('channel-divinity', '引導神力', 'shortRest', y === '2024' ? (L >= 18 ? 4 : L >= 6 ? 3 : 2) : (L >= 18 ? 3 : L >= 6 ? 2 : 1))
   if (id === 'fighter') {
-    add('second-wind', '重整旗鼓', 'shortRest', 1)
+    add('second-wind', '重整旗鼓', y === '2024' ? 'longRest' : 'shortRest', y === '2024' ? (L >= 16 ? 5 : L >= 10 ? 4 : L >= 4 ? 3 : 2) : 1)
     add('action-surge', '動作如潮', 'shortRest', L >= 17 ? 2 : 1)
     if (sub === 'battlemaster' && L >= 3) add('superiority', '優越骰', 'shortRest', L >= 15 ? 6 : L >= 7 ? 5 : 4)
   }
-  if (id === 'monk' && L >= 2) add('ki', '氣', 'shortRest', L)
+  if (id === 'monk' && L >= 2) add('ki', y === '2024' ? '專注' : '氣', 'shortRest', L)
   if (id === 'paladin') {
     add('lay-on-hands', '聖療', 'longRest', 5 * L)
-    if (L >= 3) add('channel-divinity', '引導神力', 'shortRest', 1)
+    if (L >= 3) add('channel-divinity', '引導神力', 'shortRest', y === '2024' ? 2 : 1)
   }
-  if (id === 'sorcerer') add('sorcery-points', '術法點', 'longRest', L)
+  if (id === 'ranger' && y === '2024') add('hunters-mark', '獵人印記', 'longRest', pb)
+  if (id === 'sorcerer' && (y !== '2024' || L >= 2)) add('sorcery-points', '術法點', 'longRest', L)
   return out
 }
 
@@ -293,10 +298,12 @@ function choiceDue(catalog, character) {
   if (!need) return false
   const have = (character.choices && character.choices[catalog.id]) || []
   if (have.length >= need) return false
+  if (catalog.ruleset && catalog.ruleset !== (character.ruleset || '2014')) return false
   return (catalog.when || []).some(w => {
     if (w.race && w.race !== character.race) return false
     if (w.class && w.class !== character.class) return false
     if (w.subclass && w.subclass !== character.subclass) return false
+    if (w.ruleset && w.ruleset !== (character.ruleset || '2014')) return false
     if ((w.level || 1) > character.level) return false
     return true
   })
@@ -318,7 +325,7 @@ function pendingFor(character, classDef, catalogs, spells) {
       pending.push({ id: 'asi-' + L, type: 'asi', level: L })
     }
   }
-  const picks = spellPicksOf(classDef, character.subclass)
+  const picks = isPreparedCaster(character.class, character.ruleset) ? null : spellPicksOf(classDef, character.subclass)
   if (picks) {
     const need = knownSpellNeed(picks, level)
     const have = (character.spells || []).filter(id => {
@@ -380,7 +387,7 @@ function createCharacter(input, data) {
     hp: { current: hp, max: hp },
     hpRolls,
     ac: 10 + dexMod,
-    spellSlots: slotsFor(caster, input.level),
+    spellSlots: slotsFor(caster, input.level, input.ruleset || '2014'),
     spells: [],
     cantrips: [],
     attacks: [{ name: atk.name, bonus: prof + strMod, damage: dmg }],
@@ -392,7 +399,7 @@ function createCharacter(input, data) {
     initiative: dexMod,
     saves,
     skillProf: [],
-    resources: resourceDefs({ class: input.class, level: input.level, subclass: null, abilities }).map(d => ({ id: d.id, name: d.name, rest: d.rest, max: d.max, used: 0 })),
+    resources: resourceDefs({ class: input.class, level: input.level, subclass: null, abilities, ruleset: input.ruleset || '2014' }).map(d => ({ id: d.id, name: d.name, rest: d.rest, max: d.max, used: 0 })),
     conditions: [],
     deathSaves: { success: 0, fail: 0 },
     asiTaken: [],
@@ -403,7 +410,12 @@ function createCharacter(input, data) {
     armor: null,
     shield: false,
     magicItems: [],
-    choices: {}
+    choices: {},
+    background: input.background || null
+  }
+  if ((character.ruleset || '2014') === '2024' && character.background && data.backgrounds && data.backgrounds[character.background]) {
+    const feat = data.backgrounds[character.background].feat
+    if (feat && character.feats.indexOf(feat) < 0) character.feats = character.feats.concat([feat])
   }
   character.pendingChoices = pendingFor(character, cls, data.choices, data.spells)
   return character
@@ -427,7 +439,7 @@ function setSubclass(character, subclassId, data) {
   const cls = data.classes[next.class]
   next.subclass = subclassId || null
   next.pendingChoices = pendingFor(next, cls, data.choices, data.spells)
-  next.spellSlots = mergeSlots(next.spellSlots, slotsFor(casterOf(cls, next.subclass), next.level))
+  next.spellSlots = mergeSlots(next.spellSlots, slotsFor(casterOf(cls, next.subclass), next.level, next.ruleset))
   next.resources = syncResources(next).resources
   return next
 }
@@ -485,12 +497,25 @@ function selectedPowers(character, catalogs) {
   return out
 }
 
-function isPreparedCaster(classId) {
+function isPreparedCaster(classId, ruleset) {
+  if (ruleset === '2024') {
+    return ['bard', 'cleric', 'druid', 'paladin', 'ranger', 'sorcerer', 'warlock'].indexOf(classId) >= 0
+  }
   return classId === 'cleric' || classId === 'druid' || classId === 'paladin'
 }
 
 function preparedCap(character) {
-  if (!isPreparedCaster(character.class)) return 0
+  if (!isPreparedCaster(character.class, character.ruleset)) return 0
+  if (character.ruleset === '2024') {
+    const L = character.level || 1
+    const half = [0, 2, 3, 4, 5, 6, 6, 7, 7, 9, 9, 10, 10, 11, 11, 12, 12, 14, 14, 15, 15]
+    const full = [0, 4, 5, 6, 7, 9, 10, 11, 12, 14, 15, 16, 16, 17, 17, 18, 18, 19, 20, 21, 22]
+    const sorc = [0, 2, 4, 6, 7, 9, 10, 11, 12, 14, 15, 16, 16, 17, 17, 18, 18, 19, 20, 21, 22]
+    if (character.class === 'paladin' || character.class === 'ranger') return half[L] || 2
+    if (character.class === 'sorcerer') return sorc[L] || 2
+    if (character.class === 'warlock') return Math.min(15, L + 1)
+    return full[L] || 4
+  }
   if (character.class === 'paladin') {
     if (character.level < 2) return 0
     return Math.max(1, Math.floor(character.level / 2) + abilityMod((character.abilities && character.abilities.cha) || 10))
@@ -540,7 +565,7 @@ function addSpell(character, spellId, data) {
     return next
   }
   if ((character.spells || []).indexOf(spellId) >= 0) return character
-  if (isPreparedCaster(character.class)) {
+  if (isPreparedCaster(character.class, character.ruleset)) {
     const used = (character.spells || []).filter(id => auto.indexOf(id) < 0).length
     if (used >= preparedCap(character)) return character
   }
@@ -576,6 +601,7 @@ function acFor(character, equipment) {
   for (const id of character.magicItems || []) {
     const it = magic && magic[id]
     if (it && it.ac) ac += it.ac
+    if (it && it.acUnarmored && !arm && !character.shield) ac += it.acUnarmored
   }
   return ac
 }
@@ -659,9 +685,11 @@ function checklistFor(character, data) {
   if ((cls.asiLevels || []).includes(next)) {
     items.push({ id: 'asi-' + next, type: 'asi', level: next })
   }
-  const picks = spellPicksOf(cls, character.subclass)
-  const gained = knownSpellNeed(picks, next) - knownSpellNeed(picks, character.level)
-  if (gained > 0) items.push({ id: 'spells', type: 'spells', count: gained })
+  if (!isPreparedCaster(character.class, character.ruleset)) {
+    const picks = spellPicksOf(cls, character.subclass)
+    const gained = knownSpellNeed(picks, next) - knownSpellNeed(picks, character.level)
+    if (gained > 0) items.push({ id: 'spells', type: 'spells', count: gained })
+  }
   if (data.choices) {
     const probe = Object.assign({}, character, { level: next })
     for (const cat of Object.values(data.choices)) {
@@ -696,7 +724,7 @@ function applyLevelUp(character, checkedIds, data, opts) {
   next.hp.current = Math.min(next.hp.max, next.hp.current + gained)
   next.hpRolls = (next.hpRolls || []).concat([roll])
   next.proficiency = proficiencyBonus(newLevel)
-  const fresh = slotsFor(casterOf(cls, next.subclass), newLevel)
+  const fresh = slotsFor(casterOf(cls, next.subclass), newLevel, next.ruleset)
   const merged = {}
   for (const k of Object.keys(fresh)) {
     const used = (next.spellSlots[k] && next.spellSlots[k].used) || 0
@@ -750,7 +778,7 @@ function setSlotUsed(character, circle, used) {
 function syncSpellSlots(character, data) {
   const cls = data.classes && data.classes[character.class]
   if (!cls) return character
-  const fresh = slotsFor(casterOf(cls, character.subclass), character.level)
+  const fresh = slotsFor(casterOf(cls, character.subclass), character.level, character.ruleset)
   const cur = character.spellSlots || {}
   let changed = false
   const next = {}

@@ -283,5 +283,15 @@
     "name": "奇械入門",
     "nameEn": "Artificer Initiate",
     "text": "一個奇械師戲法與一個 1 環奇械師法術。熟練工匠工具。"
+  },
+  "crafter": {
+    "name": "工匠",
+    "nameEn": "Crafter",
+    "text": "三種工匠工具熟練。可快速打造廉價非魔法物品。買非魔法物品時較便宜。"
+  },
+  "musician": {
+    "name": "樂師",
+    "nameEn": "Musician",
+    "text": "三種樂器熟練。短休或長休後可給盟友英雄激勵。"
   }
 }

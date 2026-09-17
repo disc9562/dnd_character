@@ -66,7 +66,8 @@ function packFor(year) {
       equipment: data.equipment || {},
       prepared: data.prepared || {},
       subclassFeatures: data.subclassFeatures || {},
-      magicItems: data.magicItems || {}
+      magicItems: data.magicItems || {},
+      backgrounds: data.backgrounds || {}
     }
   }
   return {
@@ -79,7 +80,8 @@ function packFor(year) {
     equipment: data.equipment || {},
     prepared: data.prepared || {},
     subclassFeatures: data.subclassFeatures || {},
-    magicItems: data.magicItems || {}
+    magicItems: data.magicItems || {},
+    backgrounds: data.backgrounds || {}
   }
 }
 
@@ -191,11 +193,12 @@ function createHtml() {
     <label class="field">名字 <input id="f-name" placeholder="角色名" autocomplete="off"${banner === '缺名字' ? bad : ''}></label>
     <label class="field">${ruleset === '2024' ? '物種' : '種族'} <select id="f-race">${races}</select></label>
     <label class="field">職業 <select id="f-class">${classes}</select></label>
+    ${ruleset === '2024' ? `<label class="field">背景 <select id="f-background">${Object.keys(pack.backgrounds || {}).map(id => `<option value="${esc(id)}">${esc(pack.backgrounds[id].name)}</option>`).join('')}</select></label>` : ''}
     <label class="field">等級 <input id="f-level" type="number" min="1" max="20" value="1" inputmode="numeric"></label>
     </section>
     <section class="form-card">
     <h3>屬性</h3>
-    <p class="hint">${ruleset === '2024' ? '填最終分數，2024 版種族不加點。' : '填加種族加值前的數字。' + Object.keys(pack.races).map(id => {
+    <p class="hint">${ruleset === '2024' ? '填最終分數（背景加值已算進去）。種族不加點；背景會給起源專長。' : '填加種族加值前的數字。' + Object.keys(pack.races).map(id => {
       const r = pack.races[id]
       const b = r.bonuses || {}
       const parts = Object.keys(b).map(k => ABI_NAME[k] + '+' + b[k])
@@ -301,7 +304,7 @@ function combatHtml(c) {
       ${domain ? '' : `<button class="icon lockable" data-act="delspell" data-id="${esc(id)}"${lock}>×</button>`}
     </div>`
   }).join('')
-  const maxRing = Rules.maxSlotLevel(Rules.casterOf(cls, c.subclass), c.level)
+  const maxRing = Rules.maxSlotLevel(Rules.casterOf(cls, c.subclass), c.level, c.ruleset)
   const spellAdd = c.locked ? '' : comboHtml('spell', spellPickItems(c, { cantrips: true }), [], maxRing ? ('搜尋法術（現在最高 ' + maxRing + ' 環）…') : '搜尋法術…')
   const featChips = (c.feats || []).map(id => {
     const f = data.feats[id]
@@ -382,11 +385,11 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v61</p>
+    <p class="mast">冒險者紀錄 · v62</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
-        <div class="kicker">${esc(raceName(c.race, c.ruleset))}　${esc(className(c.class, c.ruleset))} ${c.level}　${c.ruleset === '2024' ? '2024' : '2014'}${c.locked ? '　已鎖定' : ''}</div>
+        <div class="kicker">${esc(raceName(c.race, c.ruleset))}　${esc(className(c.class, c.ruleset))} ${c.level}　${c.ruleset === '2024' ? '2024' : '2014'}${c.background && pack.backgrounds && pack.backgrounds[c.background] ? '　' + esc(pack.backgrounds[c.background].name) : ''}${c.locked ? '　已鎖定' : ''}</div>
       </div>
       <div class="row">
         <button class="icon${c.locked ? ' is-lock' : ''}" data-act="lock" aria-label="${c.locked ? '解鎖' : '鎖定'}">${lockIcon(!!c.locked)}</button>
@@ -440,7 +443,7 @@ function combatHtml(c) {
         ${attacks}
         ${powerRows ? `<h3>職業技能</h3>${powerRows}` : ''}
         ${res ? `<h3>資源</h3><div class="slots">${res}</div>` : ''}
-        ${Rules.isPreparedCaster(c.class) || (c.spells || []).length || !c.locked ? `<h3>${Rules.isPreparedCaster(c.class) ? '今日準備' : '法術'}</h3>${Rules.isPreparedCaster(c.class) ? `<p class="muted">${(c.spells || []).length}／${Rules.preparedCap(c)}（領域不佔格）</p>` : ''}${spells}${spellAdd}` : ''}
+        ${Rules.isPreparedCaster(c.class, c.ruleset) || (c.spells || []).length || !c.locked ? `<h3>${Rules.isPreparedCaster(c.class, c.ruleset) ? '今日準備' : '法術'}</h3>${Rules.isPreparedCaster(c.class, c.ruleset) ? `<p class="muted">${(c.spells || []).length}／${Rules.preparedCap(c)}（領域不佔格）</p>` : ''}${spells}${spellAdd}` : ''}
         <h3>狀態</h3>
         <div class="slots">${condPick}</div>
       </div>
@@ -768,7 +771,7 @@ function spellPickItems(c, opts) {
   const cls = pack.classes[c.class] || {}
   const sub = c.subclass || ((view === 'levelup' || view === 'pending') ? pickSubclass : null)
   const lv = (opts && opts.level) || (view === 'levelup' ? c.level + 1 : c.level)
-  const max = Rules.maxSlotLevel(Rules.casterOf(cls, sub), lv)
+  const max = Rules.maxSlotLevel(Rules.casterOf(cls, sub), lv, c.ruleset)
   const listClass = Rules.spellListClass(c.class, sub)
   const cantrips = !!(opts && opts.cantrips)
   const auto = Rules.alwaysPreparedIds(c, pack)
@@ -884,7 +887,7 @@ function levelHtml(c) {
     }
     if (it.type === 'spells') {
       const at = view === 'levelup' ? c.level + 1 : c.level
-      const max = Rules.maxSlotLevel(Rules.casterOf(cls, c.subclass || pickSubclass), at)
+      const max = Rules.maxSlotLevel(Rules.casterOf(cls, c.subclass || pickSubclass), at, c.ruleset)
       extra = `<p class="muted">選 ${it.count} 個 · 升到 ${at} 級可選到 ${max} 環</p>` +
         comboHtml('pickspell', spellPickItems(c, { level: at }), pickSpells, '搜尋可學法術（' + at + '級最高' + max + '環）…')
     }
@@ -996,10 +999,12 @@ el.addEventListener('click', e => {
     const hpMaxRaw = (document.getElementById('f-hpmax') || {}).value
     const hpMax = hpMaxRaw === '' || hpMaxRaw == null ? null : Number(hpMaxRaw)
     if (level > 1 && hpMax == null) { banner = '等級大於 1 請填最大生命（骰＋體質加總）'; render(); focusField('f-hpmax'); return }
+    const background = ruleset === '2024' ? ((document.getElementById('f-background') || {}).value || '') : ''
     const ch = Rules.createCharacter({
       name: name.trim(), race, class: classId, level, abilities,
       hpMax: hpMax == null ? undefined : hpMax,
-      ruleset
+      ruleset,
+      background: background || undefined
     }, packFor(ruleset))
     state.characters.push(ch)
     state.currentId = ch.id
@@ -1092,7 +1097,7 @@ el.addEventListener('click', e => {
         comboQ[key] = ''
         const pack = packFor(c.ruleset)
         const next = Rules.addSpell(c, id, pack)
-        if (Rules.isPreparedCaster(c.class) && (next.spells || []).length === (c.spells || []).length) {
+        if (Rules.isPreparedCaster(c.class, c.ruleset) && (next.spells || []).length === (c.spells || []).length) {
           banner = '準備已滿（' + Rules.preparedCap(c) + '）'
         }
         replace(next)
@@ -1272,7 +1277,7 @@ el.addEventListener('click', e => {
     }
     const cls = pack.classes[next.class]
     const caster = Rules.casterOf(cls, next.subclass)
-    const fresh = Rules.slotsFor(caster, next.level)
+    const fresh = Rules.slotsFor(caster, next.level, next.ruleset)
     if (Object.keys(fresh).length && (!next.spellSlots || !Object.keys(next.spellSlots).length)) next.spellSlots = fresh
     for (const catId of Object.keys(pickChoice)) {
       const r = Rules.setChoices(next, catId, pickChoice[catId], pack)
@@ -1477,7 +1482,7 @@ el.addEventListener('change', e => {
 
 async function boot() {
   try {
-    const [races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures, magicItems] = await Promise.all([
+    const [races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures, magicItems, backgrounds] = await Promise.all([
       fetch('data/races.json').then(r => r.json()),
       fetch('data/classes.json').then(r => r.json()),
       fetch('data/spells.json').then(r => r.json()),
@@ -1489,9 +1494,10 @@ async function boot() {
       fetch('data/equipment.json').then(r => r.json()),
       fetch('data/prepared.json').then(r => r.json()),
       fetch('data/subclass-features.json').then(r => r.json()),
-      fetch('data/magic-items.json').then(r => r.json())
+      fetch('data/magic-items.json').then(r => r.json()),
+      fetch('data/backgrounds2024.json').then(r => r.json())
     ])
-    data = { races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures, magicItems }
+    data = { races, classes, spells, feats, features, races2024, classes2024, choices, equipment, prepared, subclassFeatures, magicItems, backgrounds }
     state = Store.loadState(localStorage)
     view = current() ? 'combat' : 'create'
     render()
