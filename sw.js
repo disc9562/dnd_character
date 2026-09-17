@@ -1,4 +1,4 @@
-const CACHE = 'dnd5e-pwa-v60'
+const CACHE = 'dnd5e-pwa-v61'
 const ASSETS = [
   './',
   './index.html',

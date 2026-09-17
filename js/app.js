@@ -243,6 +243,11 @@ function combatHtml(c) {
     c.spellSlots = synced.spellSlots
     persist(true)
   }
+  const resSync = Rules.syncResources(c)
+  if (JSON.stringify(resSync.resources) !== JSON.stringify(c.resources || [])) {
+    c.resources = resSync.resources
+    persist(true)
+  }
   const skills = c.skills || {}
   const saveBonus = c.saveBonus || {}
   const lock = c.locked ? ' disabled' : ''
@@ -377,7 +382,7 @@ function combatHtml(c) {
     </div>` : ''
   return `
     <div class="vitals">
-    <p class="mast">冒險者紀錄 · v60</p>
+    <p class="mast">冒險者紀錄 · v61</p>
     <div class="top">
       <div>
         <input class="name-edit" data-act="name" value="${esc(c.name)}"${lock}>
